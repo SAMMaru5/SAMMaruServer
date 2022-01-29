@@ -1,6 +1,7 @@
 # SAMMaruServer
 SAMMaru Server Repository <br>
 [Client Repository](https://github.com/SAMMaru5/SAMMaruClient)
+
 ---
 
 # Getting Started

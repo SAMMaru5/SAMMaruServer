@@ -1,0 +1,2 @@
+# SAMMaruServer
+SAMMaru Server Repository

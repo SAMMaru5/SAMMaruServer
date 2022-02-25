@@ -5,20 +5,8 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         show_sql: false
         format_sql: false
-
-#  datasource:
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#
-#    #    url: jdbc:mysql://localhost:3306/wiwy?serverTimezone=UTC&characterEncoding=UTF-8
-#    #    username: root
-#    #    password: root1234
-#
-#    #     docker
-#    url: jdbc:mysql://mysql:3306/wiwy?serverTimezone=UTC&characterEncoding=UTF-8
-#    username: wiwy
-#    password: wiwy

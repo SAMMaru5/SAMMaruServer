@@ -1,4 +1,15 @@
+devtools:
+  livereload:
+    enabled: true
+
 spring:
+
+  cache:
+    type: redis
+  redis:
+    host: 172.17.0.1
+    port: 6379
+
   output:
     ansi:
       enabled: always
@@ -19,5 +30,6 @@ spring:
         format_sql: false
 
 app:
-  jwtTokenValidTime: 700000000
+  jwtRefreshTokenValidTime: 180000
+  jwtTokenValidTime: 60000
   jwtSecretKey: SammarufiveSammarufiveSammarufiveSammarufiveSammarufiveSammarufiveSammarufiveSammarufiveSammarufiveSammarufiveSammarufiveSammarufiveSammarufive

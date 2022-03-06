@@ -1,7 +1,7 @@
 package com.sammaru5.sammaru.security;
 
-import com.sammaru5.sammaru.domain.entity.UserAuthority;
-import com.sammaru5.sammaru.domain.entity.UserEntity;
+import com.sammaru5.sammaru.domain.UserAuthority;
+import com.sammaru5.sammaru.domain.UserEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

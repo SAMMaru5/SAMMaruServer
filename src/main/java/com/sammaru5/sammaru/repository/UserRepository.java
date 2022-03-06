@@ -1,6 +1,6 @@
-package com.sammaru5.sammaru.domain.repository;
+package com.sammaru5.sammaru.repository;
 
-import com.sammaru5.sammaru.domain.entity.UserEntity;
+import com.sammaru5.sammaru.domain.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

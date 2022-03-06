@@ -1,4 +1,4 @@
-package com.sammaru5.sammaru.controller.board;
+package com.sammaru5.sammaru.request;
 
 import lombok.Getter;
 

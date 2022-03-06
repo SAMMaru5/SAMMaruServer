@@ -1,4 +1,4 @@
-package com.sammaru5.sammaru.domain.entity;
+package com.sammaru5.sammaru.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

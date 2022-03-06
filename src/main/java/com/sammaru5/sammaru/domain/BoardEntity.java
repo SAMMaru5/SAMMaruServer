@@ -1,6 +1,6 @@
 package com.sammaru5.sammaru.domain;
 
-import com.sammaru5.sammaru.controller.board.BoardRequest;
+import com.sammaru5.sammaru.request.BoardRequest;
 import lombok.Getter;
 
 import javax.persistence.Entity;
@@ -9,7 +9,7 @@ import javax.persistence.Id;
 
 @Getter
 @Entity
-public class Board {
+public class BoardEntity {
 
     @Id @GeneratedValue
     private Long id;
@@ -17,11 +17,11 @@ public class Board {
     private String boardname;
     private String description;
 
-    public Board(BoardRequest boardRequest) {
+    public BoardEntity(BoardRequest boardRequest) {
         this(boardRequest.getBoardname(), boardRequest.getDescription());
     }
 
-    public Board(String boardname, String description) {
+    public BoardEntity(String boardname, String description) {
         this.boardname = boardname;
         this.description = description;
     }

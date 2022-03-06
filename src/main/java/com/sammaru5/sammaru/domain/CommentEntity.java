@@ -4,14 +4,18 @@ import lombok.Getter;
 
 import javax.persistence.*;
 
-@Entity @Getter
-public class Storage {
+@Getter
+@Entity
+public class CommentEntity {
 
     @Id @GeneratedValue
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Article article;
+    private String content;
 
-    private String filePath;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private ArticleEntity article;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private UserEntity user;
 }

@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Getter
 @Entity
-public class Article {
+public class ArticleEntity {
 
     @Id @GeneratedValue
     private Long id;
@@ -15,9 +15,9 @@ public class Article {
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Board board;
+    private BoardEntity board;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private User user;
+    private UserEntity user;
 
 }

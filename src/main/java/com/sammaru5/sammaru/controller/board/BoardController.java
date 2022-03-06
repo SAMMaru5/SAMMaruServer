@@ -1,6 +1,7 @@
 package com.sammaru5.sammaru.controller.board;
 
 import com.sammaru5.sammaru.apiresult.ApiResult;
+import com.sammaru5.sammaru.request.BoardRequest;
 import com.sammaru5.sammaru.service.board.BoardRegisterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

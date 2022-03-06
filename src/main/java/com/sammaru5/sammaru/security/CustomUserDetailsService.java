@@ -1,7 +1,7 @@
 package com.sammaru5.sammaru.security;
 
-import com.sammaru5.sammaru.domain.entity.UserEntity;
-import com.sammaru5.sammaru.domain.repository.UserRepository;
+import com.sammaru5.sammaru.domain.UserEntity;
+import com.sammaru5.sammaru.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

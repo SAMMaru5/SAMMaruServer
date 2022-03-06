@@ -4,6 +4,7 @@ import com.sammaru5.sammaru.domain.BoardEntity;
 
 public class BoardDTO {
 
+    private Long boardId;
     private String boardname;
     private String description;
 

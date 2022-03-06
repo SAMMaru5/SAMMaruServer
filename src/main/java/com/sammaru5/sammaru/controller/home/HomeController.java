@@ -4,9 +4,6 @@ import com.sammaru5.sammaru.apiresult.ApiResult;
 import com.sammaru5.sammaru.domain.ArticleEntity;
 import com.sammaru5.sammaru.service.article.ArticleSearchService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,7 +19,7 @@ public class HomeController {
     @GetMapping("/api/home/announcements")
     public ApiResult<?> announcementList() {
         try {
-            List<ArticleEntity> findAnnoucements = articleSearchService.findArticlesByBoardname("공지사항");
+            List<ArticleEntity> findAnnoucements = articleSearchService.getAnnoucementsInHome("공지사항");
             List<AnnouncementDTO> collect = findAnnoucements.stream().map(AnnouncementDTO::new).collect(Collectors.toList());
             return ApiResult.OK(collect);
         } catch (Exception e) {

@@ -4,14 +4,12 @@ import com.sammaru5.sammaru.apiresult.ApiResult;
 import com.sammaru5.sammaru.domain.BoardEntity;
 import com.sammaru5.sammaru.request.BoardRequest;
 import com.sammaru5.sammaru.service.board.BoardRegisterService;
+import com.sammaru5.sammaru.service.board.BoardRemoveService;
 import com.sammaru5.sammaru.service.board.BoardSearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,6 +20,7 @@ public class BoardController {
 
     private final BoardRegisterService boardRegisterService;
     private final BoardSearchService boardSearchService;
+    private final BoardRemoveService boardRemoveService;
 
     /**
      * 게시판을 생성하는 메서드입니다.
@@ -32,6 +31,21 @@ public class BoardController {
     public ApiResult<?> boardAdd(Authentication authentication, @RequestBody BoardRequest boardRequest) {
         try {
             return ApiResult.OK(new BoardDTO(boardRegisterService.addBoard(authentication, boardRequest)));
+        } catch (Exception e) {
+            return ApiResult.ERROR(e, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    /**
+     * 게시판과 해당 게시판에 달린 게시글들을 모두 삭제하는 메서드입니다. (관리자 권한만 가능)
+     * @param authentication
+     * @param boardId
+     * @return
+     */
+    @DeleteMapping("/api/boards/{boardId}")
+    public ApiResult<?> boardRemove(Authentication authentication, @PathVariable Long boardId) {
+        try {
+            return ApiResult.OK(boardRemoveService.removeBoard(authentication, boardId));
         } catch (Exception e) {
             return ApiResult.ERROR(e, HttpStatus.BAD_REQUEST);
         }

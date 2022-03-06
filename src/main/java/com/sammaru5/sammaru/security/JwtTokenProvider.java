@@ -24,6 +24,9 @@ public class JwtTokenProvider {
     @Value("${app.jwtTokenValidTime}") //설정파일의 토큰 유효시간
     private Long jwtTokenValidTime;
 
+    @Value("${app.jwtRefreshTokenValidTime}") //리프레쉬 토큰 유효시간
+    private Long jwtRefreshTokenValidTime;
+
     //객체 초기화
     //jwtSecretKey를 Base64로 인코딩
     @PostConstruct
@@ -38,6 +41,18 @@ public class JwtTokenProvider {
 
         return Jwts.builder()
                 .setSubject(Long.toString(id))
+                .setIssuedAt(nowDate)
+                .setExpiration(expiryDate)
+                .signWith(SignatureAlgorithm.HS256, jwtSecretKey)
+                .compact();
+    }
+
+    //리프레쉬 토큰에는 별다른 정보를 저장하지 않음
+    public String generateRefreshToken() {
+        Date nowDate = new Date();
+        Date expiryDate = new Date(nowDate.getTime() + jwtRefreshTokenValidTime);
+
+        return Jwts.builder()
                 .setIssuedAt(nowDate)
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS256, jwtSecretKey)
@@ -62,23 +77,22 @@ public class JwtTokenProvider {
         return null;
     }
 
-    public boolean validateToken(String token) {
+    public  String getRefreshTokenFromRequest(HttpServletRequest request) {
 
+        String refreshToken = request.getHeader("RefreshToken");
+        if (StringUtils.hasText(refreshToken) && refreshToken.startsWith("Bearer ")) {
+            return refreshToken.substring(7, refreshToken.length());
+        }
+        return null;
+    }
+
+    public boolean validateToken(String token) {
         try{
             Jwts.parser().setSigningKey(jwtSecretKey).parseClaimsJws(token);
             return true;
-        } catch (SignatureException ex) {
-            logger.error("Invalid JWT signature");
-        } catch (MalformedJwtException ex) {
-            logger.error("Invalid JWT token");
-        } catch (ExpiredJwtException ex) {
-            logger.error("Expired JWT token");
-        } catch (UnsupportedJwtException ex) {
-            logger.error("Unsupported JWT token");
-        } catch (IllegalArgumentException ex) {
-            logger.error("JWT claims string is empty");
+        } catch (Exception e) {
+            logger.error(e.toString());
+            return false;
         }
-
-        return false;
     }
 }

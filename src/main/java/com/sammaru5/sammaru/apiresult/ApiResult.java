@@ -1,7 +1,9 @@
 package com.sammaru5.sammaru.apiresult;
 
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+@Getter
 public class ApiResult<T> {
     private final boolean success;
     private final T response;

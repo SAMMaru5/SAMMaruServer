@@ -1,4 +1,4 @@
-package com.sammaru5.sammaru.service.photo;
+package com.sammaru5.sammaru.service.storage;
 
 import com.sammaru5.sammaru.domain.ArticleEntity;
 import com.sammaru5.sammaru.domain.StorageEntity;

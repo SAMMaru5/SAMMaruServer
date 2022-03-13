@@ -41,6 +41,9 @@ public class ArticleSearchService {
             if(findArticle.isEmpty()) {
                 throw new NonExistentAritcleException();
             } else {
+                // 조회수를 증가시키고 리턴
+                findArticle.get().plusViewCnt();
+                articleRepository.save(findArticle.get());
                 return new ArticleDTO(findArticle.get());
             }
         }

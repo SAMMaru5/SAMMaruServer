@@ -22,7 +22,10 @@ public class BoardRegisterService {
         BoardEntity findBoard = boardRepository.findByBoardname(boardname);
         if(userSearchService.verifyAdmin(authentication)) {
             if(findBoard == null) {
-                return boardRepository.save(new BoardEntity(boardRequest));
+                return boardRepository.save(BoardEntity.builder()
+                        .boardname(boardRequest.getBoardname())
+                        .description(boardRequest.getDescription())
+                        .build());
             } else {
                 throw new AlreadyExistBoardnameException();
             }

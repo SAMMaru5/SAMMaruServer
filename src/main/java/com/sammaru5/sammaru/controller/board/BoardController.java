@@ -1,8 +1,10 @@
 package com.sammaru5.sammaru.controller.board;
 
 import com.sammaru5.sammaru.apiresult.ApiResult;
+import com.sammaru5.sammaru.controller.article.ArticleDTO;
 import com.sammaru5.sammaru.domain.BoardEntity;
 import com.sammaru5.sammaru.request.BoardRequest;
+import com.sammaru5.sammaru.service.article.ArticleSearchService;
 import com.sammaru5.sammaru.service.board.BoardRegisterService;
 import com.sammaru5.sammaru.service.board.BoardRemoveService;
 import com.sammaru5.sammaru.service.board.BoardSearchService;
@@ -21,6 +23,7 @@ public class BoardController {
     private final BoardRegisterService boardRegisterService;
     private final BoardSearchService boardSearchService;
     private final BoardRemoveService boardRemoveService;
+    private final ArticleSearchService articleSearchService;
 
     /**
      * 게시판을 생성하는 메서드입니다.
@@ -63,7 +66,17 @@ public class BoardController {
         } catch (Exception e) {
             return ApiResult.ERROR(e, HttpStatus.BAD_REQUEST);
         }
+    }
 
-
+    /**
+     * 게시판 세부 정보 조회 (해당 게시판의 게시글들을 조회 ex.자유게시판)
+     */
+    @GetMapping("/api/boards/{boardId}/pages/{pageNum}")
+    public ApiResult<?> boardDetails(@PathVariable Long boardId, @PathVariable Integer pageNum) {
+        try {
+            return ApiResult.OK(articleSearchService.findArticlesByBoardId(boardId, pageNum));
+        } catch (Exception e) {
+            return ApiResult.ERROR(e, HttpStatus.BAD_REQUEST);
+        }
     }
 }

@@ -1,7 +1,6 @@
 package com.sammaru5.sammaru.service.board;
 
 import com.sammaru5.sammaru.domain.BoardEntity;
-import com.sammaru5.sammaru.exception.AlreadyExistBoardnameException;
 import com.sammaru5.sammaru.exception.NonExistentBoardException;
 import com.sammaru5.sammaru.exception.NonExistentBoardnameException;
 import com.sammaru5.sammaru.repository.BoardRepository;
@@ -16,6 +15,12 @@ public class BoardSearchService {
 
     private final BoardRepository boardRepository;
 
+    /**
+     * 게시판 단건 조회
+     * @param id
+     * @return
+     * @throws Exception
+     */
     public BoardEntity findBoardById(Long id) throws Exception {
         Optional<BoardEntity> findBoard = boardRepository.findById(id);
         if(findBoard.isPresent()) {

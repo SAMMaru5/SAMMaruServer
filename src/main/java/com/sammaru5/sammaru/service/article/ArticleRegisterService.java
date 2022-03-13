@@ -7,10 +7,12 @@ import com.sammaru5.sammaru.exception.EmptyArticleException;
 import com.sammaru5.sammaru.repository.ArticleRepository;
 import com.sammaru5.sammaru.request.ArticleRequest;
 import com.sammaru5.sammaru.service.board.BoardSearchService;
+import com.sammaru5.sammaru.service.storage.FileRegisterService;
 import com.sammaru5.sammaru.service.user.UserSearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor @Service
 public class ArticleRegisterService {
@@ -18,13 +20,16 @@ public class ArticleRegisterService {
     private final ArticleRepository articleRepository;
     private final BoardSearchService boardSearchService;
     private final UserSearchService userSearchService;
+    private final FileRegisterService fileRegisterService;
 
-    public ArticleEntity addArticle(Authentication authentication, Long boardId, ArticleRequest articleRequest) throws Exception {
+    public ArticleEntity addArticle(Authentication authentication, Long boardId, ArticleRequest articleRequest, MultipartFile multipartFile) throws Exception {
         if(articleRequest.getTitle() == null || articleRequest.getContent() == null) {
             throw new EmptyArticleException();
         }
         BoardEntity findBoard = boardSearchService.findBoardById(boardId);
         UserEntity findUser = userSearchService.getUserFromToken(authentication);
-        return articleRepository.save(new ArticleEntity(articleRequest, findBoard, findUser));
+        ArticleEntity articleEntity = articleRepository.save(new ArticleEntity(articleRequest, findBoard, findUser));
+        fileRegisterService.addFile(multipartFile, articleEntity.getId());
+        return articleEntity;
     }
 }

@@ -1,6 +1,6 @@
 package com.sammaru5.sammaru.service.article;
 
-import com.sammaru5.sammaru.controller.article.ArticleDTO;
+import com.sammaru5.sammaru.dto.ArticleDTO;
 import com.sammaru5.sammaru.domain.ArticleEntity;
 import com.sammaru5.sammaru.domain.UserEntity;
 import com.sammaru5.sammaru.exception.InvalidUserException;

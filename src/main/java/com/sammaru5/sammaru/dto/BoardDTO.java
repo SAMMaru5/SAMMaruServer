@@ -1,4 +1,4 @@
-package com.sammaru5.sammaru.controller.board;
+package com.sammaru5.sammaru.dto;
 
 import com.sammaru5.sammaru.domain.BoardEntity;
 

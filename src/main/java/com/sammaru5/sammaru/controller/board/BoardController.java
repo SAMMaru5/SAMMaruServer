@@ -1,8 +1,8 @@
 package com.sammaru5.sammaru.controller.board;
 
 import com.sammaru5.sammaru.apiresult.ApiResult;
-import com.sammaru5.sammaru.controller.article.ArticleDTO;
 import com.sammaru5.sammaru.domain.BoardEntity;
+import com.sammaru5.sammaru.dto.BoardDTO;
 import com.sammaru5.sammaru.request.BoardRequest;
 import com.sammaru5.sammaru.service.article.ArticleSearchService;
 import com.sammaru5.sammaru.service.board.BoardRegisterService;

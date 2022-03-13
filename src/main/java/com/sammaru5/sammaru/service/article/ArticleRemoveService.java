@@ -21,7 +21,6 @@ public class ArticleRemoveService {
     private final ArticleRepository articleRepository;
     private final ArticleSearchService articleSearchService;
     private final UserSearchService userSearchService;
-    private final ArticleRemoveService articleRemoveService;
 
     /**
      * 작성자가 게시글 삭제

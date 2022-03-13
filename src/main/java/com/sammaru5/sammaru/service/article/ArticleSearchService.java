@@ -3,18 +3,23 @@ package com.sammaru5.sammaru.service.article;
 import com.sammaru5.sammaru.controller.article.ArticleDTO;
 import com.sammaru5.sammaru.domain.ArticleEntity;
 import com.sammaru5.sammaru.domain.BoardEntity;
+import com.sammaru5.sammaru.domain.UserEntity;
+import com.sammaru5.sammaru.exception.InvalidUserException;
 import com.sammaru5.sammaru.exception.NonExistentAritcleException;
 import com.sammaru5.sammaru.exception.NonExistentBoardnameException;
 import com.sammaru5.sammaru.repository.ArticleRepository;
 import com.sammaru5.sammaru.service.board.BoardSearchService;
+import com.sammaru5.sammaru.service.user.UserSearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service @RequiredArgsConstructor
@@ -22,6 +27,25 @@ public class ArticleSearchService {
 
     private final BoardSearchService boardSearchService;
     private final ArticleRepository articleRepository;
+    private final UserSearchService userSearchService;
+
+    /**
+     * 단건 게시글 상세 조회
+     */
+    public ArticleDTO findOneArticle(Authentication authentication, Long boardId, Long articleId) throws Exception {
+        UserEntity findUser = userSearchService.getUserFromToken(authentication);
+        if(findUser == null) {
+            throw new InvalidUserException();
+        } else {
+            Optional<ArticleEntity> findArticle = articleRepository.findById(articleId);
+            if(findArticle.isEmpty()) {
+                throw new NonExistentAritcleException();
+            } else {
+                return new ArticleDTO(findArticle.get());
+            }
+        }
+
+    }
 
     /**
      * boardId에 해당하는 게시판의 게시글들을 paging

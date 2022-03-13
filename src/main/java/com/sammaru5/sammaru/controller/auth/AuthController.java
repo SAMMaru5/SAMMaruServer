@@ -1,4 +1,4 @@
-package com.sammaru5.sammaru.controller;
+package com.sammaru5.sammaru.controller.auth;
 
 
 import com.sammaru5.sammaru.apiresult.ApiResult;

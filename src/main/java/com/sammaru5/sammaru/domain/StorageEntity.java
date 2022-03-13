@@ -1,10 +1,18 @@
 package com.sammaru5.sammaru.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Entity @Getter
+@Entity
+@Table(name = "storage")
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class StorageEntity {
 
     @Id @GeneratedValue
@@ -12,6 +20,6 @@ public class StorageEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private ArticleEntity article;
-
     private String filePath;
+    private String fileName;
 }

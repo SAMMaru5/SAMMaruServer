@@ -5,10 +5,14 @@ import com.sammaru5.sammaru.request.ArticleRequest;
 import com.sammaru5.sammaru.service.article.ArticleRegisterService;
 import com.sammaru5.sammaru.service.article.ArticleRemoveService;
 import com.sammaru5.sammaru.service.article.ArticleSearchService;
+import com.sammaru5.sammaru.service.photo.FileRegisterService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import javax.servlet.http.HttpServletRequest;
 
 @RestController @RequiredArgsConstructor
 public class ArticleController {
@@ -16,6 +20,7 @@ public class ArticleController {
     private final ArticleRegisterService articleRegisterService;
     private final ArticleSearchService articleSearchService;
     private final ArticleRemoveService articleRemoveService;
+    private final FileRegisterService fileRegisterService;
 
     /**
      * 게시글 생성
@@ -55,5 +60,10 @@ public class ArticleController {
         } catch (Exception e) {
             return ApiResult.ERROR(e, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @PostMapping(value="/api/articles/{articleId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ApiResult<?> fileAdd(HttpServletRequest request, @RequestPart(name="file", required = false) MultipartFile multipartFile, @PathVariable Long articleId) {
+        return ApiResult.OK(fileRegisterService.addFile(multipartFile, articleId));
     }
 }

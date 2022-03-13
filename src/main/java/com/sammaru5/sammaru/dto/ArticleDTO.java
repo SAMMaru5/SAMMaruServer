@@ -1,4 +1,4 @@
-package com.sammaru5.sammaru.controller.article;
+package com.sammaru5.sammaru.dto;
 
 import com.sammaru5.sammaru.domain.ArticleEntity;
 import lombok.Getter;

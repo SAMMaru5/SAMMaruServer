@@ -28,7 +28,7 @@ public class FileRegisterService {
 
         UUID uid = UUID.randomUUID();
         String extension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
-        File targetFile = new File("src/main/resources/files/" + uid.toString() + "." + extension);
+        File targetFile = new File("src/main/resources/files/" + articleEntity.getBoard().getBoardname() + "/" + uid.toString() + "." + extension);
         try {
             InputStream fileStream = multipartFile.getInputStream();
             FileUtils.copyInputStreamToFile(fileStream, targetFile);

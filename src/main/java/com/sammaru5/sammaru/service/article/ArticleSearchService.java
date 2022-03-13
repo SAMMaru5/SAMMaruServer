@@ -1,6 +1,6 @@
 package com.sammaru5.sammaru.service.article;
 
-import com.sammaru5.sammaru.controller.article.ArticleDTO;
+import com.sammaru5.sammaru.dto.ArticleDTO;
 import com.sammaru5.sammaru.domain.ArticleEntity;
 import com.sammaru5.sammaru.domain.BoardEntity;
 import com.sammaru5.sammaru.domain.UserEntity;
@@ -17,7 +17,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

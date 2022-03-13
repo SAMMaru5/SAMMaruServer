@@ -2,6 +2,7 @@ package com.sammaru5.sammaru.controller.home;
 
 import com.sammaru5.sammaru.apiresult.ApiResult;
 import com.sammaru5.sammaru.domain.ArticleEntity;
+import com.sammaru5.sammaru.dto.AnnouncementDTO;
 import com.sammaru5.sammaru.service.article.ArticleSearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

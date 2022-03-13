@@ -30,6 +30,6 @@ spring:
         format_sql: false
 
 app:
-  jwtRefreshTokenValidTime: 180000
-  jwtTokenValidTime: 60000
+  jwtRefreshTokenValidTime: 1800000
+  jwtTokenValidTime: 900000
   jwtSecretKey: SammarufiveSammarufiveSammarufiveSammarufiveSammarufiveSammarufiveSammarufiveSammarufiveSammarufiveSammarufiveSammarufiveSammarufiveSammarufive

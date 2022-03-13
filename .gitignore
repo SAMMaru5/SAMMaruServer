@@ -40,3 +40,6 @@ out/
 ### Redis ###
 redis/data/
 redis/logs/
+
+### file ###
+src/main/resources/files/

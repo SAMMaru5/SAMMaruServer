@@ -3,20 +3,19 @@ package com.sammaru5.sammaru.controller.article;
 import com.sammaru5.sammaru.apiresult.ApiResult;
 import com.sammaru5.sammaru.request.ArticleRequest;
 import com.sammaru5.sammaru.service.article.ArticleRegisterService;
+import com.sammaru5.sammaru.service.article.ArticleRemoveService;
 import com.sammaru5.sammaru.service.article.ArticleSearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController @RequiredArgsConstructor
 public class ArticleController {
 
     private final ArticleRegisterService articleRegisterService;
     private final ArticleSearchService articleSearchService;
+    private final ArticleRemoveService articleRemoveService;
 
     /**
      * 게시글 생성
@@ -41,6 +40,18 @@ public class ArticleController {
     public ApiResult<?> articleDetails(Authentication authentication, @PathVariable Long boardId, @PathVariable Long articleId) {
         try {
             return ApiResult.OK(articleSearchService.findOneArticle(authentication, boardId, articleId));
+        } catch (Exception e) {
+            return ApiResult.ERROR(e, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    /**
+     * 작성자가 게시글 삭제
+     */
+    @DeleteMapping("/api/boards/{boardId}/articles/{articleId}")
+    public ApiResult<?> articleRemove(Authentication authentication, @PathVariable Long boardId, @PathVariable Long articleId) {
+        try {
+            return ApiResult.OK(articleRemoveService.removeArticleByAuthor(authentication, boardId, articleId));
         } catch (Exception e) {
             return ApiResult.ERROR(e, HttpStatus.BAD_REQUEST);
         }

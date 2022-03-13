@@ -27,7 +27,7 @@ public class BoardRemoveService {
     public boolean removeBoard(Authentication authentication, Long boardId) throws Exception {
         boolean isAdmin = userSearchService.verifyAdmin(authentication);
         if(isAdmin) { // 관리자 권한이 있으면
-            articleRemoveService.removeArticle(boardId);
+            articleRemoveService.removeArticleByAdmin(boardId);
             boardRepository.deleteById(boardId);
             return true;
         } else {

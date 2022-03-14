@@ -5,6 +5,8 @@ import lombok.Getter;
 
 import java.sql.Timestamp;
 
+import static org.springframework.beans.BeanUtils.copyProperties;
+
 @Getter
 public class ArticleDTO {
     private String title;
@@ -15,11 +17,8 @@ public class ArticleDTO {
     private Integer likeCnt;
 
     public ArticleDTO(ArticleEntity articleEntity) {
-        this.title = articleEntity.getTitle();
-        this.content = articleEntity.getContent();
+        copyProperties(articleEntity, this);
         this.createDt = articleEntity.getCreateTime();
         this.author = articleEntity.getUser().getUsername();
-        this.viewCnt = articleEntity.getViewCnt();
-        this.likeCnt = articleEntity.getLikeCnt();
     }
 }

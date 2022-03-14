@@ -5,15 +5,17 @@ import lombok.Getter;
 
 import java.sql.Timestamp;
 
+import static org.springframework.beans.BeanUtils.copyProperties;
+
 @Getter
 public class AnnouncementDTO {
     private String title;
     private String author;
     private Timestamp createDt;
 
-    public AnnouncementDTO(ArticleEntity annoucement) {
-        this.title = annoucement.getTitle();
-        this.author = annoucement.getUser().getUsername();
-        this.createDt = annoucement.getCreateTime();
+    public AnnouncementDTO(ArticleEntity articleEntity) {
+        copyProperties(articleEntity, this);
+        this.author = articleEntity.getUser().getUsername();
+        this.createDt = articleEntity.getCreateTime();
     }
 }

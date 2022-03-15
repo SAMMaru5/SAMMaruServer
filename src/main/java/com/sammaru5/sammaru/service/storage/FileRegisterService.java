@@ -22,27 +22,30 @@ public class FileRegisterService {
     private final ArticleStatusService articleStatusService;
     private final StorageRepository storageRepository;
 
-    public StorageEntity addFile(MultipartFile multipartFile, Long articleId) {
+    public boolean addFile(MultipartFile[] multipartFiles, Long articleId) {
 
         ArticleEntity articleEntity = articleStatusService.findArticleById(articleId).get();
 
-        UUID uid = UUID.randomUUID();
-        String extension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
-        File targetFile = new File("src/main/resources/files/" + articleEntity.getBoard().getBoardname() + "/" + uid.toString() + "." + extension);
-        try {
-            InputStream fileStream = multipartFile.getInputStream();
-            FileUtils.copyInputStreamToFile(fileStream, targetFile);
-        } catch (IOException e) {
-            FileUtils.deleteQuietly(targetFile); //지움
-            e.printStackTrace();
+        for(MultipartFile multipartFile : multipartFiles){
+            UUID uid = UUID.randomUUID();
+            String extension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
+            File targetFile = new File("src/main/resources/files/" + articleEntity.getBoard().getBoardname() + "/" + uid.toString() + "." + extension);
+            try {
+                InputStream fileStream = multipartFile.getInputStream();
+                FileUtils.copyInputStreamToFile(fileStream, targetFile);
+            } catch (IOException e) {
+                FileUtils.deleteQuietly(targetFile); //지움
+                e.printStackTrace();
+            }
+            storageRepository.save(
+                    StorageEntity.builder()
+                            .article(articleEntity)
+                            .filePath(uid.toString() + "." + extension)
+                            .fileName(multipartFile.getOriginalFilename())
+                            .build()
+            );
         }
 
-        return storageRepository.save(
-                StorageEntity.builder()
-                        .article(articleEntity)
-                        .filePath(uid.toString() + "." + extension)
-                        .fileName(multipartFile.getOriginalFilename())
-                        .build()
-        );
+        return true;
     }
 }

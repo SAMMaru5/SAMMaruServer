@@ -22,14 +22,14 @@ public class ArticleRegisterService {
     private final UserSearchService userSearchService;
     private final FileRegisterService fileRegisterService;
 
-    public ArticleEntity addArticle(Authentication authentication, Long boardId, ArticleRequest articleRequest, MultipartFile multipartFile) throws Exception {
+    public ArticleEntity addArticle(Authentication authentication, Long boardId, ArticleRequest articleRequest, MultipartFile[] multipartFiles) throws Exception {
         if(articleRequest.getTitle() == null || articleRequest.getContent() == null) {
             throw new EmptyArticleException();
         }
         BoardEntity findBoard = boardSearchService.findBoardById(boardId);
         UserEntity findUser = userSearchService.getUserFromToken(authentication);
         ArticleEntity articleEntity = articleRepository.save(new ArticleEntity(articleRequest, findBoard, findUser));
-        fileRegisterService.addFile(multipartFile, articleEntity.getId());
+        fileRegisterService.addFile(multipartFiles, articleEntity.getId());
         return articleEntity;
     }
 }

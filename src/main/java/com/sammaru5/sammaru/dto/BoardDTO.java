@@ -13,7 +13,8 @@ public class BoardDTO {
     private String description;
 
     public BoardDTO(BoardEntity boardEntity) {
-        copyProperties(boardEntity, this);
         this.boardId = boardEntity.getId();
+        this.boardname = boardEntity.getBoardname();
+        this.description = boardEntity.getDescription();
     }
 }

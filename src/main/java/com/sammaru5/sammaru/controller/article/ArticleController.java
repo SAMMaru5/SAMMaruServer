@@ -27,9 +27,8 @@ public class ArticleController {
      * @return
      */
     @PostMapping(value="/permission/api/boards/{boardId}/articles", consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ApiResult<?> articleAdd(Authentication authentication, @PathVariable Long boardId, @RequestPart(value="article", required = false) ArticleRequest articleRequest, @RequestPart(value="file", required = false) MultipartFile[] multipartFiles) {
+    public ApiResult<?> articleAdd(Authentication authentication, @PathVariable Long boardId, @RequestPart(value="article") ArticleRequest articleRequest, @RequestPart(value="file", required = false) MultipartFile[] multipartFiles) {
         try {
-            // articleRequest랑 multipartfiles가 null이 들어오면 어떡함?? 체크가 안되어있는거같은데 물어봐야지
             return ApiResult.OK(articleRegisterService.addArticle(authentication, boardId, articleRequest, multipartFiles));
         } catch (Exception e) {
             return ApiResult.ERROR(e, HttpStatus.BAD_REQUEST);

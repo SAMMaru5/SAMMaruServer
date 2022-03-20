@@ -10,6 +10,7 @@ import com.sammaru5.sammaru.service.board.BoardRemoveService;
 import com.sammaru5.sammaru.service.board.BoardSearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +31,7 @@ public class BoardController {
      * @param boardRequest
      * @return
      */
-    @PostMapping("/auth/api/boards")
+    @PostMapping("/permission/api/boards")
     public ApiResult<?> boardAdd(Authentication authentication, @RequestBody BoardRequest boardRequest) {
         try {
             return ApiResult.OK(new BoardDTO(boardRegisterService.addBoard(authentication, boardRequest)));
@@ -45,7 +46,7 @@ public class BoardController {
      * @param boardId
      * @return
      */
-    @DeleteMapping("/auth/api/boards/{boardId}")
+    @DeleteMapping("/permission/api/boards/{boardId}")
     public ApiResult<?> boardRemove(Authentication authentication, @PathVariable Long boardId) {
         try {
             return ApiResult.OK(boardRemoveService.removeBoard(authentication, boardId));

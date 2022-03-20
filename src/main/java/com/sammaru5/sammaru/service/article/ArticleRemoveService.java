@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,13 +31,18 @@ public class ArticleRemoveService {
         if(findUser == null) {
             throw new InvalidUserException();
         }
-        ArticleDTO findAritcle = articleSearchService.findOneArticle(authentication, boardId, articleId);
-        if(findAritcle.getAuthor().equals(findUser.getUsername())) {
-            articleRepository.deleteById(articleId);
-            return true;
+        Optional<ArticleEntity> findArticle = articleRepository.findById(articleId);
+        if(findArticle.isPresent()) {
+            if(findArticle.get().getUser().getUsername().equals(findUser.getUsername())) {
+                articleRepository.deleteById(articleId);
+                return true;
+            } else {
+                throw new InvalidUserException();
+            }
         } else {
-            throw new InvalidUserException();
+            throw new NonExistentAritcleException();
         }
+
     }
 
     /**

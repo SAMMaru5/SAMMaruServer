@@ -26,7 +26,7 @@ public class ArticleController {
      * @param articleRequest
      * @return
      */
-    @PostMapping(value="/auth/api/boards/{boardId}/articles", consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(value="/permission/api/boards/{boardId}/articles", consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
     public ApiResult<?> articleAdd(Authentication authentication, @PathVariable Long boardId, @RequestPart(value="article", required = false) ArticleRequest articleRequest, @RequestPart(value="file", required = false) MultipartFile[] multipartFiles) {
         try {
             // articleRequest랑 multipartfiles가 null이 들어오면 어떡함?? 체크가 안되어있는거같은데 물어봐야지
@@ -39,7 +39,7 @@ public class ArticleController {
     /**
      * 게시글 상세
      */
-    @GetMapping("/auth/api/boards/{boardId}/articles/{articleId}")
+    @GetMapping("/permission/api/boards/{boardId}/articles/{articleId}")
     public ApiResult<?> articleDetails(Authentication authentication, @PathVariable Long boardId, @PathVariable Long articleId) {
         try {
             return ApiResult.OK(articleSearchService.findArticleDetailsByClient(authentication, boardId, articleId));
@@ -51,7 +51,7 @@ public class ArticleController {
     /**
      * 작성자가 게시글 삭제
      */
-    @DeleteMapping("/auth/api/boards/{boardId}/articles/{articleId}")
+    @DeleteMapping("/permission/api/boards/{boardId}/articles/{articleId}")
     public ApiResult<?> articleRemove(Authentication authentication, @PathVariable Long boardId, @PathVariable Long articleId) {
         try {
             return ApiResult.OK(articleRemoveService.removeArticleByAuthor(authentication, boardId, articleId));

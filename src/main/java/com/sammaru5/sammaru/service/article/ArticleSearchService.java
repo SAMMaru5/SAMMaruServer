@@ -34,7 +34,7 @@ public class ArticleSearchService {
     /**
      * 단건 게시글 상세 조회
      */
-    public ArticleDTO findOneArticle(Authentication authentication, Long boardId, Long articleId) throws Exception {
+    public ArticleDTO findArticleDetailsByClient(Authentication authentication, Long boardId, Long articleId) throws Exception {
         UserEntity findUser = userSearchService.getUserFromToken(authentication);
         if(findUser == null) {
             throw new InvalidUserException();

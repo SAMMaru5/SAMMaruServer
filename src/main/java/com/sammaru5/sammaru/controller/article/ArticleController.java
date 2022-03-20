@@ -29,6 +29,7 @@ public class ArticleController {
     @PostMapping(value="/auth/api/boards/{boardId}/articles", consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
     public ApiResult<?> articleAdd(Authentication authentication, @PathVariable Long boardId, @RequestPart(value="article", required = false) ArticleRequest articleRequest, @RequestPart(value="file", required = false) MultipartFile[] multipartFiles) {
         try {
+            // articleRequest랑 multipartfiles가 null이 들어오면 어떡함?? 체크가 안되어있는거같은데 물어봐야지
             return ApiResult.OK(articleRegisterService.addArticle(authentication, boardId, articleRequest, multipartFiles));
         } catch (Exception e) {
             return ApiResult.ERROR(e, HttpStatus.BAD_REQUEST);
@@ -41,7 +42,7 @@ public class ArticleController {
     @GetMapping("/auth/api/boards/{boardId}/articles/{articleId}")
     public ApiResult<?> articleDetails(Authentication authentication, @PathVariable Long boardId, @PathVariable Long articleId) {
         try {
-            return ApiResult.OK(articleSearchService.findOneArticle(authentication, boardId, articleId));
+            return ApiResult.OK(articleSearchService.findArticleDetailsByClient(authentication, boardId, articleId));
         } catch (Exception e) {
             return ApiResult.ERROR(e, HttpStatus.BAD_REQUEST);
         }
@@ -58,4 +59,16 @@ public class ArticleController {
             return ApiResult.ERROR(e, HttpStatus.BAD_REQUEST);
         }
     }
+
+    /**
+     * 게시글 수정 (작성자만 가능)
+     */
+    /*@PutMapping(value = "/auth/api/boards/{boardId}/articles/{articleId}", consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ApiResult<?> articleModify(Authentication authentication, @PathVariable Long boardId, @PathVariable Long articleId, @RequestPart(value="article", required = false) ArticleRequest articleRequest, @RequestPart(value="file", required = false) MultipartFile[] multipartFiles) {
+        try {
+            return ApiResult.OK()
+        } catch(Exception e) {
+            return ApiResult.ERROR(e, HttpStatus.BAD_REQUEST);
+        }
+    }*/
 }

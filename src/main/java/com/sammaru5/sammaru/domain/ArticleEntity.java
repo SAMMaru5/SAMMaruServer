@@ -50,16 +50,19 @@ public class ArticleEntity {
     public void plusViewCnt() {
         this.viewCnt++;
     }
-
     public void minusViewCnt() {
         this.viewCnt--;
     }
-
     public void plusLikeCnt() {
         this.likeCnt++;
     }
     public void minusLikeCnt() {
         this.likeCnt--;
+    }
+
+    public void modifyArticle(ArticleRequest articleRequest) {
+        this.title = articleRequest.getTitle();
+        this.content = articleRequest.getContent();
     }
 
 }

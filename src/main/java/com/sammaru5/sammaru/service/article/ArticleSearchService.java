@@ -1,5 +1,6 @@
 package com.sammaru5.sammaru.service.article;
 
+import com.sammaru5.sammaru.domain.StorageEntity;
 import com.sammaru5.sammaru.dto.ArticleDTO;
 import com.sammaru5.sammaru.domain.ArticleEntity;
 import com.sammaru5.sammaru.domain.BoardEntity;
@@ -9,6 +10,7 @@ import com.sammaru5.sammaru.exception.NonExistentAritcleException;
 import com.sammaru5.sammaru.exception.NonExistentBoardnameException;
 import com.sammaru5.sammaru.repository.ArticleRepository;
 import com.sammaru5.sammaru.service.board.BoardSearchService;
+import com.sammaru5.sammaru.service.storage.FileSearchService;
 import com.sammaru5.sammaru.service.user.UserSearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -27,6 +29,7 @@ public class ArticleSearchService {
     private final BoardSearchService boardSearchService;
     private final ArticleRepository articleRepository;
     private final UserSearchService userSearchService;
+    private final FileSearchService fileSearchService;
 
     /**
      * 단건 게시글 상세 조회
@@ -41,9 +44,10 @@ public class ArticleSearchService {
                 throw new NonExistentAritcleException();
             } else {
                 // 조회수를 증가시키고 리턴
+                List<StorageEntity> findFiles = fileSearchService.findFilesByArticle(findArticle.get());
                 findArticle.get().plusViewCnt();
                 articleRepository.save(findArticle.get());
-                return new ArticleDTO(findArticle.get());
+                return new ArticleDTO(findArticle.get(), findFiles);
             }
         }
 

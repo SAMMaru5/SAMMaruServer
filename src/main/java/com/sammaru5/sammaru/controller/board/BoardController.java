@@ -30,7 +30,7 @@ public class BoardController {
      * @param boardRequest
      * @return
      */
-    @PostMapping("/api/boards")
+    @PostMapping("/auth/api/boards")
     public ApiResult<?> boardAdd(Authentication authentication, @RequestBody BoardRequest boardRequest) {
         try {
             return ApiResult.OK(new BoardDTO(boardRegisterService.addBoard(authentication, boardRequest)));
@@ -45,7 +45,7 @@ public class BoardController {
      * @param boardId
      * @return
      */
-    @DeleteMapping("/api/boards/{boardId}")
+    @DeleteMapping("/auth/api/boards/{boardId}")
     public ApiResult<?> boardRemove(Authentication authentication, @PathVariable Long boardId) {
         try {
             return ApiResult.OK(boardRemoveService.removeBoard(authentication, boardId));

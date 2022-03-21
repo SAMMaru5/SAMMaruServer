@@ -33,3 +33,4 @@ app:
   jwtRefreshTokenValidTime: 1800000
   jwtTokenValidTime: 900000
   jwtSecretKey: SammarufiveSammarufiveSammarufiveSammarufiveSammarufiveSammarufiveSammarufiveSammarufiveSammarufiveSammarufiveSammarufiveSammarufiveSammarufive
+  fileDir: src/main/resources/files/

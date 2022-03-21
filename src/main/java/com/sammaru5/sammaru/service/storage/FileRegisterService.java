@@ -4,8 +4,9 @@ import com.sammaru5.sammaru.domain.ArticleEntity;
 import com.sammaru5.sammaru.domain.StorageEntity;
 import com.sammaru5.sammaru.repository.StorageRepository;
 import com.sammaru5.sammaru.service.article.ArticleStatusService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FileUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.apache.commons.io.FilenameUtils;
@@ -16,11 +17,14 @@ import java.io.InputStream;
 import java.util.UUID;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class FileRegisterService {
 
     private final ArticleStatusService articleStatusService;
     private final StorageRepository storageRepository;
+
+    @Value("${app.fileDir}")
+    private String fileDir;
 
     public boolean addFile(MultipartFile[] multipartFiles, Long articleId) {
 
@@ -29,7 +33,7 @@ public class FileRegisterService {
         for(MultipartFile multipartFile : multipartFiles){
             UUID uid = UUID.randomUUID();
             String extension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
-            File targetFile = new File("src/main/resources/files/" + articleEntity.getBoard().getBoardname() + "/" + uid.toString() + "." + extension);
+            File targetFile = new File(fileDir + articleEntity.getBoard().getId() + "/" + uid.toString() + "." + extension);
             try {
                 InputStream fileStream = multipartFile.getInputStream();
                 FileUtils.copyInputStreamToFile(fileStream, targetFile);

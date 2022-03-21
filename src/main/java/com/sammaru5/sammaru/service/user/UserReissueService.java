@@ -23,9 +23,6 @@ public class UserReissueService {
         String refreshToken = jwtTokenProvider.getRefreshTokenFromRequest(request);
         String newAccessToken;
 
-        System.out.println(accessToken);
-        System.out.println(refreshToken);
-
         //리프레쉬 토큰 시간이 유효할때
         if(StringUtils.hasText(refreshToken) && jwtTokenProvider.validateToken(refreshToken)) {
 

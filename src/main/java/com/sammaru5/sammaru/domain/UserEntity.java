@@ -25,4 +25,8 @@ public class UserEntity {
     private String email;
     private Long point;
     private UserAuthority role;
+
+    public void setRole(UserAuthority role) {
+        this.role = role;
+    }
 }

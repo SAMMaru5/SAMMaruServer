@@ -23,7 +23,7 @@ public class FileRemoveService {
     private String fileDir;
 
     //해당 파일 삭제
-    boolean removeFile(Long boardId, String filePath) throws NonExistentFileException {
+    public boolean removeFile(Long boardId, String filePath) throws NonExistentFileException {
 
         File targetFile = new File(fileDir + boardId + "/" + filePath);
         Optional<StorageEntity> storageEntity = storageRepository.findByFilePath(filePath);
@@ -36,7 +36,7 @@ public class FileRemoveService {
     }
 
     //Article에 속한 모든 파일 삭제
-    boolean removeFileByArticle(ArticleEntity articleEntity) throws NonExistentFileException {
+    public boolean removeFileByArticle(ArticleEntity articleEntity) throws NonExistentFileException {
 
         List<StorageEntity> storageEntities = storageRepository.findByArticle(articleEntity);
         for(StorageEntity storageEntity : storageEntities){

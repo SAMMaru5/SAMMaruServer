@@ -1,5 +1,6 @@
 package com.sammaru5.sammaru.domain;
 
+import com.sammaru5.sammaru.request.CalendarRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,4 +22,11 @@ public class CalendarEntity {
     private Date start;
     private Date end;
     private String content;
+
+    public CalendarEntity(CalendarRequest calendarRequest) {
+        this.title = calendarRequest.getTitle();
+        this.start = calendarRequest.getStart();
+        this.end = calendarRequest.getEnd();
+        this.content = calendarRequest.getContent();
+    }
 }

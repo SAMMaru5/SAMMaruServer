@@ -41,4 +41,8 @@ public class UserEntity {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public void setPoint(Long point) {
+        this.point = point;
+    }
 }

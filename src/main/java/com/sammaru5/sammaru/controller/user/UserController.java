@@ -1,6 +1,7 @@
 package com.sammaru5.sammaru.controller.user;
 
 import com.sammaru5.sammaru.apiresult.ApiResult;
+import com.sammaru5.sammaru.dto.UserDTO;
 import com.sammaru5.sammaru.request.PointRequest;
 import com.sammaru5.sammaru.request.RoleRequest;
 import com.sammaru5.sammaru.request.UserRequest;
@@ -39,7 +40,7 @@ public class UserController {
     @GetMapping("/user/info")
     public ApiResult<?> userInfo(Authentication authentication) {
         try{
-            return ApiResult.OK(userSearchService.getUserFromToken(authentication));
+            return ApiResult.OK(new UserDTO(userSearchService.getUserFromToken(authentication)));
         } catch(Exception e) {
             return ApiResult.ERROR(e, HttpStatus.UNAUTHORIZED);
         }
@@ -50,6 +51,7 @@ public class UserController {
         try{
             return ApiResult.OK(userModifyService.modifyUser(authentication, userRequest));
         } catch(Exception e) {
+            e.printStackTrace();
             return ApiResult.ERROR(e, HttpStatus.UNAUTHORIZED);
         }
     }

@@ -2,6 +2,7 @@ package com.sammaru5.sammaru.service.user;
 
 import com.sammaru5.sammaru.domain.UserAuthority;
 import com.sammaru5.sammaru.domain.UserEntity;
+import com.sammaru5.sammaru.dto.UserDTO;
 import com.sammaru5.sammaru.repository.UserRepository;
 import com.sammaru5.sammaru.exception.AlreadyExistStudentIdException;
 import com.sammaru5.sammaru.request.SignUpRequest;
@@ -16,7 +17,7 @@ public class UserRegisterService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserEntity signUpUser(SignUpRequest signUpRequest) throws Exception {
+    public UserDTO signUpUser(SignUpRequest signUpRequest) throws Exception {
 
         if(userRepository.existsByStudentId(signUpRequest.getStudentId())) {
             throw new AlreadyExistStudentIdException();
@@ -30,6 +31,6 @@ public class UserRegisterService {
                 .role(UserAuthority.ROLE_TEMP)
                 .build();
 
-        return userRepository.save(userEntity);
+        return new UserDTO(userRepository.save(userEntity));
     }
 }

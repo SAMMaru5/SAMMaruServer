@@ -2,6 +2,7 @@ package com.sammaru5.sammaru.service.user;
 
 import com.sammaru5.sammaru.apiresult.ApiResult;
 import com.sammaru5.sammaru.domain.UserEntity;
+import com.sammaru5.sammaru.dto.UserDTO;
 import com.sammaru5.sammaru.repository.UserRepository;
 import com.sammaru5.sammaru.request.UserRequest;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ public class UserModifyService {
     private final UserSearchService userSearchService;
     private final PasswordEncoder passwordEncoder;
 
-    public UserEntity modifyUser(Authentication authentication, UserRequest userRequest) throws Exception {
+    public UserDTO modifyUser(Authentication authentication, UserRequest userRequest) throws Exception {
 
         try{
             UserEntity userEntity = userSearchService.getUserFromToken(authentication);
@@ -30,8 +31,9 @@ public class UserModifyService {
             if(userRequest.getPassword() != null){
                 userEntity.setPassword(passwordEncoder.encode(userRequest.getPassword()));
             }
-            return userRepository.save(userEntity);
+            return new UserDTO(userRepository.save(userEntity));
         } catch(Exception e) {
+            e.printStackTrace();
             throw e;
         }
 

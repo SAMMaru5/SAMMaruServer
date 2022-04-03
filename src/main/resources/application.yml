@@ -34,3 +34,7 @@ app:
   jwtTokenValidTime: 900000
   jwtSecretKey: SammarufiveSammarufiveSammarufiveSammarufiveSammarufiveSammarufiveSammarufiveSammarufiveSammarufiveSammarufiveSammarufiveSammarufiveSammarufive
   fileDir: src/main/resources/files/
+  swagger:
+    API_NAME: Sammaru_API
+    API_VERSION: 1.0.0
+    API_DESCRIPTION: Sammaru_API_DESCRIPTION

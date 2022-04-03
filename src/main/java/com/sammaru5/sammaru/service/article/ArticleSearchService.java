@@ -1,10 +1,11 @@
 package com.sammaru5.sammaru.service.article;
 
-import com.sammaru5.sammaru.domain.StorageEntity;
-import com.sammaru5.sammaru.dto.ArticleDTO;
 import com.sammaru5.sammaru.domain.ArticleEntity;
 import com.sammaru5.sammaru.domain.BoardEntity;
+import com.sammaru5.sammaru.domain.StorageEntity;
 import com.sammaru5.sammaru.domain.UserEntity;
+import com.sammaru5.sammaru.dto.ArticleDTO;
+import com.sammaru5.sammaru.dto.BoardDTO;
 import com.sammaru5.sammaru.exception.InvalidUserException;
 import com.sammaru5.sammaru.exception.NonExistentAritcleException;
 import com.sammaru5.sammaru.exception.NonExistentBoardnameException;
@@ -72,10 +73,12 @@ public class ArticleSearchService {
      * @return
      * @throws Exception
      */
-    public List<ArticleEntity> findAllByBoardId(Long boardId) throws Exception {
+    public List<ArticleDTO> findAllByBoardId(Long boardId) throws Exception {
         BoardEntity findBoard = boardSearchService.findBoardById(boardId);
         List<ArticleEntity> articles = articleRepository.findByBoard(findBoard);
-        if(!articles.isEmpty()) return articles;
+        if(!articles.isEmpty()) {
+            return articles.stream().map(ArticleDTO::new).collect(Collectors.toList());
+        }
         else throw new NonExistentAritcleException();
     }
 

@@ -1,8 +1,8 @@
 package com.sammaru5.sammaru.service.article;
 
-import com.sammaru5.sammaru.dto.ArticleDTO;
 import com.sammaru5.sammaru.domain.ArticleEntity;
 import com.sammaru5.sammaru.domain.UserEntity;
+import com.sammaru5.sammaru.dto.ArticleDTO;
 import com.sammaru5.sammaru.exception.InvalidUserException;
 import com.sammaru5.sammaru.exception.NonExistentAritcleException;
 import com.sammaru5.sammaru.repository.ArticleRepository;
@@ -52,12 +52,12 @@ public class ArticleRemoveService {
      * @throws Exception
      */
     public boolean removeArticleByAdmin(Long boardId) throws Exception {
-        List<ArticleEntity> articles = articleSearchService.findAllByBoardId(boardId);
+        List<ArticleDTO> articles = articleSearchService.findAllByBoardId(boardId);
         if (articles.isEmpty()) {
             throw new NonExistentAritcleException();
         }
         List<Long> ids = new ArrayList<>();
-        for (ArticleEntity a : articles) {
+        for (ArticleDTO a : articles) {
             ids.add(a.getId());
         }
         articleRepository.deleteAllByIdInQuery(ids);

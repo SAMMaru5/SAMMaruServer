@@ -1,6 +1,7 @@
 package com.sammaru5.sammaru.service.board;
 
 import com.sammaru5.sammaru.domain.BoardEntity;
+import com.sammaru5.sammaru.dto.BoardDTO;
 import com.sammaru5.sammaru.exception.NonExistentBoardException;
 import com.sammaru5.sammaru.exception.NonExistentBoardnameException;
 import com.sammaru5.sammaru.repository.BoardRepository;

@@ -3,6 +3,7 @@ package com.sammaru5.sammaru.service.article;
 import com.sammaru5.sammaru.domain.ArticleEntity;
 import com.sammaru5.sammaru.domain.BoardEntity;
 import com.sammaru5.sammaru.domain.UserEntity;
+import com.sammaru5.sammaru.dto.ArticleDTO;
 import com.sammaru5.sammaru.exception.EmptyArticleException;
 import com.sammaru5.sammaru.repository.ArticleRepository;
 import com.sammaru5.sammaru.request.ArticleRequest;
@@ -22,7 +23,7 @@ public class ArticleRegisterService {
     private final UserSearchService userSearchService;
     private final FileRegisterService fileRegisterService;
 
-    public ArticleEntity addArticle(Authentication authentication, Long boardId, ArticleRequest articleRequest, MultipartFile[] multipartFiles) throws Exception {
+    public ArticleDTO addArticle(Authentication authentication, Long boardId, ArticleRequest articleRequest, MultipartFile[] multipartFiles) throws Exception {
 
         BoardEntity findBoard = boardSearchService.findBoardById(boardId);
         UserEntity findUser = userSearchService.getUserFromToken(authentication);
@@ -31,6 +32,6 @@ public class ArticleRegisterService {
         if(multipartFiles.length != 0)
             fileRegisterService.addFile(multipartFiles, articleEntity.getId());
 
-        return articleEntity;
+        return new ArticleDTO(articleEntity);
     }
 }

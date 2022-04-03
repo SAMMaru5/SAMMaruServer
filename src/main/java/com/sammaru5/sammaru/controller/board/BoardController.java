@@ -34,7 +34,7 @@ public class BoardController {
     @PostMapping("/permission/api/boards")
     public ApiResult<?> boardAdd(Authentication authentication, @RequestBody BoardRequest boardRequest) {
         try {
-            return ApiResult.OK(new BoardDTO(boardRegisterService.addBoard(authentication, boardRequest)));
+            return ApiResult.OK(boardRegisterService.addBoard(authentication, boardRequest));
         } catch (Exception e) {
             return ApiResult.ERROR(e, HttpStatus.BAD_REQUEST);
         }

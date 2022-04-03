@@ -1,7 +1,6 @@
 package com.sammaru5.sammaru.service.article;
 
 import com.sammaru5.sammaru.domain.ArticleEntity;
-import com.sammaru5.sammaru.domain.StorageEntity;
 import com.sammaru5.sammaru.domain.UserEntity;
 import com.sammaru5.sammaru.dto.ArticleDTO;
 import com.sammaru5.sammaru.exception.EmptyArticleException;
@@ -11,14 +10,12 @@ import com.sammaru5.sammaru.repository.ArticleRepository;
 import com.sammaru5.sammaru.request.ArticleRequest;
 import com.sammaru5.sammaru.service.storage.FileRegisterService;
 import com.sammaru5.sammaru.service.storage.FileRemoveService;
-import com.sammaru5.sammaru.service.storage.FileSearchService;
 import com.sammaru5.sammaru.service.user.UserSearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -31,7 +28,7 @@ public class ArticleModifyService {
     private final FileRemoveService fileRemoveService;
     private final FileRegisterService fileRegisterService;
 
-    public boolean modifyArticle(Authentication authentication, Long boardId, Long articleId, ArticleRequest articleRequest, MultipartFile[] multipartFiles) throws Exception {
+    public ArticleDTO modifyArticle(Authentication authentication, Long boardId, Long articleId, ArticleRequest articleRequest, MultipartFile[] multipartFiles) throws Exception {
         if (articleRequest.getTitle() == null || articleRequest.getContent() == null) {
             throw new EmptyArticleException();
         }
@@ -46,7 +43,7 @@ public class ArticleModifyService {
                 if (multipartFiles != null) {
                     fileRemoveService.removeFileByArticle(article);
                     fileRegisterService.addFile(multipartFiles, article.getId());
-                    return true;
+                    return new ArticleDTO(article);
                 }
             } else {
                 // 존재하지 않는 게시글에 접근했을때
@@ -57,7 +54,7 @@ public class ArticleModifyService {
             throw new InvalidUserException();
         }
 
-        return false;
+        return null;
     }
 
 }

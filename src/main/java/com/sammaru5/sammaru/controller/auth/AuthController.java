@@ -2,11 +2,15 @@ package com.sammaru5.sammaru.controller.auth;
 
 
 import com.sammaru5.sammaru.apiresult.ApiResult;
+import com.sammaru5.sammaru.dto.JwtDTO;
+import com.sammaru5.sammaru.dto.UserDTO;
 import com.sammaru5.sammaru.request.SignInRequest;
 import com.sammaru5.sammaru.request.SignUpRequest;
 import com.sammaru5.sammaru.service.user.UserLoginService;
 import com.sammaru5.sammaru.service.user.UserRegisterService;
 import com.sammaru5.sammaru.service.user.UserReissueService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +21,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/auth")
 @AllArgsConstructor
+@Api(tags = {"회원 인증 API"})
 public class AuthController {
 
     private final UserRegisterService userRegisterService;
@@ -24,6 +29,7 @@ public class AuthController {
     private final UserReissueService userReissueService;
 
     @PostMapping("/signup")
+    @ApiOperation(value = "회원가입", notes = "사용자 회원가입" ,response = UserDTO.class)
     public ApiResult<?> userSignUp(@Valid @RequestBody SignUpRequest signUpRequest){
         try{
             return ApiResult.OK(userRegisterService.signUpUser(signUpRequest));
@@ -33,7 +39,8 @@ public class AuthController {
     }
 
     @PostMapping("/signin")
-    public ApiResult<?> userSignIn(@Valid @RequestBody SignInRequest signInRequest) {
+    @ApiOperation(value = "로그인", notes = "엑세스 토큰과 리프레쉬 토큰 반환")
+    public ApiResult<JwtDTO> userSignIn(@Valid @RequestBody SignInRequest signInRequest) {
         return ApiResult.OK(userLoginService.signInUser(signInRequest));
     }
 

@@ -22,7 +22,7 @@ public class BoardEntity {
     @Id @GeneratedValue
     private Long id;
 
-    private String boardname;
+    private String name;
     private String description;
 
     public BoardEntity(BoardRequest boardRequest) {
@@ -30,7 +30,7 @@ public class BoardEntity {
     }
 
     public BoardEntity(String boardname, String description) {
-        this.boardname = boardname;
+        this.name = boardname;
         this.description = description;
     }
 

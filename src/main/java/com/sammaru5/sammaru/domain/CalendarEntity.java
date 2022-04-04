@@ -16,7 +16,7 @@ import java.sql.Date;
 @NoArgsConstructor
 public class CalendarEntity {
     @Id @GeneratedValue
-    private Long calendarId;
+    private Long id;
 
     private String title;
     private Date start;

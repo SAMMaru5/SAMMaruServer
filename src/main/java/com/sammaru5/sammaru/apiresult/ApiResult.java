@@ -22,4 +22,7 @@ public class ApiResult<T> {
     public static ApiResult<?> ERROR(Throwable throwable, HttpStatus status) {
         return new ApiResult<>(false, null, new ApiError(throwable, status));
     }
+    public static ApiResult<?> ERROR(String message, HttpStatus status) {
+        return new ApiResult<>(false, null, new ApiError(message, status));
+    }
 }

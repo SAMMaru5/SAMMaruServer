@@ -2,7 +2,7 @@ package com.sammaru5.sammaru.service.file;
 
 import com.sammaru5.sammaru.domain.ArticleEntity;
 import com.sammaru5.sammaru.domain.FileEntity;
-import com.sammaru5.sammaru.repository.StorageRepository;
+import com.sammaru5.sammaru.repository.FileRepository;
 import com.sammaru5.sammaru.service.article.ArticleStatusService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FileUtils;
@@ -19,7 +19,7 @@ import java.util.UUID;
 @Service @RequiredArgsConstructor
 public class FileRegisterService {
     private final ArticleStatusService articleStatusService;
-    private final StorageRepository storageRepository;
+    private final FileRepository fileRepository;
     @Value("${app.fileDir}")
     private String fileDir;
 
@@ -38,7 +38,7 @@ public class FileRegisterService {
                 FileUtils.deleteQuietly(targetFile); //지움
                 e.printStackTrace();
             }
-            storageRepository.save(
+            fileRepository.save(
                     FileEntity.builder()
                             .article(articleEntity)
                             .filePath(uid.toString() + "." + extension)

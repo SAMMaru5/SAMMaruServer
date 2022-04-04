@@ -3,7 +3,7 @@ package com.sammaru5.sammaru.service.file;
 import com.sammaru5.sammaru.domain.ArticleEntity;
 import com.sammaru5.sammaru.domain.FileEntity;
 import com.sammaru5.sammaru.exception.NonExistentFileException;
-import com.sammaru5.sammaru.repository.StorageRepository;
+import com.sammaru5.sammaru.repository.FileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @Service @RequiredArgsConstructor
 public class FileRemoveService {
-    private final StorageRepository storageRepository;
+    private final FileRepository fileRepository;
     @Value("${app.fileDir}")
     private String fileDir;
 
@@ -22,19 +22,19 @@ public class FileRemoveService {
     public boolean removeFile(Long boardId, String filePath) throws NonExistentFileException {
 
         File targetFile = new File(fileDir + boardId + "/" + filePath);
-        Optional<FileEntity> storageEntity = storageRepository.findByFilePath(filePath);
+        Optional<FileEntity> storageEntity = fileRepository.findByFilePath(filePath);
         if(!targetFile.exists() || !storageEntity.isPresent()){
             throw new NonExistentFileException();
         }
 
-        storageRepository.delete(storageEntity.get());
+        fileRepository.delete(storageEntity.get());
         return targetFile.delete();
     }
 
     //Article에 속한 모든 파일 삭제
     public boolean removeFilesByArticle(ArticleEntity articleEntity) throws NonExistentFileException {
 
-        List<FileEntity> storageEntities = storageRepository.findByArticle(articleEntity);
+        List<FileEntity> storageEntities = fileRepository.findByArticle(articleEntity);
         for(FileEntity fileEntity : storageEntities){
             removeFile(articleEntity.getBoard().getId(), fileEntity.getFilePath());
         }

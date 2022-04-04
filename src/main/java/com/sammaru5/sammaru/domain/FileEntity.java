@@ -8,12 +8,12 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "storage")
+@Table(name = "file")
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class StorageEntity {
+public class FileEntity {
 
     @Id @GeneratedValue
     private Long id;

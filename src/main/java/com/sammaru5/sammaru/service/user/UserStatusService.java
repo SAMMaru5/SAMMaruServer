@@ -16,15 +16,7 @@ public class UserSearchService {
 
     private final UserRepository userRepository;
 
-    public boolean verifyAdmin(Authentication authentication) throws Exception {
-        UserEntity user = getUserFromToken(authentication);
-        UserAuthority role = user.getRole();
-        //if(role == UserAuthority.ROLE_ADMIN) return true;
-        //else return false;
-        return true;
-    }
-
-    public UserEntity getUserFromToken(Authentication authentication) throws Exception{
+    public UserEntity getUserFromAuth(Authentication authentication) throws Exception{
         UserDetail principal = (UserDetail) authentication.getPrincipal();
         Optional<UserEntity> findStudent = userRepository.findByStudentId(principal.getUsername());
         if(findStudent.isPresent()) {

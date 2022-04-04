@@ -18,17 +18,6 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 public class ArticleEntity {
 
-    public ArticleEntity(ArticleRequest articleRequest, BoardEntity board, UserEntity user) {
-        this(articleRequest.getTitle(), articleRequest.getContent());
-        this.board = board;
-        this.user = user;
-    }
-
-    public ArticleEntity(String title, String content) {
-        this.title = title;
-        this.content = content;
-    }
-
     @Id @GeneratedValue
     private Long id;
 
@@ -63,6 +52,17 @@ public class ArticleEntity {
     public void modifyArticle(ArticleRequest articleRequest) {
         this.title = articleRequest.getTitle();
         this.content = articleRequest.getContent();
+    }
+
+    public ArticleEntity(ArticleRequest articleRequest, BoardEntity board, UserEntity user) {
+        this(articleRequest.getTitle(), articleRequest.getContent());
+        this.board = board;
+        this.user = user;
+    }
+
+    public ArticleEntity(String title, String content) {
+        this.title = title;
+        this.content = content;
     }
 
 }

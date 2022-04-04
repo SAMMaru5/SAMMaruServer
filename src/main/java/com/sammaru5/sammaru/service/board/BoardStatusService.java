@@ -24,7 +24,7 @@ public class BoardStatusService {
     }
 
     public BoardEntity findBoardByName(String boardName) throws NonExistentBoardnameException {
-        BoardEntity findBoard = boardRepository.findByBoardname(boardName);
+        BoardEntity findBoard = boardRepository.findByName(boardName);
         if(findBoard != null) {
             return findBoard;
         } else {

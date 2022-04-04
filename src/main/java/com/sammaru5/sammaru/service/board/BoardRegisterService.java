@@ -14,7 +14,7 @@ public class BoardRegisterService {
 
     public BoardDTO addBoard(BoardRequest boardRequest) throws AlreadyExistBoardnameException {
         String boardName = boardRequest.getName();
-        BoardEntity findBoard = boardRepository.findByBoardname(boardName);
+        BoardEntity findBoard = boardRepository.findByName(boardName);
 
         if (findBoard == null) {
             return new BoardDTO(boardRepository.save(BoardEntity.builder()

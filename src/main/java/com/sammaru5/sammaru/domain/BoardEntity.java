@@ -26,11 +26,11 @@ public class BoardEntity {
     private String description;
 
     public BoardEntity(BoardRequest boardRequest) {
-        this(boardRequest.getBoardname(), boardRequest.getDescription());
+        this(boardRequest.getName(), boardRequest.getDescription());
     }
 
-    public BoardEntity(String boardname, String description) {
-        this.name = boardname;
+    public BoardEntity(String boardName, String description) {
+        this.name = boardName;
         this.description = description;
     }
 

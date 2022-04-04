@@ -37,9 +37,9 @@ public class ArticleController {
 
     @GetMapping("/api/boards/{boardId}/articles/{articleId}")
     @ApiOperation(value = "게시글 상세", notes = "게시글 상세 정보 가져오기", response = ArticleDTO.class)
-    public ApiResult<?> articleDetails(Authentication authentication, @PathVariable Long boardId, @PathVariable Long articleId) {
+    public ApiResult<?> articleDetails(@PathVariable Long boardId, @PathVariable Long articleId) {
         try {
-            return ApiResult.OK(articleSearchService.findArticleDetailsByClient(authentication, boardId, articleId));
+            return ApiResult.OK(articleSearchService.findArticle(articleId));
         } catch (Exception e) {
             return ApiResult.ERROR(e, HttpStatus.BAD_REQUEST);
         }
@@ -49,7 +49,7 @@ public class ArticleController {
     @ApiOperation(value = "게시글 삭제", notes = "게시글 삭제", response = Boolean.class)
     public ApiResult<?> articleRemove(Authentication authentication, @PathVariable Long boardId, @PathVariable Long articleId) {
         try {
-            return ApiResult.OK(articleRemoveService.removeArticleByAuthor(authentication, boardId, articleId));
+            return ApiResult.OK(articleRemoveService.removeArticle(authentication, boardId, articleId));
         } catch (Exception e) {
             return ApiResult.ERROR(e, HttpStatus.BAD_REQUEST);
         }

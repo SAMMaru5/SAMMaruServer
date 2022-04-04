@@ -1,27 +1,26 @@
 package com.sammaru5.sammaru.service.user;
 
-import com.sammaru5.sammaru.apiresult.ApiResult;
+import com.sammaru5.sammaru.domain.UserAuthority;
 import com.sammaru5.sammaru.domain.UserEntity;
 import com.sammaru5.sammaru.dto.UserDTO;
+import com.sammaru5.sammaru.exception.InvalidPointException;
 import com.sammaru5.sammaru.repository.UserRepository;
+import com.sammaru5.sammaru.request.PointRequest;
 import com.sammaru5.sammaru.request.UserRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-@Service
-@RequiredArgsConstructor
+@Service @RequiredArgsConstructor
 public class UserModifyService {
     private final UserRepository userRepository;
-    private final UserSearchService userSearchService;
+    private final UserStatusService userStatusService;
     private final PasswordEncoder passwordEncoder;
 
     public UserDTO modifyUser(Authentication authentication, UserRequest userRequest) throws Exception {
-
         try{
-            UserEntity userEntity = userSearchService.getUserFromToken(authentication);
+            UserEntity userEntity = userStatusService.getUser(authentication);
             if(userRequest.getUsername() != null){
                 userEntity.setUsername(userRequest.getUsername());
             }
@@ -36,6 +35,20 @@ public class UserModifyService {
             e.printStackTrace();
             throw e;
         }
+    }
 
+    public UserDTO modifyUserRole(Long userId, UserAuthority role){
+        UserEntity userEntity = userRepository.findById(userId).get();
+        userEntity.setRole(role);
+        return new UserDTO(userRepository.save(userEntity));
+    }
+
+    public UserDTO addUserPoint(Long userId, PointRequest pointRequest) throws InvalidPointException {
+        UserEntity userEntity = userRepository.getById(userId);
+        if(userEntity.getPoint() + pointRequest.getAddPoint() < 0){
+            throw new InvalidPointException();
+        }
+        userEntity.setPoint(userEntity.getPoint() + pointRequest.getAddPoint());
+        return new UserDTO(userRepository.save(userEntity));
     }
 }

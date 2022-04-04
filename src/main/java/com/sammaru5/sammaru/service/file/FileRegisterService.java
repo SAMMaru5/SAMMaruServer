@@ -1,7 +1,7 @@
-package com.sammaru5.sammaru.service.storage;
+package com.sammaru5.sammaru.service.file;
 
 import com.sammaru5.sammaru.domain.ArticleEntity;
-import com.sammaru5.sammaru.domain.StorageEntity;
+import com.sammaru5.sammaru.domain.FileEntity;
 import com.sammaru5.sammaru.repository.StorageRepository;
 import com.sammaru5.sammaru.service.article.ArticleStatusService;
 import lombok.RequiredArgsConstructor;
@@ -16,19 +16,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
 
-@Service
-@RequiredArgsConstructor
+@Service @RequiredArgsConstructor
 public class FileRegisterService {
-
     private final ArticleStatusService articleStatusService;
     private final StorageRepository storageRepository;
-
     @Value("${app.fileDir}")
     private String fileDir;
 
-    public boolean addFile(MultipartFile[] multipartFiles, Long articleId) {
+    public boolean addFiles(MultipartFile[] multipartFiles, Long articleId) {
 
-        ArticleEntity articleEntity = articleStatusService.findArticleById(articleId).get();
+        ArticleEntity articleEntity = articleStatusService.findArticle(articleId).get();
 
         for(MultipartFile multipartFile : multipartFiles){
             UUID uid = UUID.randomUUID();
@@ -42,7 +39,7 @@ public class FileRegisterService {
                 e.printStackTrace();
             }
             storageRepository.save(
-                    StorageEntity.builder()
+                    FileEntity.builder()
                             .article(articleEntity)
                             .filePath(uid.toString() + "." + extension)
                             .fileName(multipartFile.getOriginalFilename())

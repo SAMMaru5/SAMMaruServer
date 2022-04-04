@@ -1,8 +1,9 @@
 package com.sammaru5.sammaru.dto;
 
 import com.sammaru5.sammaru.domain.ArticleEntity;
-import com.sammaru5.sammaru.domain.StorageEntity;
+import com.sammaru5.sammaru.domain.FileEntity;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
 import static org.springframework.beans.BeanUtils.copyProperties;
 
 @Getter
+@Setter
 public class ArticleDTO {
     private Long id;
     private String title;
@@ -27,7 +29,7 @@ public class ArticleDTO {
         this.author = articleEntity.getUser().getUsername();
     }
 
-    public ArticleDTO(ArticleEntity articleEntity, List<StorageEntity> files) {
+    public ArticleDTO(ArticleEntity articleEntity, List<FileEntity> files) {
         this(articleEntity);
 
         if(files != null) {

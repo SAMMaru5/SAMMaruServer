@@ -1,6 +1,5 @@
 package com.sammaru5.sammaru.controller.auth;
 
-
 import com.sammaru5.sammaru.apiresult.ApiResult;
 import com.sammaru5.sammaru.dto.JwtDTO;
 import com.sammaru5.sammaru.dto.UserDTO;

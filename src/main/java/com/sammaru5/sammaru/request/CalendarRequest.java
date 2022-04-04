@@ -6,9 +6,8 @@ import lombok.NoArgsConstructor;
 
 import java.sql.Date;
 
-@Getter @AllArgsConstructor
+@Getter
 public class CalendarRequest {
-
     private String title;
     private String content;
     private Date start;

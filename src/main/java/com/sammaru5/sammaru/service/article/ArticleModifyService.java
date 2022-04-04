@@ -8,9 +8,9 @@ import com.sammaru5.sammaru.exception.InvalidUserException;
 import com.sammaru5.sammaru.exception.NonExistentAritcleException;
 import com.sammaru5.sammaru.repository.ArticleRepository;
 import com.sammaru5.sammaru.request.ArticleRequest;
-import com.sammaru5.sammaru.service.storage.FileRegisterService;
-import com.sammaru5.sammaru.service.storage.FileRemoveService;
-import com.sammaru5.sammaru.service.user.UserSearchService;
+import com.sammaru5.sammaru.service.file.FileRegisterService;
+import com.sammaru5.sammaru.service.file.FileRemoveService;
+import com.sammaru5.sammaru.service.user.UserStatusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -18,13 +18,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 
-@Service
-@RequiredArgsConstructor
+@Service @RequiredArgsConstructor
 public class ArticleModifyService {
-
     private final ArticleRepository articleRepository;
-    private final ArticleRegisterService articleRegisterService;
-    private final UserSearchService userSearchService;
+    private final UserStatusService userStatusService;
     private final FileRemoveService fileRemoveService;
     private final FileRegisterService fileRegisterService;
 
@@ -33,7 +30,7 @@ public class ArticleModifyService {
             throw new EmptyArticleException();
         }
 
-        UserEntity findUser = userSearchService.getUserFromToken(authentication);
+        UserEntity findUser = userStatusService.getUser(authentication);
         if (findUser != null) {
             Optional<ArticleEntity> findArticle = articleRepository.findById(articleId);
             if (findArticle.isPresent()) {
@@ -41,8 +38,8 @@ public class ArticleModifyService {
                 article.modifyArticle(articleRequest);
 
                 if (multipartFiles != null) {
-                    fileRemoveService.removeFileByArticle(article);
-                    fileRegisterService.addFile(multipartFiles, article.getId());
+                    fileRemoveService.removeFilesByArticle(article);
+                    fileRegisterService.addFiles(multipartFiles, article.getId());
                     return new ArticleDTO(article);
                 }
             } else {

@@ -6,7 +6,7 @@ import com.sammaru5.sammaru.dto.ArticleDTO;
 import com.sammaru5.sammaru.exception.InvalidUserException;
 import com.sammaru5.sammaru.exception.NonExistentAritcleException;
 import com.sammaru5.sammaru.repository.ArticleRepository;
-import com.sammaru5.sammaru.service.user.UserSearchService;
+import com.sammaru5.sammaru.service.user.UserStatusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -15,19 +15,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Service
-@RequiredArgsConstructor
+@Service @RequiredArgsConstructor
 public class ArticleRemoveService {
-
     private final ArticleRepository articleRepository;
     private final ArticleSearchService articleSearchService;
-    private final UserSearchService userSearchService;
+    private final UserStatusService userStatusService;
 
-    /**
-     * 작성자가 게시글 삭제
-     */
-    public boolean removeArticleByAuthor(Authentication authentication, Long boardId, Long articleId) throws Exception {
-        UserEntity findUser = userSearchService.getUserFromToken(authentication);
+    public boolean removeArticle(Authentication authentication, Long boardId, Long articleId) throws Exception {
+        UserEntity findUser = userStatusService.getUser(authentication);
         if(findUser == null) {
             throw new InvalidUserException();
         }
@@ -45,14 +40,8 @@ public class ArticleRemoveService {
 
     }
 
-    /**
-     * Admin이 게시글 삭제
-     * @param boardId
-     * @return
-     * @throws Exception
-     */
     public boolean removeArticleByAdmin(Long boardId) throws Exception {
-        List<ArticleDTO> articles = articleSearchService.findAllByBoardId(boardId);
+        List<ArticleDTO> articles = articleSearchService.findArticlesByBoardId(boardId);
         if (articles.isEmpty()) {
             throw new NonExistentAritcleException();
         }

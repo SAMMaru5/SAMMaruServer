@@ -3,35 +3,26 @@ package com.sammaru5.sammaru.service.board;
 import com.sammaru5.sammaru.domain.BoardEntity;
 import com.sammaru5.sammaru.dto.BoardDTO;
 import com.sammaru5.sammaru.exception.AlreadyExistBoardnameException;
-import com.sammaru5.sammaru.exception.NoPermissionException;
 import com.sammaru5.sammaru.repository.BoardRepository;
 import com.sammaru5.sammaru.request.BoardRequest;
-import com.sammaru5.sammaru.service.user.UserSearchService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-@RequiredArgsConstructor
-@Service
+@Service @RequiredArgsConstructor
 public class BoardRegisterService {
-
     private final BoardRepository boardRepository;
-    private final UserSearchService userSearchService;
 
-    public BoardDTO addBoard(Authentication authentication, BoardRequest boardRequest) throws Exception {
-        String boardname = boardRequest.getBoardname();
-        BoardEntity findBoard = boardRepository.findByBoardname(boardname);
-        if(userSearchService.verifyAdmin(authentication)) {
-            if(findBoard == null) {
-                return new BoardDTO(boardRepository.save(BoardEntity.builder()
-                        .boardname(boardRequest.getBoardname())
-                        .description(boardRequest.getDescription())
-                        .build()));
-            } else {
-                throw new AlreadyExistBoardnameException();
-            }
+    public BoardDTO addBoard(BoardRequest boardRequest) throws AlreadyExistBoardnameException {
+        String boardName = boardRequest.getName();
+        BoardEntity findBoard = boardRepository.findByBoardname(boardName);
+
+        if (findBoard == null) {
+            return new BoardDTO(boardRepository.save(BoardEntity.builder()
+                    .name(boardRequest.getName())
+                    .description(boardRequest.getDescription())
+                    .build()));
         } else {
-            throw new NoPermissionException();
+            throw new AlreadyExistBoardnameException();
         }
     }
 }

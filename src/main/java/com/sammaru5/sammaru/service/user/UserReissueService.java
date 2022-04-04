@@ -4,20 +4,18 @@ import com.sammaru5.sammaru.dto.JwtDTO;
 import com.sammaru5.sammaru.exception.InvalidRefreshTokenException;
 import com.sammaru5.sammaru.security.JwtTokenProvider;
 import com.sammaru5.sammaru.service.redis.RedisService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 
-@Service
-@AllArgsConstructor
+@Service @RequiredArgsConstructor
 public class UserReissueService {
-
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisService redisService;
 
-    public JwtDTO reissueUser(HttpServletRequest request) throws Exception {
+    public JwtDTO reissueUser(HttpServletRequest request) throws InvalidRefreshTokenException {
 
         String accessToken = jwtTokenProvider.getTokenFromRequest(request);
         String refreshToken = jwtTokenProvider.getRefreshTokenFromRequest(request);

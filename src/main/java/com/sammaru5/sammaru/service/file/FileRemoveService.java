@@ -1,8 +1,7 @@
-package com.sammaru5.sammaru.service.storage;
+package com.sammaru5.sammaru.service.file;
 
 import com.sammaru5.sammaru.domain.ArticleEntity;
-import com.sammaru5.sammaru.domain.BoardEntity;
-import com.sammaru5.sammaru.domain.StorageEntity;
+import com.sammaru5.sammaru.domain.FileEntity;
 import com.sammaru5.sammaru.exception.NonExistentFileException;
 import com.sammaru5.sammaru.repository.StorageRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,12 +12,9 @@ import java.io.File;
 import java.util.List;
 import java.util.Optional;
 
-@Service
-@RequiredArgsConstructor
+@Service @RequiredArgsConstructor
 public class FileRemoveService {
-
     private final StorageRepository storageRepository;
-
     @Value("${app.fileDir}")
     private String fileDir;
 
@@ -26,7 +22,7 @@ public class FileRemoveService {
     public boolean removeFile(Long boardId, String filePath) throws NonExistentFileException {
 
         File targetFile = new File(fileDir + boardId + "/" + filePath);
-        Optional<StorageEntity> storageEntity = storageRepository.findByFilePath(filePath);
+        Optional<FileEntity> storageEntity = storageRepository.findByFilePath(filePath);
         if(!targetFile.exists() || !storageEntity.isPresent()){
             throw new NonExistentFileException();
         }
@@ -36,11 +32,11 @@ public class FileRemoveService {
     }
 
     //Article에 속한 모든 파일 삭제
-    public boolean removeFileByArticle(ArticleEntity articleEntity) throws NonExistentFileException {
+    public boolean removeFilesByArticle(ArticleEntity articleEntity) throws NonExistentFileException {
 
-        List<StorageEntity> storageEntities = storageRepository.findByArticle(articleEntity);
-        for(StorageEntity storageEntity : storageEntities){
-            removeFile(articleEntity.getBoard().getId(), storageEntity.getFilePath());
+        List<FileEntity> storageEntities = storageRepository.findByArticle(articleEntity);
+        for(FileEntity fileEntity : storageEntities){
+            removeFile(articleEntity.getBoard().getId(), fileEntity.getFilePath());
         }
         return true;
     }

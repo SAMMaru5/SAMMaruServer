@@ -6,19 +6,16 @@ import com.sammaru5.sammaru.dto.UserDTO;
 import com.sammaru5.sammaru.repository.UserRepository;
 import com.sammaru5.sammaru.exception.AlreadyExistStudentIdException;
 import com.sammaru5.sammaru.request.SignUpRequest;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-@Service
-@AllArgsConstructor
+@Service @RequiredArgsConstructor
 public class UserRegisterService {
-
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserDTO signUpUser(SignUpRequest signUpRequest) throws Exception {
-
+    public UserDTO signUpUser(SignUpRequest signUpRequest) throws AlreadyExistStudentIdException {
         if(userRepository.existsByStudentId(signUpRequest.getStudentId())) {
             throw new AlreadyExistStudentIdException();
         }

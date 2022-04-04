@@ -7,14 +7,13 @@ import static org.springframework.beans.BeanUtils.copyProperties;
 
 @Getter
 public class BoardDTO {
-
-    private Long boardId;
-    private String boardname;
+    private Long id;
+    private String name;
     private String description;
 
     public BoardDTO(BoardEntity boardEntity) {
-        this.boardId = boardEntity.getId();
-        this.boardname = boardEntity.getBoardname();
+        this.id = boardEntity.getId();
+        this.name = boardEntity.getName();
         this.description = boardEntity.getDescription();
     }
 }

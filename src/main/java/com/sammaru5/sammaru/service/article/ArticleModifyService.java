@@ -3,9 +3,7 @@ package com.sammaru5.sammaru.service.article;
 import com.sammaru5.sammaru.domain.ArticleEntity;
 import com.sammaru5.sammaru.domain.UserEntity;
 import com.sammaru5.sammaru.dto.ArticleDTO;
-import com.sammaru5.sammaru.exception.EmptyArticleException;
 import com.sammaru5.sammaru.exception.InvalidUserException;
-import com.sammaru5.sammaru.exception.NonExistentAritcleException;
 import com.sammaru5.sammaru.repository.ArticleRepository;
 import com.sammaru5.sammaru.request.ArticleRequest;
 import com.sammaru5.sammaru.service.file.FileRegisterService;
@@ -26,10 +24,6 @@ public class ArticleModifyService {
     private final FileRegisterService fileRegisterService;
 
     public ArticleDTO modifyArticle(Authentication authentication, Long boardId, Long articleId, ArticleRequest articleRequest, MultipartFile[] multipartFiles) throws Exception {
-        if (articleRequest.getTitle() == null || articleRequest.getContent() == null) {
-            throw new EmptyArticleException();
-        }
-
         UserEntity findUser = userStatusService.getUser(authentication);
         if (findUser != null) {
             Optional<ArticleEntity> findArticle = articleRepository.findById(articleId);
@@ -44,7 +38,7 @@ public class ArticleModifyService {
                 }
             } else {
                 // 존재하지 않는 게시글에 접근했을때
-                throw new NonExistentAritcleException();
+                throw new NullPointerException("존재하지 않는 게시물에 접근했습니다");
             }
         } else {
             // 정상적인 사용자가 아닐때

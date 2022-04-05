@@ -2,27 +2,28 @@ package com.sammaru5.sammaru.service.board;
 
 import com.sammaru5.sammaru.domain.BoardEntity;
 import com.sammaru5.sammaru.dto.BoardDTO;
-import com.sammaru5.sammaru.exception.AlreadyExistBoardnameException;
 import com.sammaru5.sammaru.repository.BoardRepository;
 import com.sammaru5.sammaru.request.BoardRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service @RequiredArgsConstructor
 public class BoardRegisterService {
     private final BoardRepository boardRepository;
 
-    public BoardDTO addBoard(BoardRequest boardRequest) throws AlreadyExistBoardnameException {
+    public BoardDTO addBoard(BoardRequest boardRequest) throws IllegalArgumentException {
         String boardName = boardRequest.getName();
-        BoardEntity findBoard = boardRepository.findByName(boardName);
+        Optional<BoardEntity> boardEntity = boardRepository.findByName(boardName);
 
-        if (findBoard == null) {
+        if (!boardEntity.isPresent()) {
             return new BoardDTO(boardRepository.save(BoardEntity.builder()
                     .name(boardRequest.getName())
                     .description(boardRequest.getDescription())
                     .build()));
         } else {
-            throw new AlreadyExistBoardnameException();
+            throw new IllegalArgumentException("해당 게시판 이름은 이미 존재합니다!");
         }
     }
 }

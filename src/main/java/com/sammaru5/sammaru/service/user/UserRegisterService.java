@@ -4,7 +4,6 @@ import com.sammaru5.sammaru.domain.UserAuthority;
 import com.sammaru5.sammaru.domain.UserEntity;
 import com.sammaru5.sammaru.dto.UserDTO;
 import com.sammaru5.sammaru.repository.UserRepository;
-import com.sammaru5.sammaru.exception.AlreadyExistStudentIdException;
 import com.sammaru5.sammaru.request.SignUpRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,9 +14,9 @@ public class UserRegisterService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserDTO signUpUser(SignUpRequest signUpRequest) throws AlreadyExistStudentIdException {
+    public UserDTO signUpUser(SignUpRequest signUpRequest) throws IllegalArgumentException {
         if(userRepository.existsByStudentId(signUpRequest.getStudentId())) {
-            throw new AlreadyExistStudentIdException();
+            throw new IllegalArgumentException("해당 학번의 사옹자가 이미 존재합니다");
         }
         UserEntity userEntity = UserEntity.builder()
                 .studentId(signUpRequest.getStudentId())

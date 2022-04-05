@@ -4,7 +4,6 @@ import com.sammaru5.sammaru.domain.ArticleEntity;
 import com.sammaru5.sammaru.domain.UserEntity;
 import com.sammaru5.sammaru.dto.ArticleDTO;
 import com.sammaru5.sammaru.exception.InvalidUserException;
-import com.sammaru5.sammaru.exception.NonExistentAritcleException;
 import com.sammaru5.sammaru.repository.ArticleRepository;
 import com.sammaru5.sammaru.service.user.UserStatusService;
 import lombok.RequiredArgsConstructor;
@@ -35,15 +34,15 @@ public class ArticleRemoveService {
                 throw new InvalidUserException();
             }
         } else {
-            throw new NonExistentAritcleException();
+            throw new NullPointerException("해당 게시글이 존재하지 않습니다!");
         }
 
     }
 
-    public boolean removeArticleByAdmin(Long boardId) throws Exception {
+    public boolean removeArticleByAdmin(Long boardId) throws NullPointerException {
         List<ArticleDTO> articles = articleSearchService.findArticlesByBoardId(boardId);
         if (articles.isEmpty()) {
-            throw new NonExistentAritcleException();
+            throw new NullPointerException("해당 게시판에 게시글이 존재하지 않습니다!");
         }
         List<Long> ids = new ArrayList<>();
         for (ArticleDTO a : articles) {

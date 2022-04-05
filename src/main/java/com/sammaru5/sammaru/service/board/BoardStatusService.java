@@ -1,8 +1,6 @@
 package com.sammaru5.sammaru.service.board;
 
 import com.sammaru5.sammaru.domain.BoardEntity;
-import com.sammaru5.sammaru.exception.NonExistentBoardException;
-import com.sammaru5.sammaru.exception.NonExistentBoardnameException;
 import com.sammaru5.sammaru.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,30 +12,30 @@ import java.util.Optional;
 public class BoardStatusService {
     private final BoardRepository boardRepository;
 
-    public BoardEntity findBoard(Long boardId) throws NonExistentBoardException {
+    public BoardEntity findBoard(Long boardId) throws NullPointerException {
         Optional<BoardEntity> findBoard = boardRepository.findById(boardId);
         if(findBoard.isPresent()) {
             return findBoard.get();
         } else {
-            throw new NonExistentBoardException();
+            throw new NullPointerException("해당 boardId 게시판이 존재하지 않습니다");
         }
     }
 
-    public BoardEntity findBoardByName(String boardName) throws NonExistentBoardnameException {
-        BoardEntity findBoard = boardRepository.findByName(boardName);
-        if(findBoard != null) {
-            return findBoard;
+    public BoardEntity findBoardByName(String boardName) throws NullPointerException {
+        Optional<BoardEntity> findBoard = boardRepository.findByName(boardName);
+        if(findBoard.isPresent()) {
+            return findBoard.get();
         } else {
-            throw new NonExistentBoardnameException();
+            throw new NullPointerException("해당 boardName 게시판이 존재하지 않습니다!");
         }
     }
 
-    public List<BoardEntity> findBoards() throws NonExistentBoardException{
+    public List<BoardEntity> findBoards() throws NullPointerException{
         List<BoardEntity> boards = boardRepository.findAll();
         if(boards != null) {
             return boards;
         } else {
-            throw new NonExistentBoardException();
+            throw new NullPointerException("현재 존재하는 게시판이 없습니다");
         }
     }
 }

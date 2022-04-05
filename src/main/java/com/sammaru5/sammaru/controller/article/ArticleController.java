@@ -16,6 +16,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
+
 @RestController @RequiredArgsConstructor
 @Api(tags = {"게시글 API"})
 public class ArticleController {
@@ -27,7 +29,7 @@ public class ArticleController {
 
     @PostMapping(value="/api/boards/{boardId}/articles", consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
     @ApiOperation(value = "게시글 생성", notes = "게시판에 게시글 추가", response = ArticleDTO.class)
-    public ApiResult<?> articleAdd(Authentication authentication, @PathVariable Long boardId, @RequestPart(value="article") ArticleRequest articleRequest, @RequestPart(value="file", required = false) MultipartFile[] multipartFiles) {
+    public ApiResult<?> articleAdd(Authentication authentication, @PathVariable Long boardId, @RequestPart(value="article") @Valid ArticleRequest articleRequest, @RequestPart(value="file", required = false) MultipartFile[] multipartFiles) {
         try {
             return ApiResult.OK(articleRegisterService.addArticle(authentication, boardId, articleRequest, multipartFiles));
         } catch (Exception e) {
@@ -57,7 +59,7 @@ public class ArticleController {
 
     @PutMapping(value = "/api/boards/{boardId}/articles/{articleId}", consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
     @ApiOperation(value = "게시글 수정", notes = "작성자가 게시글 수정", response = ArticleDTO.class)
-    public ApiResult<?> articleModify(Authentication authentication, @PathVariable Long boardId, @PathVariable Long articleId, @RequestPart(value="article", required = false) ArticleRequest articleRequest, @RequestPart(value="file", required = false) MultipartFile[] multipartFiles) {
+    public ApiResult<?> articleModify(Authentication authentication, @PathVariable Long boardId, @PathVariable Long articleId, @RequestPart(value="article", required = false) @Valid ArticleRequest articleRequest, @RequestPart(value="file", required = false) MultipartFile[] multipartFiles) {
         try {
             return ApiResult.OK(articleModifyService.modifyArticle(authentication, boardId, articleId, articleRequest, multipartFiles));
         } catch(Exception e) {

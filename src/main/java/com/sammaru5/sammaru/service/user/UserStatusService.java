@@ -17,6 +17,5 @@ public class UserStatusService {
         UserDetail principal = (UserDetail) authentication.getPrincipal();
         Optional<UserEntity> findStudent = userRepository.findByStudentId(principal.getUsername());
         return findStudent.get();
-
     }
 }

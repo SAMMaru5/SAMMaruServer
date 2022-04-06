@@ -1,11 +1,13 @@
 package com.sammaru5.sammaru.controller.user;
 
 import com.sammaru5.sammaru.apiresult.ApiResult;
+import com.sammaru5.sammaru.domain.UserAuthority;
 import com.sammaru5.sammaru.dto.UserDTO;
 import com.sammaru5.sammaru.request.PointRequest;
 import com.sammaru5.sammaru.request.RoleRequest;
 import com.sammaru5.sammaru.request.UserRequest;
 import com.sammaru5.sammaru.service.user.UserModifyService;
+import com.sammaru5.sammaru.service.user.UserSearchService;
 import com.sammaru5.sammaru.service.user.UserStatusService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -21,6 +23,7 @@ import javax.validation.Valid;
 public class UserController {
     private final UserStatusService userStatusService;
     private final UserModifyService userModifyService;
+    private final UserSearchService userSearchService;
 
     @PatchMapping("/api/users/{userId}/role")
     @ApiOperation(value = "유저 권한 변경", notes = "userId에 해당하는 유저 권한 변경", response = UserDTO.class)
@@ -46,6 +49,18 @@ public class UserController {
         } catch(Exception e) {
             return ApiResult.ERROR(e, HttpStatus.UNAUTHORIZED);
         }
+    }
+
+    @GetMapping("/api/users/info")
+    @ApiOperation(value = "전체 회원 정보", notes = "전체 회원 정보 가져오기", responseContainer = "List", response = UserDTO.class)
+    public ApiResult<?> userList() {
+        return ApiResult.OK(userSearchService.findUsers());
+    }
+
+    @GetMapping("/api/users")
+    @ApiOperation(value = "해당 역할의 회원 정보", notes = "쿼리의 역할에 맞는 회원 정보들 가져오기", responseContainer = "List", response = UserDTO.class)
+    public ApiResult<?> UserListByRole(@RequestParam UserAuthority role) {
+        return ApiResult.OK(userSearchService.findUsersByRole(role));
     }
 
     @PatchMapping("/api/user/info")

@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,7 +30,7 @@ public class BoardController {
 
     @PostMapping("/api/boards")
     @ApiOperation(value = "게시판 생성", notes = "게시판을 생성", response = BoardDTO.class)
-    public ApiResult<?> boardAdd(@RequestBody BoardRequest boardRequest) {
+    public ApiResult<?> boardAdd(@Valid @RequestBody BoardRequest boardRequest) {
         try {
             return ApiResult.OK(boardRegisterService.addBoard(boardRequest));
         } catch (Exception e) {

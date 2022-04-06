@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController @RequiredArgsConstructor
 @Api(tags = {"사용자 API"})
 public class UserController {
@@ -22,13 +24,13 @@ public class UserController {
 
     @PatchMapping("/api/users/{userId}/role")
     @ApiOperation(value = "유저 권한 변경", notes = "userId에 해당하는 유저 권한 변경", response = UserDTO.class)
-    public ApiResult<?> userRoleModify(@RequestBody RoleRequest roleRequest, @PathVariable Long userId){
+    public ApiResult<?> userRoleModify(@Valid  @RequestBody RoleRequest roleRequest, @PathVariable Long userId){
         return ApiResult.OK(userModifyService.modifyUserRole(userId, roleRequest.getRole()));
     }
 
     @PostMapping("/api/users/{userId}/point")
     @ApiOperation(value = "유저 포인트 추가", notes = "userId에 해당하는 유저 포인트 부여 (음수 가능)", response = UserDTO.class)
-    public ApiResult<?> userPointAdd(@RequestBody PointRequest pointRequest, @PathVariable Long userId){
+    public ApiResult<?> userPointAdd(@Valid @RequestBody PointRequest pointRequest, @PathVariable Long userId){
         try{
             return ApiResult.OK(userModifyService.addUserPoint(userId, pointRequest));
         } catch (Exception e){
@@ -48,7 +50,7 @@ public class UserController {
 
     @PatchMapping("/api/user/info")
     @ApiOperation(value = "회원 정보 수정", notes = "회원 정보 수정하기", response = UserDTO.class)
-    public ApiResult<?> userModify(Authentication authentication, @RequestBody UserRequest userRequest){
+    public ApiResult<?> userModify(Authentication authentication, @Valid @RequestBody UserRequest userRequest){
         try{
             return ApiResult.OK(userModifyService.modifyUser(authentication, userRequest));
         } catch(Exception e) {

@@ -3,10 +3,10 @@ package com.sammaru5.sammaru.service.article;
 import com.sammaru5.sammaru.domain.ArticleEntity;
 import com.sammaru5.sammaru.domain.UserEntity;
 import com.sammaru5.sammaru.dto.ArticleDTO;
-import com.sammaru5.sammaru.exception.InvalidUserException;
 import com.sammaru5.sammaru.repository.ArticleRepository;
 import com.sammaru5.sammaru.service.user.UserStatusService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
@@ -20,23 +20,18 @@ public class ArticleRemoveService {
     private final ArticleSearchService articleSearchService;
     private final UserStatusService userStatusService;
 
-    public boolean removeArticle(Authentication authentication, Long boardId, Long articleId) throws Exception {
+    public boolean removeArticle(Authentication authentication, Long boardId, Long articleId) throws AccessDeniedException, NullPointerException {
         UserEntity findUser = userStatusService.getUser(authentication);
-        if(findUser == null) {
-            throw new InvalidUserException();
-        }
         Optional<ArticleEntity> findArticle = articleRepository.findById(articleId);
         if(findArticle.isPresent()) {
-            if(findArticle.get().getUser().getUsername().equals(findUser.getUsername())) {
-                articleRepository.deleteById(articleId);
-                return true;
-            } else {
-                throw new InvalidUserException();
+            if(findArticle.get().getUser() != findUser){ //작성자가 아닌 사람이 접근하려고 할때때
+                throw new AccessDeniedException("해당 게시물에 권한이 없는 사용자 입니다");
             }
+            articleRepository.deleteById(findArticle.get().getId());
+            return true;
         } else {
             throw new NullPointerException("해당 게시글이 존재하지 않습니다!");
         }
-
     }
 
     public boolean removeArticleByAdmin(Long boardId) throws NullPointerException {

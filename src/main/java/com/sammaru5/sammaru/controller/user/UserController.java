@@ -12,7 +12,6 @@ import com.sammaru5.sammaru.service.user.UserStatusService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,21 +33,13 @@ public class UserController {
     @PostMapping("/api/users/{userId}/point")
     @ApiOperation(value = "유저 포인트 추가", notes = "userId에 해당하는 유저 포인트 부여 (음수 가능)", response = UserDTO.class)
     public ApiResult<?> userPointAdd(@Valid @RequestBody PointRequest pointRequest, @PathVariable Long userId){
-        try{
-            return ApiResult.OK(userModifyService.addUserPoint(userId, pointRequest));
-        } catch (Exception e){
-            return ApiResult.ERROR(e, HttpStatus.BAD_REQUEST);
-        }
+        return ApiResult.OK(userModifyService.addUserPoint(userId, pointRequest));
     }
 
     @GetMapping("/api/user/info")
     @ApiOperation(value = "회원 정보", notes = "회원 정보 가져오기", response = UserDTO.class)
     public ApiResult<?> userDetails(Authentication authentication) {
-        try{
-            return ApiResult.OK(new UserDTO(userStatusService.getUser(authentication)));
-        } catch(Exception e) {
-            return ApiResult.ERROR(e, HttpStatus.UNAUTHORIZED);
-        }
+        return ApiResult.OK(new UserDTO(userStatusService.getUser(authentication)));
     }
 
     @GetMapping("/api/users/info")
@@ -66,11 +57,6 @@ public class UserController {
     @PatchMapping("/api/user/info")
     @ApiOperation(value = "회원 정보 수정", notes = "회원 정보 수정하기", response = UserDTO.class)
     public ApiResult<?> userModify(Authentication authentication, @Valid @RequestBody UserRequest userRequest){
-        try{
-            return ApiResult.OK(userModifyService.modifyUser(authentication, userRequest));
-        } catch(Exception e) {
-            e.printStackTrace();
-            return ApiResult.ERROR(e, HttpStatus.UNAUTHORIZED);
-        }
+        return ApiResult.OK(userModifyService.modifyUser(authentication, userRequest));
     }
 }

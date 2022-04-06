@@ -14,14 +14,9 @@ public class BoardRemoveService {
     private final BoardRepository boardRepository;
 
     @Transactional
-    public boolean removeBoard(Long boardId) throws Exception {
-        try {
-            articleRemoveService.removeArticleByAdmin(boardId);
-            boardRepository.deleteById(boardId);
-            return true;
-        } catch (Exception e){
-            throw e;
-        }
-
+    public boolean removeBoard(Long boardId)  {
+        articleRemoveService.removeArticleByAdmin(boardId);
+        boardRepository.deleteById(boardId);
+        return true;
     }
 }

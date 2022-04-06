@@ -10,7 +10,6 @@ import com.sammaru5.sammaru.service.article.ArticleSearchService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -30,21 +29,13 @@ public class ArticleController {
     @PostMapping(value="/api/boards/{boardId}/articles", consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
     @ApiOperation(value = "게시글 생성", notes = "게시판에 게시글 추가", response = ArticleDTO.class)
     public ApiResult<?> articleAdd(Authentication authentication, @PathVariable Long boardId, @RequestPart(value="article") @Valid ArticleRequest articleRequest, @RequestPart(value="file", required = false) MultipartFile[] multipartFiles) {
-        try {
-            return ApiResult.OK(articleRegisterService.addArticle(authentication, boardId, articleRequest, multipartFiles));
-        } catch (Exception e) {
-            return ApiResult.ERROR(e, HttpStatus.BAD_REQUEST);
-        }
+        return ApiResult.OK(articleRegisterService.addArticle(authentication, boardId, articleRequest, multipartFiles));
     }
 
     @GetMapping("/api/boards/{boardId}/articles/{articleId}")
     @ApiOperation(value = "게시글 상세", notes = "게시글 상세 정보 가져오기", response = ArticleDTO.class)
     public ApiResult<?> articleDetails(@PathVariable Long boardId, @PathVariable Long articleId) {
-        try {
-            return ApiResult.OK(articleSearchService.findArticle(articleId));
-        } catch (Exception e) {
-            return ApiResult.ERROR(e, HttpStatus.BAD_REQUEST);
-        }
+        return ApiResult.OK(articleSearchService.findArticle(articleId));
     }
 
     @DeleteMapping("/api/boards/{boardId}/articles/{articleId}")

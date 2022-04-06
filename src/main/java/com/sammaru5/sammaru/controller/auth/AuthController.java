@@ -11,7 +11,6 @@ import com.sammaru5.sammaru.service.user.UserReissueService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,11 +27,7 @@ public class AuthController {
     @PostMapping("/auth/signup")
     @ApiOperation(value = "회원가입", notes = "사용자 회원가입", response = UserDTO.class)
     public ApiResult<?> userSignUp(@Valid @RequestBody SignUpRequest signUpRequest){
-        try{
-            return ApiResult.OK(userRegisterService.signUpUser(signUpRequest));
-        } catch(Exception e) {
-            return ApiResult.ERROR(e, HttpStatus.BAD_REQUEST);
-        }
+        return ApiResult.OK(userRegisterService.signUpUser(signUpRequest));
     }
 
     @PostMapping("/auth/signin")
@@ -44,10 +39,6 @@ public class AuthController {
     @PostMapping("/auth/reissue")
     @ApiOperation(value = "엑세스 토큰 재발급", notes = "만료된 엑세스 토큰과, 리프레쉬 토큰을 이용해 토큰 재 발급", response = JwtDTO.class)
     public ApiResult<?> userReissue(HttpServletRequest request) {
-        try{
-            return ApiResult.OK(userReissueService.reissueUser(request));
-        } catch (Exception e) {
-            return ApiResult.ERROR(e, HttpStatus.BAD_REQUEST);
-        }
+        return ApiResult.OK(userReissueService.reissueUser(request));
     }
 }

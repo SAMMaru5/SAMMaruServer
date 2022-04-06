@@ -21,7 +21,7 @@ public class ArticleRegisterService {
     private final UserStatusService userStatusService;
     private final FileRegisterService fileRegisterService;
 
-    public ArticleDTO addArticle(Authentication authentication, Long boardId, ArticleRequest articleRequest, MultipartFile[] multipartFiles) throws Exception {
+    public ArticleDTO addArticle(Authentication authentication, Long boardId, ArticleRequest articleRequest, MultipartFile[] multipartFiles) throws NullPointerException {
 
         BoardEntity findBoard = boardStatusService.findBoard(boardId);
         UserEntity findUser = userStatusService.getUser(authentication);

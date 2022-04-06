@@ -1,7 +1,6 @@
 package com.sammaru5.sammaru.controller.board;
 
 import com.sammaru5.sammaru.apiresult.ApiResult;
-import com.sammaru5.sammaru.domain.BoardEntity;
 import com.sammaru5.sammaru.dto.ArticleDTO;
 import com.sammaru5.sammaru.dto.BoardDTO;
 import com.sammaru5.sammaru.request.BoardRequest;
@@ -16,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController @RequiredArgsConstructor
@@ -31,33 +29,19 @@ public class BoardController {
     @PostMapping("/api/boards")
     @ApiOperation(value = "게시판 생성", notes = "게시판을 생성", response = BoardDTO.class)
     public ApiResult<?> boardAdd(@Valid @RequestBody BoardRequest boardRequest) {
-        try {
-            return ApiResult.OK(boardRegisterService.addBoard(boardRequest));
-        } catch (Exception e) {
-            return ApiResult.ERROR(e, HttpStatus.BAD_REQUEST);
-        }
+        return ApiResult.OK(boardRegisterService.addBoard(boardRequest));
     }
 
     @DeleteMapping("/api/boards/{boardId}")
     @ApiOperation(value = "게시판 삭제", notes = "관리자가 게시판과 게시판에 속한 모든 게시글 삭제", response = Boolean.class)
     public ApiResult<?> boardRemove(@PathVariable Long boardId) {
-        try {
-            return ApiResult.OK(boardRemoveService.removeBoard(boardId));
-        } catch (Exception e) {
-            return ApiResult.ERROR(e, HttpStatus.BAD_REQUEST);
-        }
+        return ApiResult.OK(boardRemoveService.removeBoard(boardId));
     }
 
     @GetMapping("/no-permit/api/boards")
     @ApiOperation(value = "게시판 목록", notes = "게시판 목록을 조회", responseContainer = "List",response = BoardDTO.class)
     public ApiResult<?> boardList() {
-        try {
-            List<BoardEntity> boards = boardStatusService.findBoards();
-            List<BoardDTO> collect = boards.stream().map(BoardDTO::new).collect(Collectors.toList());
-            return ApiResult.OK(collect);
-        } catch (Exception e) {
-            return ApiResult.ERROR(e, HttpStatus.BAD_REQUEST);
-        }
+        return ApiResult.OK(boardStatusService.findBoards().stream().map(BoardDTO::new).collect(Collectors.toList()));
     }
 
     @GetMapping("/api/boards/{boardId}/pages/{pageNum}")

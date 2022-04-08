@@ -1,6 +1,6 @@
 package com.sammaru5.sammaru.domain;
 
-import com.sammaru5.sammaru.request.CalendarRequest;
+import com.sammaru5.sammaru.request.ScheduleRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,10 +11,10 @@ import javax.persistence.Table;
 import java.sql.Date;
 
 @Entity
-@Table(name = "calendar")
+@Table(name = "schedule")
 @Getter
 @NoArgsConstructor
-public class CalendarEntity {
+public class ScheduleEntity {
     @Id @GeneratedValue
     private Long id;
 
@@ -23,10 +23,10 @@ public class CalendarEntity {
     private Date end;
     private String content;
 
-    public CalendarEntity(CalendarRequest calendarRequest) {
-        this.title = calendarRequest.getTitle();
-        this.start = calendarRequest.getStart();
-        this.end = calendarRequest.getEnd();
-        this.content = calendarRequest.getContent();
+    public ScheduleEntity(ScheduleRequest scheduleRequest) {
+        this.title = scheduleRequest.getTitle();
+        this.start = scheduleRequest.getStart();
+        this.end = scheduleRequest.getEnd();
+        this.content = scheduleRequest.getContent();
     }
 }

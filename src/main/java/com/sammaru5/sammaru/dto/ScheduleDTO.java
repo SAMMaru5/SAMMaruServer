@@ -1,12 +1,12 @@
 package com.sammaru5.sammaru.dto;
 
-import com.sammaru5.sammaru.domain.CalendarEntity;
+import com.sammaru5.sammaru.domain.ScheduleEntity;
 import lombok.Getter;
 
 import java.sql.Date;
 
 @Getter
-public class CalendarDTO {
+public class ScheduleDTO {
 
     private Long id;
     private String title;
@@ -14,7 +14,7 @@ public class CalendarDTO {
     private Date end;
     private String content;
 
-    public CalendarDTO(CalendarEntity calendar) {
+    public ScheduleDTO(ScheduleEntity calendar) {
         this.id = calendar.getId();
         this.title = calendar.getTitle();
         this.start = calendar.getStart();

@@ -1,6 +1,7 @@
 package com.sammaru5.sammaru.service.calendar;
 
 import com.sammaru5.sammaru.domain.CalendarEntity;
+import com.sammaru5.sammaru.dto.CalendarDTO;
 import com.sammaru5.sammaru.repository.CalendarRepository;
 import com.sammaru5.sammaru.request.CalendarRequest;
 import lombok.RequiredArgsConstructor;
@@ -12,12 +13,9 @@ public class CalendarRegisterService {
 
     private final CalendarRepository calendarRepository;
 
-    public boolean addCalendar(CalendarRequest calendarRequest) {
-        if (calendarRequest == null || calendarRequest.getTitle().isEmpty() || calendarRequest.getContent().isEmpty() || calendarRequest.getStart() == null || calendarRequest.getEnd() == null) {
-            return false;
-        } else {
-            calendarRepository.save(new CalendarEntity(calendarRequest));
-            return true;
-        }
+    public CalendarDTO addCalendar(CalendarRequest calendarRequest) {
+        CalendarEntity calendar = new CalendarEntity(calendarRequest);
+        calendarRepository.save(calendar);
+        return new CalendarDTO(calendar);
     }
 }

@@ -59,7 +59,7 @@ public class ArticleSearchService {
     // 메인페이지에 보여지는 7개의 공지사항을 가져오는 메서드 findArticlesByBoardName
     public List<ArticleDTO> findArticlesByBoardName(String boardName) throws NullPointerException {
         BoardEntity findBoard = boardStatusService.findBoardByName(boardName);
-        Pageable pageable = PageRequest.of(0, 7, Sort.by("createDt").descending());
+        Pageable pageable = PageRequest.of(0, 7, Sort.by("createTime").descending());
         List<ArticleEntity> findArticles = articleRepository.findByBoard(findBoard, pageable);
         if(findArticles.isEmpty()){
             throw new NullPointerException("해당 게시판의 게시글이 아무것도 존재하지 않습니다!");

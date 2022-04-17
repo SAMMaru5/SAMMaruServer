@@ -1,18 +1,14 @@
 package com.sammaru5.sammaru.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.sammaru5.sammaru.request.CommentRequest;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "comment")
 @Getter
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
 public class CommentEntity {
 
     @Id @GeneratedValue
@@ -25,4 +21,10 @@ public class CommentEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private UserEntity user;
+
+    public CommentEntity (CommentRequest commentRequest, UserEntity user, ArticleEntity article) {
+        this.content = commentRequest.getContent();
+        this.article = article;
+        this.user = user;
+    }
 }

@@ -14,17 +14,17 @@ public class RedisService {
     private final RedisTemplate redisTemplate;
 
     // 데이터 넣기
-    public void setValues(String token, String id){
+    public void setValues(String key, String value){
         ValueOperations<String, String> values = redisTemplate.opsForValue();
-        values.set(token, id, Duration.ofMinutes(3)); // 3분 뒤 메모리에서 삭제. (리프레쉬 토큰 유효기간 3분)
+        values.set(key, value, Duration.ofMinutes(3)); // 3분 뒤 메모리에서 삭제. (리프레쉬 토큰 유효기간 3분)
     }
     // 데이터 가져오기
-    public String getValues(String token){
+    public String getValues(String key){
         ValueOperations<String, String> values = redisTemplate.opsForValue();
-        return values.get(token);
+        return values.get(key);
     }
     // 데이터 삭제
-    public void deleteValues(String token) {
-        redisTemplate.delete(token.substring(7));
+    public void deleteValues(String key) {
+        redisTemplate.delete(key.substring(7));
     }
 }

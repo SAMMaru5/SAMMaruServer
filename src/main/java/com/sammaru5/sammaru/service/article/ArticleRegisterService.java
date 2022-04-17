@@ -27,9 +27,10 @@ public class ArticleRegisterService {
         UserEntity findUser = userStatusService.getUser(authentication);
         ArticleEntity articleEntity = articleRepository.save(new ArticleEntity(articleRequest, findBoard, findUser));
 
-        if(multipartFiles.length != 0)
+        if(multipartFiles != null){
             fileRegisterService.addFiles(multipartFiles, articleEntity.getId());
-
+        }
+        
         return new ArticleDTO(articleEntity);
     }
 }

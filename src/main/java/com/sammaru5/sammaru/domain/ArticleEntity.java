@@ -58,6 +58,8 @@ public class ArticleEntity {
         this(articleRequest.getTitle(), articleRequest.getContent());
         this.board = board;
         this.user = user;
+        this.viewCnt = 0;
+        this.likeCnt = 0;
     }
 
     public ArticleEntity(String title, String content) {

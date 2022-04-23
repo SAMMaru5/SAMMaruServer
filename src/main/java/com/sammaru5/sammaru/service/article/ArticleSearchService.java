@@ -1,13 +1,16 @@
 package com.sammaru5.sammaru.service.article;
 
+import com.sammaru5.sammaru.config.CacheKey;
 import com.sammaru5.sammaru.domain.ArticleEntity;
 import com.sammaru5.sammaru.domain.BoardEntity;
 import com.sammaru5.sammaru.domain.FileEntity;
 import com.sammaru5.sammaru.dto.ArticleDTO;
+import com.sammaru5.sammaru.dto.FileDTO;
 import com.sammaru5.sammaru.repository.ArticleRepository;
+import com.sammaru5.sammaru.repository.FileRepository;
 import com.sammaru5.sammaru.service.board.BoardStatusService;
-import com.sammaru5.sammaru.service.file.FileStatusService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -21,18 +24,24 @@ import java.util.stream.Collectors;
 public class ArticleSearchService {
     private final BoardStatusService boardStatusService;
     private final ArticleRepository articleRepository;
-    private final FileStatusService fileStatusService;
+    private final FileRepository fileRepository;
 
+    @Cacheable(value = CacheKey.ARTICLE, key = "{#articleId}", cacheManager = "cacheManager") //value와 key로 레디스의 key를 만듬 (CacheKey.ARTICLE::articleId 같은 형태), value는 메소드 반환값
     public ArticleDTO findArticle(Long articleId) throws NullPointerException {
 
         Optional<ArticleEntity> findArticle = articleRepository.findById(articleId);
         if (!findArticle.isPresent()) {
             throw new NullPointerException("해당 articleId 게시글이 존재하지 않습니다!");
         }
-        List<FileEntity> findFiles = fileStatusService.findFilesByArticle(findArticle.get());
+        List<FileEntity> findFiles = fileRepository.findByArticle(findArticle.get());
+
+        if(findFiles.isEmpty()){ //첨부파일이 없을때
+            findArticle.get().plusViewCnt(); //조회수 증가
+            return new ArticleDTO(articleRepository.save(findArticle.get()), null);
+        }
+
         findArticle.get().plusViewCnt(); //조회수 증가
-        articleRepository.save(findArticle.get());
-        return new ArticleDTO(findArticle.get(), findFiles);
+        return new ArticleDTO(articleRepository.save(findArticle.get()), findFiles.stream().map(FileDTO::new).collect(Collectors.toList()));
     }
 
      //boardId에 해당하는 게시판의 게시글들을 paging

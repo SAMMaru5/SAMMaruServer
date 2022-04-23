@@ -26,8 +26,8 @@ spring:
       ddl-auto: update
     properties:
       hibernate:
-        show_sql: false
-        format_sql: false
+        show_sql: true
+        format_sql: true
 
 app:
   jwtRefreshTokenValidTime: 1800000

@@ -3,6 +3,7 @@ package com.sammaru5.sammaru.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.CacheKeyPrefix;
@@ -52,6 +53,11 @@ public class RedisConfig {
                 .entryTtl(Duration.ofMinutes(3L)); //캐시 유효기간 3분
 
         return RedisCacheManager.RedisCacheManagerBuilder.fromConnectionFactory(redisConnectionFactory()).cacheDefaults(redisCacheConfiguration).build();
+    }
+
+    @Bean
+    public KeyGenerator articleCacheKeyGenerator() {
+        return new ArticleCacheKeyGenerator();
     }
 
 }

@@ -6,6 +6,7 @@ import com.sammaru5.sammaru.dto.ArticleDTO;
 import com.sammaru5.sammaru.repository.ArticleRepository;
 import com.sammaru5.sammaru.service.user.UserStatusService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,8 @@ public class ArticleRemoveService {
     private final ArticleSearchService articleSearchService;
     private final UserStatusService userStatusService;
 
-    public boolean removeArticle(Authentication authentication, Long boardId, Long articleId) throws AccessDeniedException, NullPointerException {
+    @CacheEvict(keyGenerator = "articleCacheKeyGenerator", value = "article", cacheManager = "cacheManager")
+    public boolean removeArticle(Long articleId, Authentication authentication, Long boardId) throws AccessDeniedException, NullPointerException {
         UserEntity findUser = userStatusService.getUser(authentication);
         Optional<ArticleEntity> findArticle = articleRepository.findById(articleId);
         if(findArticle.isPresent()) {

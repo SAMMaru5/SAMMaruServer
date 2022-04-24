@@ -26,7 +26,7 @@ public class ArticleSearchService {
     private final ArticleRepository articleRepository;
     private final FileRepository fileRepository;
 
-    @Cacheable(value = CacheKey.ARTICLE, key = "{#articleId}", cacheManager = "cacheManager") //value와 key로 레디스의 key를 만듬 (CacheKey.ARTICLE::articleId 같은 형태), value는 메소드 반환값
+    @Cacheable(keyGenerator = "articleCacheKeyGenerator", value = "article", cacheManager = "cacheManager")
     public ArticleDTO findArticle(Long articleId) throws NullPointerException {
 
         Optional<ArticleEntity> findArticle = articleRepository.findById(articleId);

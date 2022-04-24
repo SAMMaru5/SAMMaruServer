@@ -46,13 +46,13 @@ public class ArticleController {
     @DeleteMapping("/api/boards/{boardId}/articles/{articleId}")
     @ApiOperation(value = "게시글 삭제", notes = "게시글 삭제", response = Boolean.class)
     public ApiResult<?> articleRemove(Authentication authentication, @PathVariable Long boardId, @PathVariable Long articleId) {
-        return ApiResult.OK(articleRemoveService.removeArticle(authentication, boardId, articleId));
+        return ApiResult.OK(articleRemoveService.removeArticle(articleId, authentication, boardId));
     }
 
     @PutMapping(value = "/api/boards/{boardId}/articles/{articleId}", consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
     @ApiOperation(value = "게시글 수정", notes = "작성자가 게시글 수정", response = ArticleDTO.class)
     public ApiResult<?> articleModify(Authentication authentication, @PathVariable Long boardId, @PathVariable Long articleId, @RequestPart(value="article", required = false) @Valid ArticleRequest articleRequest, @RequestPart(value="file", required = false) MultipartFile[] multipartFiles) {
-        return ApiResult.OK(articleModifyService.modifyArticle(authentication, boardId, articleId, articleRequest, multipartFiles));
+        return ApiResult.OK(articleModifyService.modifyArticle(articleId, authentication, boardId, articleRequest, multipartFiles));
     }
 
     //파일 다운로드

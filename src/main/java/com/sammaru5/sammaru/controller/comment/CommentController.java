@@ -5,6 +5,7 @@ import com.sammaru5.sammaru.dto.CommentDTO;
 import com.sammaru5.sammaru.request.CommentRequest;
 import com.sammaru5.sammaru.service.comment.CommentRegisterService;
 import com.sammaru5.sammaru.service.comment.CommentSearchService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -14,6 +15,7 @@ import javax.validation.Valid;
 
 @RequiredArgsConstructor
 @RestController
+@Api(tags = {"댓글 API"})
 public class CommentController {
 
     private final CommentSearchService commentSearchService;

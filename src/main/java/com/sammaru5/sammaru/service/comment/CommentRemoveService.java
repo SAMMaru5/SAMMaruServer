@@ -21,7 +21,8 @@ public class CommentRemoveService {
     public boolean removeComment(Authentication authentication, Long commentId) throws AccessDeniedException {
         UserEntity user = userStatusService.getUser(authentication);
         Optional<CommentEntity> comment = commentRepository.findById(commentId);
-        if (comment.get().getUser().getId().equals(user.getId())) {
+//        if (comment.get().getUser().getId().equals(user.getId())) {
+        if(comment.get().getUser() == user) {
             commentRepository.deleteById(commentId);
             return true;
         } else {

@@ -4,6 +4,10 @@ devtools:
 
 spring:
 
+  mvc:
+    pathmatch:
+      matching-strategy: ant-path-matcher
+
   cache:
     type: redis
   redis:

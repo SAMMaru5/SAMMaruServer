@@ -49,14 +49,14 @@ public class ArticleController {
         return ApiResult.OK(articleRemoveService.removeArticle(articleId, authentication, boardId));
     }
 
-    @PutMapping(value = "/api/boards/{boardId}/articles/{articleId}", consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PatchMapping(value = "/api/boards/{boardId}/articles/{articleId}", consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
     @ApiOperation(value = "게시글 수정", notes = "작성자가 게시글 수정", response = ArticleDTO.class)
     public ApiResult<?> articleModify(Authentication authentication, @PathVariable Long boardId, @PathVariable Long articleId, @RequestPart(value="article", required = false) @Valid ArticleRequest articleRequest, @RequestPart(value="file", required = false) MultipartFile[] multipartFiles) {
         return ApiResult.OK(articleModifyService.modifyArticle(articleId, authentication, boardId, articleRequest, multipartFiles));
     }
 
     //파일 다운로드
-    @GetMapping("/api/boards/{boardId}/articles/{articleId}/file/{fileName:.+}")
+    @GetMapping("/api/boards/{boardId}/articles/{articleId}/files/{fileName:.+}")
     @ApiOperation(value = "파일 다운로드", notes = "게시판 id와 파일 경로를 통해 파일 다운로드")
     public ResponseEntity<InputStreamResource> fileDownload(@PathVariable Long boardId, @PathVariable Long articleId, @PathVariable String fileName) throws IOException {
         return fileStatusService.downloadFile(boardId, fileName);

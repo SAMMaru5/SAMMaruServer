@@ -10,6 +10,10 @@ import com.sammaru5.sammaru.service.article.ArticleSearchService;
 import com.sammaru5.sammaru.service.file.FileStatusService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
@@ -32,26 +36,26 @@ public class ArticleController {
     private final FileStatusService fileStatusService;
 
     @PostMapping(value="/api/boards/{boardId}/articles", consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
-    @ApiOperation(value = "게시글 생성", notes = "게시판에 게시글 추가", response = ArticleDTO.class)
-    public ApiResult<?> articleAdd(Authentication authentication, @PathVariable Long boardId, @RequestPart(value="article") @Valid ArticleRequest articleRequest, @RequestPart(value="file", required = false) MultipartFile[] multipartFiles) {
+    @ApiOperation(value = "게시글 생성", notes = "게시판에 게시글 추가")
+    public ApiResult<ArticleDTO> articleAdd(Authentication authentication, @PathVariable Long boardId, @RequestPart(value="article") @Valid ArticleRequest articleRequest, @RequestPart(value="file", required = false) MultipartFile[] multipartFiles) {
         return ApiResult.OK(articleRegisterService.addArticle(authentication, boardId, articleRequest, multipartFiles));
     }
 
     @GetMapping("/api/boards/{boardId}/articles/{articleId}")
-    @ApiOperation(value = "게시글 상세", notes = "게시글 상세 정보 가져오기", response = ArticleDTO.class)
-    public ApiResult<?> articleDetails(@PathVariable Long boardId, @PathVariable Long articleId) {
+    @ApiOperation(value = "게시글 상세", notes = "게시글 상세 정보 가져오기")
+    public ApiResult<ArticleDTO> articleDetails(@PathVariable Long boardId, @PathVariable Long articleId) {
         return ApiResult.OK(articleSearchService.findArticle(articleId));
     }
 
     @DeleteMapping("/api/boards/{boardId}/articles/{articleId}")
-    @ApiOperation(value = "게시글 삭제", notes = "게시글 삭제", response = Boolean.class)
-    public ApiResult<?> articleRemove(Authentication authentication, @PathVariable Long boardId, @PathVariable Long articleId) {
+    @ApiOperation(value = "게시글 삭제", notes = "게시글 삭제")
+    public ApiResult<Boolean> articleRemove(Authentication authentication, @PathVariable Long boardId, @PathVariable Long articleId) {
         return ApiResult.OK(articleRemoveService.removeArticle(articleId, authentication, boardId));
     }
 
     @PatchMapping(value = "/api/boards/{boardId}/articles/{articleId}", consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
-    @ApiOperation(value = "게시글 수정", notes = "작성자가 게시글 수정", response = ArticleDTO.class)
-    public ApiResult<?> articleModify(Authentication authentication, @PathVariable Long boardId, @PathVariable Long articleId, @RequestPart(value="article", required = false) @Valid ArticleRequest articleRequest, @RequestPart(value="file", required = false) MultipartFile[] multipartFiles) {
+    @ApiOperation(value = "게시글 수정", notes = "작성자가 게시글 수정")
+    public ApiResult<ArticleDTO> articleModify(Authentication authentication, @PathVariable Long boardId, @PathVariable Long articleId, @RequestPart(value="article", required = false) @Valid ArticleRequest articleRequest, @RequestPart(value="file", required = false) MultipartFile[] multipartFiles) {
         return ApiResult.OK(articleModifyService.modifyArticle(articleId, authentication, boardId, articleRequest, multipartFiles));
     }
 

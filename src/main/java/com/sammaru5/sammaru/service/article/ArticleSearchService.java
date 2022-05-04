@@ -37,13 +37,12 @@ public class ArticleSearchService {
         }
         List<FileEntity> findFiles = fileRepository.findByArticle(findArticle.get());
 
-        if(findFiles.isEmpty()){ //첨부파일이 없을때
-            findArticle.get().plusViewCnt(); //조회수 증가
-            return new ArticleDTO(articleRepository.save(findArticle.get()), null);
-        }
-
         findArticle.get().plusViewCnt(); //조회수 증가
-        return new ArticleDTO(articleRepository.save(findArticle.get()), findFiles.stream().map(FileDTO::new).collect(Collectors.toList()));
+        if(findFiles.isEmpty()){ //첨부파일이 없을 때
+            return new ArticleDTO(articleRepository.save(findArticle.get()), null);
+        } else {
+            return new ArticleDTO(articleRepository.save(findArticle.get()), findFiles.stream().map(FileDTO::new).collect(Collectors.toList()));
+        }
     }
 
      //boardId에 해당하는 게시판의 게시글들을 paging

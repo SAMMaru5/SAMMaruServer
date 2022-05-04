@@ -6,11 +6,13 @@ import com.sammaru5.sammaru.repository.FileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.util.List;
 import java.util.Optional;
 
+@Transactional
 @Service @RequiredArgsConstructor
 public class FileRemoveService {
     private final FileRepository fileRepository;

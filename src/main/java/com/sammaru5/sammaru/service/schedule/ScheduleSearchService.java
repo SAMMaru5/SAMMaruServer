@@ -5,11 +5,13 @@ import com.sammaru5.sammaru.dto.ScheduleDTO;
 import com.sammaru5.sammaru.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Transactional(readOnly = true)
 @Service @RequiredArgsConstructor
 public class ScheduleSearchService {
 

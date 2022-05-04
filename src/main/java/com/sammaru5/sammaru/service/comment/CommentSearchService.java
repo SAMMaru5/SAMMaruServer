@@ -5,15 +5,16 @@ import com.sammaru5.sammaru.domain.CommentEntity;
 import com.sammaru5.sammaru.dto.CommentDTO;
 import com.sammaru5.sammaru.repository.ArticleRepository;
 import com.sammaru5.sammaru.repository.CommentRepository;
-import com.sammaru5.sammaru.service.article.ArticleSearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
 public class CommentSearchService {

@@ -6,10 +6,12 @@ import com.sammaru5.sammaru.security.JwtTokenProvider;
 import com.sammaru5.sammaru.service.redis.RedisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 
+@Transactional
 @Service @RequiredArgsConstructor
 public class UserReissueService {
     private final JwtTokenProvider jwtTokenProvider;

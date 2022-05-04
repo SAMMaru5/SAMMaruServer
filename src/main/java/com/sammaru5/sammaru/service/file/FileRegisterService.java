@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.apache.commons.io.FilenameUtils;
 
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
 
+@Transactional
 @Service @RequiredArgsConstructor
 public class FileRegisterService {
     private final ArticleStatusService articleStatusService;

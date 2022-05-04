@@ -4,10 +4,12 @@ import com.sammaru5.sammaru.domain.BoardEntity;
 import com.sammaru5.sammaru.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
+@Transactional(readOnly = true)
 @Service @RequiredArgsConstructor
 public class BoardStatusService {
     private final BoardRepository boardRepository;

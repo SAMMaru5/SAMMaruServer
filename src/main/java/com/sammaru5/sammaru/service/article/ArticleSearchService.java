@@ -1,6 +1,5 @@
 package com.sammaru5.sammaru.service.article;
 
-import com.sammaru5.sammaru.config.CacheKey;
 import com.sammaru5.sammaru.domain.ArticleEntity;
 import com.sammaru5.sammaru.domain.BoardEntity;
 import com.sammaru5.sammaru.domain.FileEntity;
@@ -15,17 +14,20 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Transactional(readOnly = true)
 @Service @RequiredArgsConstructor
 public class ArticleSearchService {
     private final BoardStatusService boardStatusService;
     private final ArticleRepository articleRepository;
     private final FileRepository fileRepository;
 
+    @Transactional
     @Cacheable(keyGenerator = "articleCacheKeyGenerator", value = "article", cacheManager = "cacheManager")
     public ArticleDTO findArticle(Long articleId) throws NullPointerException {
 

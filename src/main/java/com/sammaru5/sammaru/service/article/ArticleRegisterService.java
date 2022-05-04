@@ -12,8 +12,10 @@ import com.sammaru5.sammaru.service.user.UserStatusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+@Transactional
 @Service @RequiredArgsConstructor
 public class ArticleRegisterService {
     private final ArticleRepository articleRepository;

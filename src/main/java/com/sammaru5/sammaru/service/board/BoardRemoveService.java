@@ -4,9 +4,10 @@ import com.sammaru5.sammaru.repository.BoardRepository;
 import com.sammaru5.sammaru.service.article.ArticleRemoveService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 
+@Transactional
 @Service @RequiredArgsConstructor
 public class BoardRemoveService {
 

@@ -14,7 +14,10 @@ import java.util.List;
 public interface ArticleRepository extends JpaRepository<ArticleEntity, Long> {
 
     List<ArticleEntity> findByBoard(BoardEntity board);
-    List<ArticleEntity> findByBoard(BoardEntity board, Pageable pageable);
+
+    @Query(value = "select a from ArticleEntity a join fetch a.user where a.board = :board",
+    countQuery = "select count(a) from ArticleEntity a")
+    List<ArticleEntity> findByBoard(@Param("board") BoardEntity board, Pageable pageable);
 
     @Transactional
     @Modifying

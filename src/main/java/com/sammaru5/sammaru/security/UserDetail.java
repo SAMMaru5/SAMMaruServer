@@ -2,6 +2,7 @@ package com.sammaru5.sammaru.security;
 
 import com.sammaru5.sammaru.domain.UserAuthority;
 import com.sammaru5.sammaru.domain.UserEntity;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,43 +11,46 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
+@Getter
 public class UserDetail implements UserDetails {
 
-    private Long id;
-    private String studentId;
-    private String username;
-    private String password;
-    private String email;
-    private Long point;
-    private UserAuthority userAuthority;
+//    private Long id;
+//    private String studentId;
+//    private String username;
+//    private String password;
+//    private String email;
+//    private Long point;
+//    private UserAuthority userAuthority;
+    private UserEntity userEntity;
 
     public UserDetail (UserEntity userEntity) {
-        this.id = userEntity.getId();
-        this.studentId = userEntity.getStudentId();
-        this.username = userEntity.getUsername();
-        this.password = userEntity.getPassword();
-        this.email = userEntity.getEmail();
-        this.point = userEntity.getPoint();
-        this.userAuthority = userEntity.getRole();
+        this.userEntity = userEntity;
+//        this.id = userEntity.getId();
+//        this.studentId = userEntity.getStudentId();
+//        this.username = userEntity.getUsername();
+//        this.password = userEntity.getPassword();
+//        this.email = userEntity.getEmail();
+//        this.point = userEntity.getPoint();
+//        this.userAuthority = userEntity.getRole();
     }
 
-    public Long getId() {return id;}
+    public Long getId() {return userEntity.getId();}
 
     @Override
     public String getUsername() {
-        return studentId;
+        return userEntity.getUsername();
     }
 
     @Override
     public String getPassword() {
-        return password;
+        return userEntity.getPassword();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 
-        authorities.add(new SimpleGrantedAuthority(this.userAuthority.name()));
+        authorities.add(new SimpleGrantedAuthority(this.userEntity.getRole().name()));
 
         return authorities;
     }
@@ -78,11 +82,11 @@ public class UserDetail implements UserDetails {
         if(o == null || getClass() != o.getClass())
             return false;
         UserDetail that = (UserDetail) o;
-        return Objects.equals(id, that.id);
+        return Objects.equals(this.userEntity.getId(), that.userEntity.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(this.userEntity.getId());
     }
 }

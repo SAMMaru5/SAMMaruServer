@@ -53,7 +53,8 @@ public class ArticleSearchService {
         if(findArticlesByPaging.isEmpty()) {
             throw new NullPointerException("해당 게시판의 게시글이 아무것도 존재하지 않습니다!");
         }
-        return findArticlesByPaging.stream().map(ArticleDTO::new).collect(Collectors.toList());
+
+        return findArticlesByPaging.stream().map(a -> new ArticleDTO(a, fileRepository.findByArticle(a).stream().map(FileDTO::new).collect(Collectors.toList()))).collect(Collectors.toList());
     }
 
     //boardId에 해당하는 게시판에 달린 모든 게시글들 조회
@@ -71,9 +72,10 @@ public class ArticleSearchService {
         BoardEntity findBoard = boardStatusService.findBoardByName(boardName);
         Pageable pageable = PageRequest.of(0, 7, Sort.by("createTime").descending());
         List<ArticleEntity> findArticles = articleRepository.findByBoard(findBoard, pageable);
+
         if(findArticles.isEmpty()){
             throw new NullPointerException("해당 게시판의 게시글이 아무것도 존재하지 않습니다!");
         }
-        return findArticles.stream().map(ArticleDTO::new).collect(Collectors.toList());
+        return findArticles.stream().map(a -> new ArticleDTO(a, fileRepository.findByArticle(a).stream().map(FileDTO::new).collect(Collectors.toList()))).collect(Collectors.toList());
     }
 }

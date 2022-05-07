@@ -47,10 +47,6 @@ public class BoardController {
     @GetMapping("/api/boards/{boardId}/pages/{pageNum}")
     @ApiOperation(value = "게시판 세부 정보 조회", notes = "해당 게시판의 게시글들을 조회 ex.자유게시판", responseContainer = "List",response = ArticleDTO.class)
     public ApiResult<?> boardDetails(@PathVariable Long boardId, @PathVariable Integer pageNum) {
-        try {
-            return ApiResult.OK(articleSearchService.findArticlesByBoardIdAndPaging(boardId, pageNum));
-        } catch (Exception e) {
-            return ApiResult.ERROR(e, HttpStatus.BAD_REQUEST);
-        }
+        return ApiResult.OK(articleSearchService.findArticlesByBoardIdAndPaging(boardId, pageNum - 1));
     }
 }

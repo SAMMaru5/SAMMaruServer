@@ -24,8 +24,7 @@ public class ArticleRemoveService {
     private final UserStatusService userStatusService;
 
     @CacheEvict(keyGenerator = "articleCacheKeyGenerator", value = "article", cacheManager = "cacheManager")
-    public boolean removeArticle(Long articleId, Authentication authentication, Long boardId) throws AccessDeniedException, NullPointerException {
-        UserEntity findUser = userStatusService.getUser(authentication);
+    public boolean removeArticle(Long articleId, UserEntity findUser, Long boardId) throws AccessDeniedException, NullPointerException {
         Optional<ArticleEntity> findArticle = articleRepository.findById(articleId);
         if(findArticle.isPresent()) {
             if(findArticle.get().getUser() != findUser){ //작성자가 아닌 사람이 접근하려고 할때때

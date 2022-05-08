@@ -18,7 +18,7 @@ public class ScheduleSearchService {
     private final ScheduleRepository scheduleRepository;
 
     public List<ScheduleDTO> findSchedulesFromStartToEnd(Date start, Date end) {
-        List<ScheduleEntity> schedules = scheduleRepository.findByEndBetween(start, end);
+        List<ScheduleEntity> schedules = scheduleRepository.findByEndBetweenOrderByStartAscEndAsc(start, end);
         return schedules.stream().map(ScheduleDTO::new).collect(Collectors.toList());
     }
 }

@@ -4,6 +4,7 @@ import com.sammaru5.sammaru.domain.ArticleEntity;
 import com.sammaru5.sammaru.domain.BoardEntity;
 import com.sammaru5.sammaru.domain.UserEntity;
 import com.sammaru5.sammaru.dto.ArticleDTO;
+import com.sammaru5.sammaru.dto.UserDTO;
 import com.sammaru5.sammaru.repository.ArticleRepository;
 import com.sammaru5.sammaru.request.ArticleRequest;
 import com.sammaru5.sammaru.service.board.BoardStatusService;
@@ -20,13 +21,11 @@ import org.springframework.web.multipart.MultipartFile;
 public class ArticleRegisterService {
     private final ArticleRepository articleRepository;
     private final BoardStatusService boardStatusService;
-    private final UserStatusService userStatusService;
     private final FileRegisterService fileRegisterService;
 
-    public ArticleDTO addArticle(Authentication authentication, Long boardId, ArticleRequest articleRequest, MultipartFile[] multipartFiles) throws NullPointerException {
+    public ArticleDTO addArticle(UserEntity findUser, Long boardId, ArticleRequest articleRequest, MultipartFile[] multipartFiles) throws NullPointerException {
 
         BoardEntity findBoard = boardStatusService.findBoard(boardId);
-        UserEntity findUser = userStatusService.getUser(authentication);
         ArticleEntity articleEntity = articleRepository.save(new ArticleEntity(articleRequest, findBoard, findUser));
 
         if(multipartFiles != null){

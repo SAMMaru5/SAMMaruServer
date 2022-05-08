@@ -27,8 +27,7 @@ public class ArticleModifyService {
     private final FileRegisterService fileRegisterService;
 
     @CacheEvict(keyGenerator = "articleCacheKeyGenerator", value = "article", cacheManager = "cacheManager")
-    public ArticleDTO modifyArticle(Long articleId, Authentication authentication, Long boardId, ArticleRequest articleRequest, MultipartFile[] multipartFiles) throws AccessDeniedException, NullPointerException {
-        UserEntity findUser = userStatusService.getUser(authentication);
+    public ArticleDTO modifyArticle(Long articleId, UserEntity findUser, Long boardId, ArticleRequest articleRequest, MultipartFile[] multipartFiles) throws AccessDeniedException, NullPointerException {
         Optional<ArticleEntity> findArticle = articleRepository.findById(articleId);
         if (findArticle.isPresent()) {
             ArticleEntity article = findArticle.get();

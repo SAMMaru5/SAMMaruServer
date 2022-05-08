@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController @RequiredArgsConstructor
@@ -28,25 +29,25 @@ public class BoardController {
 
     @PostMapping("/api/boards")
     @ApiOperation(value = "게시판 생성", notes = "게시판을 생성", response = BoardDTO.class)
-    public ApiResult<?> boardAdd(@Valid @RequestBody BoardRequest boardRequest) {
+    public ApiResult<BoardDTO> boardAdd(@Valid @RequestBody BoardRequest boardRequest) {
         return ApiResult.OK(boardRegisterService.addBoard(boardRequest));
     }
 
     @DeleteMapping("/api/boards/{boardId}")
     @ApiOperation(value = "게시판 삭제", notes = "관리자가 게시판과 게시판에 속한 모든 게시글 삭제", response = Boolean.class)
-    public ApiResult<?> boardRemove(@PathVariable Long boardId) {
+    public ApiResult<Boolean> boardRemove(@PathVariable Long boardId) {
         return ApiResult.OK(boardRemoveService.removeBoard(boardId));
     }
 
     @GetMapping("/no-permit/api/boards")
     @ApiOperation(value = "게시판 목록", notes = "게시판 목록을 조회", responseContainer = "List",response = BoardDTO.class)
-    public ApiResult<?> boardList() {
+    public ApiResult<List<BoardDTO>> boardList() {
         return ApiResult.OK(boardStatusService.findBoards().stream().map(BoardDTO::new).collect(Collectors.toList()));
     }
 
-    @GetMapping("/api/boards/{boardId}/pages/{pageNum}")
+    @GetMapping("/no-permit/api/boards/{boardId}/pages/{pageNum}")
     @ApiOperation(value = "게시판 세부 정보 조회", notes = "해당 게시판의 게시글들을 조회 ex.자유게시판", responseContainer = "List",response = ArticleDTO.class)
-    public ApiResult<?> boardDetails(@PathVariable Long boardId, @PathVariable Integer pageNum) {
+    public ApiResult<List<ArticleDTO>> boardDetails(@PathVariable Long boardId, @PathVariable Integer pageNum) {
         return ApiResult.OK(articleSearchService.findArticlesByBoardIdAndPaging(boardId, pageNum - 1));
     }
 }

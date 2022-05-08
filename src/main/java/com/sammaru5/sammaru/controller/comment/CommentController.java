@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -25,19 +26,19 @@ public class CommentController {
 
     @GetMapping("/api/boards/{boardId}/articles/{articleId}/comments")
     @ApiOperation(value = "댓글 목록 조회", notes = "해당 게시글에 달린 댓글 목록 불러오기", response = CommentDTO.class)
-    public ApiResult<?> commentList(@PathVariable Long boardId, @PathVariable Long articleId) {
+    public ApiResult<List<CommentDTO>> commentList(@PathVariable Long boardId, @PathVariable Long articleId) {
         return ApiResult.OK(commentSearchService.findCommentsByArticleId(articleId));
     }
 
     @PostMapping("/api/boards/{boardId}/articles/{articleId}/comments")
     @ApiOperation(value = "댓글 작성", notes = "해당 게시글에 댓글 작성", response = CommentDTO.class)
-    public ApiResult<?> commentAdd(@PathVariable Long boardId, @PathVariable Long articleId, Authentication authentication, @Valid @RequestBody CommentRequest commentRequest) {
+    public ApiResult<CommentDTO> commentAdd(@PathVariable Long boardId, @PathVariable Long articleId, Authentication authentication, @Valid @RequestBody CommentRequest commentRequest) {
         return ApiResult.OK(commentRegisterService.addComment(authentication, commentRequest, articleId));
     }
 
     @DeleteMapping("/api/boards/{boardId}/articles/{articleId}/comments/{commentId}")
     @ApiOperation(value = "댓글 삭제", notes = "해당 댓글 삭제", response = boolean.class)
-    public ApiResult<?> commentRemove(@PathVariable Long boardId, @PathVariable Long articleId, Authentication authentication, @PathVariable Long commentId) {
+    public ApiResult<Boolean> commentRemove(@PathVariable Long boardId, @PathVariable Long articleId, Authentication authentication, @PathVariable Long commentId) {
         return ApiResult.OK(commentRemoveService.removeComment(authentication, commentId));
     }
 }

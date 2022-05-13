@@ -9,6 +9,8 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "article")
@@ -36,9 +38,13 @@ public class ArticleEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private UserEntity user;
 
+    @OneToMany(mappedBy = "article")
+    private List<FileEntity> files = new ArrayList<>();
+
     public void plusViewCnt() {
         this.viewCnt++;
     }
+
     public void minusViewCnt() {
         this.viewCnt--;
     }

@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.beans.BeanUtils.copyProperties;
 
@@ -32,10 +33,6 @@ public class ArticleDTO {
         this.author = articleEntity.getUser().getUsername();
         this.viewCnt = articleEntity.getViewCnt();
         this.likeCnt = articleEntity.getViewCnt();
-    }
-
-    public ArticleDTO(ArticleEntity articleEntity, List<FileDTO> files) {
-        this(articleEntity);
-        this.files = files;
+        this.files = articleEntity.getFiles().stream().map(FileDTO::new).collect(Collectors.toList());
     }
 }

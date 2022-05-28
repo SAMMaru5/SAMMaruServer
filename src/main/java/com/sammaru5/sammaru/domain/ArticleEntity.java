@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -39,6 +40,7 @@ public class ArticleEntity {
     private UserEntity user;
 
     @OneToMany(mappedBy = "article")
+    @BatchSize(size=100)
     private List<FileEntity> files = new ArrayList<>();
 
     public void plusViewCnt() {

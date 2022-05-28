@@ -18,6 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController @RequiredArgsConstructor
 @Api(tags = {"사용자 API"})
@@ -60,5 +61,11 @@ public class UserController {
     @ApiOperation(value = "회원 정보 수정", notes = "회원 정보 수정하기", response = UserDTO.class)
     public ApiResult<?> userModify(Authentication authentication, @Valid @RequestBody UserRequest userRequest){
         return ApiResult.OK(userModifyService.modifyUser(authentication, userRequest));
+    }
+
+    @GetMapping("/api/users/gen/{generationNum}")
+    @ApiOperation(value = "기수에 대한 회원 정보 조회", notes = "generationNum으로 넘어온 기수에 대한 회원들에 대한 정보를 조회합니다.", response = UserDTO.class)
+    public ApiResult<List<UserDTO>> userListOfGeneration(@PathVariable Integer generationNum) {
+        return ApiResult.OK(userSearchService.findUsersByGeneration(generationNum));
     }
 }

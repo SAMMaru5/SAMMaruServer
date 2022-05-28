@@ -24,6 +24,7 @@ public class UserEntity {
     private String password;
     private String email;
     private Long point;
+    private Integer generation;
     private UserAuthority role;
 
     public void setRole(UserAuthority role) {

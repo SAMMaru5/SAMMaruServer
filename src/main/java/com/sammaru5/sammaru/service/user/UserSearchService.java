@@ -24,4 +24,8 @@ public class UserSearchService {
     public List<UserDTO> findUsersByRole(UserAuthority role) {
         return userRepository.findByRole(role).stream().map(UserDTO::new).collect(Collectors.toList());
     }
+
+    public List<UserDTO> findUsersByGeneration(Integer generationNum) {
+        return userRepository.findByGeneration(generationNum).stream().map(UserDTO::new).collect(Collectors.toList());
+    }
 }

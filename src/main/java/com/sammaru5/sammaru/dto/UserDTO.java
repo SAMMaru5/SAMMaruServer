@@ -15,6 +15,7 @@ public class UserDTO {
     private String email;
     private Long point;
     private UserAuthority role;
+    private Integer generation;
     private String nickname;
 
     public UserDTO(UserEntity userEntity){

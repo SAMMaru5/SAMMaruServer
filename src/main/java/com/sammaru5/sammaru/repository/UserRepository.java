@@ -12,4 +12,5 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     Optional<UserEntity> findByStudentId(String studentId);
     boolean existsByStudentId(String studentId);
     List<UserEntity> findByRole(UserAuthority userAuthority);
+    List<UserEntity> findByGeneration(Integer generationNum);
 }

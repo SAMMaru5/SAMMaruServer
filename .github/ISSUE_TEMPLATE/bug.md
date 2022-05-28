@@ -1,18 +1,10 @@
 ---
-name: bug
-about: Describe this issue template's purpose here.
-title: ''
-labels: ''
+name: BUG
+about: BUG 발생 시 사용하는 이슈입니다.
+title: "[BUG]"
+labels: BUG
 assignees: ''
 
----
-
----
-name: Bug
-about: Create a report to help us improve
-title: ""
-labels: bug
-assignees: ""
 ---
 
 ## 📌 문제 상황

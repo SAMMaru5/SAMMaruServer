@@ -1,7 +1,7 @@
 package com.sammaru5.sammaru.service.schedule;
 
 import com.sammaru5.sammaru.domain.ScheduleEntity;
-import com.sammaru5.sammaru.dto.ScheduleDTO;
+import com.sammaru5.sammaru.web.dto.ScheduleDTO;
 import com.sammaru5.sammaru.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

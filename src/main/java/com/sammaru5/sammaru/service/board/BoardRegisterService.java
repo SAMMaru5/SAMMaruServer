@@ -1,9 +1,9 @@
 package com.sammaru5.sammaru.service.board;
 
 import com.sammaru5.sammaru.domain.BoardEntity;
-import com.sammaru5.sammaru.dto.BoardDTO;
+import com.sammaru5.sammaru.web.dto.BoardDTO;
 import com.sammaru5.sammaru.repository.BoardRepository;
-import com.sammaru5.sammaru.request.BoardRequest;
+import com.sammaru5.sammaru.web.request.BoardRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

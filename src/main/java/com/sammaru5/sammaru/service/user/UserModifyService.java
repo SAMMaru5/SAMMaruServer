@@ -2,10 +2,10 @@ package com.sammaru5.sammaru.service.user;
 
 import com.sammaru5.sammaru.domain.UserAuthority;
 import com.sammaru5.sammaru.domain.UserEntity;
-import com.sammaru5.sammaru.dto.UserDTO;
+import com.sammaru5.sammaru.web.dto.UserDTO;
 import com.sammaru5.sammaru.repository.UserRepository;
-import com.sammaru5.sammaru.request.PointRequest;
-import com.sammaru5.sammaru.request.UserRequest;
+import com.sammaru5.sammaru.web.request.PointRequest;
+import com.sammaru5.sammaru.web.request.UserRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;

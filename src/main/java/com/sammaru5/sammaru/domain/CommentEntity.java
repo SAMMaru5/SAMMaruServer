@@ -1,6 +1,6 @@
 package com.sammaru5.sammaru.domain;
 
-import com.sammaru5.sammaru.request.CommentRequest;
+import com.sammaru5.sammaru.web.request.CommentRequest;
 import lombok.*;
 
 import javax.persistence.*;

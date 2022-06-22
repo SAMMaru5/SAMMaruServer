@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ArticleRepository extends JpaRepository<ArticleEntity, Long> {
 
@@ -20,6 +21,9 @@ public interface ArticleRepository extends JpaRepository<ArticleEntity, Long> {
     @Query(value = "select a from ArticleEntity a join fetch a.user where a.board = :board",
             countQuery = "select count(a) from ArticleEntity a where a.board = :board")
     List<ArticleEntity> findByBoard(@Param("board") BoardEntity board);
+
+    @Query(value = "select a from ArticleEntity a join fetch a.files where a.id = :id")
+    Optional<ArticleEntity> findArticleWithFile(@Param("id") Long articleId);
 
     @Transactional
     @Modifying

@@ -2,9 +2,9 @@ package com.sammaru5.sammaru.service.article;
 
 import com.sammaru5.sammaru.domain.ArticleEntity;
 import com.sammaru5.sammaru.domain.BoardEntity;
-import com.sammaru5.sammaru.web.dto.ArticleDTO;
 import com.sammaru5.sammaru.repository.ArticleRepository;
 import com.sammaru5.sammaru.service.board.BoardStatusService;
+import com.sammaru5.sammaru.web.dto.ArticleDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Transactional(readOnly = true)

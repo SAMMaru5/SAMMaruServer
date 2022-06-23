@@ -1,13 +1,10 @@
 package com.sammaru5.sammaru.web.dto;
 
 import com.sammaru5.sammaru.domain.ArticleEntity;
-<<<<<<< HEAD:src/main/java/com/sammaru5/sammaru/dto/ArticleDTO.java
-=======
-import lombok.AllArgsConstructor;
->>>>>>> main:src/main/java/com/sammaru5/sammaru/web/dto/ArticleDTO.java
 import lombok.Getter;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,7 +19,7 @@ public class ArticleDTO {
     private String author;
     private Integer viewCnt;
     private Integer likeCnt;
-    private List<FileDTO> files;
+    private List<FileDTO> files = new ArrayList<>();
 
     public ArticleDTO(ArticleEntity articleEntity) {
         copyProperties(articleEntity, this);

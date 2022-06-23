@@ -2,7 +2,7 @@ package com.sammaru5.sammaru.service.user;
 
 import com.sammaru5.sammaru.domain.UserEntity;
 import com.sammaru5.sammaru.repository.UserRepository;
-import com.sammaru5.sammaru.security.UserDetail;
+import com.sammaru5.sammaru.config.security.UserDetail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;

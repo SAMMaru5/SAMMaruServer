@@ -2,7 +2,7 @@ package com.sammaru5.sammaru.service.article;
 
 import com.sammaru5.sammaru.domain.ArticleEntity;
 import com.sammaru5.sammaru.domain.BoardEntity;
-import com.sammaru5.sammaru.dto.ArticleDTO;
+import com.sammaru5.sammaru.web.dto.ArticleDTO;
 import com.sammaru5.sammaru.repository.ArticleRepository;
 import com.sammaru5.sammaru.service.board.BoardStatusService;
 import lombok.RequiredArgsConstructor;

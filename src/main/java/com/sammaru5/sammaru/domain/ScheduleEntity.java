@@ -1,6 +1,6 @@
 package com.sammaru5.sammaru.domain;
 
-import com.sammaru5.sammaru.request.ScheduleRequest;
+import com.sammaru5.sammaru.web.request.ScheduleRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

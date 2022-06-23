@@ -1,9 +1,9 @@
 package com.sammaru5.sammaru.service.user;
 
-import com.sammaru5.sammaru.dto.JwtDTO;
-import com.sammaru5.sammaru.request.SignInRequest;
-import com.sammaru5.sammaru.security.JwtTokenProvider;
-import com.sammaru5.sammaru.security.UserDetail;
+import com.sammaru5.sammaru.web.dto.JwtDTO;
+import com.sammaru5.sammaru.web.request.SignInRequest;
+import com.sammaru5.sammaru.config.jwt.JwtTokenProvider;
+import com.sammaru5.sammaru.config.security.UserDetail;
 import com.sammaru5.sammaru.service.redis.RedisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;

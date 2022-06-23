@@ -2,13 +2,12 @@ package com.sammaru5.sammaru.service.article;
 
 import com.sammaru5.sammaru.domain.ArticleEntity;
 import com.sammaru5.sammaru.domain.UserEntity;
-import com.sammaru5.sammaru.dto.ArticleDTO;
+import com.sammaru5.sammaru.web.dto.ArticleDTO;
 import com.sammaru5.sammaru.repository.ArticleRepository;
 import com.sammaru5.sammaru.service.user.UserStatusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

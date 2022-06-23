@@ -29,7 +29,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.sammaru5.sammaru.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.sammaru5.sammaru.web.controller"))
                 .paths(PathSelectors.any()) //어떤 식으로 시작하는 api를 보여줄것인가
                 .build();
     }

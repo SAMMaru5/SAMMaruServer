@@ -1,6 +1,6 @@
 package com.sammaru5.sammaru.domain;
 
-import com.sammaru5.sammaru.request.ArticleRequest;
+import com.sammaru5.sammaru.web.request.ArticleRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

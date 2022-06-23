@@ -2,7 +2,7 @@ package com.sammaru5.sammaru.service.comment;
 
 import com.sammaru5.sammaru.domain.ArticleEntity;
 import com.sammaru5.sammaru.domain.CommentEntity;
-import com.sammaru5.sammaru.dto.CommentDTO;
+import com.sammaru5.sammaru.web.dto.CommentDTO;
 import com.sammaru5.sammaru.repository.ArticleRepository;
 import com.sammaru5.sammaru.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;

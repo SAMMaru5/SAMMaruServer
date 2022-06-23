@@ -1,8 +1,8 @@
 package com.sammaru5.sammaru.service.user;
 
-import com.sammaru5.sammaru.dto.JwtDTO;
+import com.sammaru5.sammaru.web.dto.JwtDTO;
 import com.sammaru5.sammaru.exception.InvalidRefreshTokenException;
-import com.sammaru5.sammaru.security.JwtTokenProvider;
+import com.sammaru5.sammaru.config.jwt.JwtTokenProvider;
 import com.sammaru5.sammaru.service.redis.RedisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

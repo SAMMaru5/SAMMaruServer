@@ -2,9 +2,9 @@ package com.sammaru5.sammaru.service.article;
 
 import com.sammaru5.sammaru.domain.ArticleEntity;
 import com.sammaru5.sammaru.domain.BoardEntity;
-import com.sammaru5.sammaru.web.dto.ArticleDTO;
 import com.sammaru5.sammaru.repository.ArticleRepository;
 import com.sammaru5.sammaru.service.board.BoardStatusService;
+import com.sammaru5.sammaru.web.dto.ArticleDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Transactional(readOnly = true)
@@ -27,13 +27,12 @@ public class ArticleSearchService {
     @Cacheable(keyGenerator = "articleCacheKeyGenerator", value = "article", cacheManager = "cacheManager")
     public ArticleDTO findArticle(Long articleId) throws NullPointerException {
 
-        Optional<ArticleEntity> findArticle = articleRepository.findById(articleId);
-        if (!findArticle.isPresent()) {
-            throw new NullPointerException("해당 articleId 게시글이 존재하지 않습니다!");
-        }
-        findArticle.get().plusViewCnt(); //조회수 증가
+        ArticleEntity article = articleRepository.findById(articleId)
+                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 게시글입니다."));
 
-        return new ArticleDTO(findArticle.get());
+        article.plusViewCnt(); //조회수 증가
+
+        return new ArticleDTO(article);
     }
 
      //boardId에 해당하는 게시판의 게시글들을 paging
@@ -43,7 +42,7 @@ public class ArticleSearchService {
         Pageable pageable = PageRequest.of(pageNum, 15, Sort.by("createTime").descending());
         List<ArticleEntity> findArticlesByPaging = articleRepository.findByBoard(findBoard, pageable);
         if(findArticlesByPaging.isEmpty()) {
-            throw new NullPointerException("해당 게시판의 게시글이 아무것도 존재하지 않습니다!");
+            throw new NoSuchElementException("해당 게시판의 게시글이 아무것도 존재하지 않습니다!");
         }
 
         return findArticlesByPaging.stream().map(ArticleDTO::new).collect(Collectors.toList());
@@ -55,7 +54,7 @@ public class ArticleSearchService {
         BoardEntity findBoard = boardStatusService.findBoard(boardId);
         List<ArticleEntity> findArticles = articleRepository.findByBoard(findBoard);
         if(findArticles.isEmpty()) {
-            throw new NullPointerException("해당 게시판의 게시글이 아무것도 존재하지 않습니다!");
+            throw new NoSuchElementException("해당 게시판의 게시글이 아무것도 존재하지 않습니다!");
         }
 
         return findArticles.stream().map(ArticleDTO::new).collect(Collectors.toList());
@@ -68,7 +67,7 @@ public class ArticleSearchService {
         Pageable pageable = PageRequest.of(0, 7, Sort.by("createTime").descending());
         List<ArticleEntity> findArticles = articleRepository.findByBoard(findBoard, pageable);
         if(findArticles.isEmpty()){
-            throw new NullPointerException("해당 게시판의 게시글이 아무것도 존재하지 않습니다!");
+            throw new NoSuchElementException("해당 게시판의 게시글이 아무것도 존재하지 않습니다!");
         }
 
         return findArticles.stream().map(ArticleDTO::new).collect(Collectors.toList());

@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Transactional
@@ -15,17 +17,13 @@ import java.util.Optional;
 public class BoardRegisterService {
     private final BoardRepository boardRepository;
 
-    public BoardDTO addBoard(BoardRequest boardRequest) throws IllegalArgumentException {
-        String boardName = boardRequest.getName();
-        Optional<BoardEntity> boardEntity = boardRepository.findByName(boardName);
+    public BoardDTO addBoard(BoardRequest boardRequest) {
+        validateDuplicateBoard(boardRequest.getBoardName());
+        return new BoardDTO(boardRepository.save(boardRequest.toEntity()));
+    }
 
-        if (!boardEntity.isPresent()) {
-            return new BoardDTO(boardRepository.save(BoardEntity.builder()
-                    .name(boardRequest.getName())
-                    .description(boardRequest.getDescription())
-                    .build()));
-        } else {
-            throw new IllegalArgumentException("해당 게시판 이름은 이미 존재합니다!");
-        }
+    private void validateDuplicateBoard(String boardName) {
+        List<BoardEntity> boards = boardRepository.findByBoardName(boardName);
+        if(!boards.isEmpty()) throw new IllegalStateException("중복된 게시판입니다.");
     }
 }

@@ -29,6 +29,6 @@ public class ArticleRegisterService {
             fileRegisterService.addFiles(multipartFiles, articleEntity.getId());
         }
         
-        return new ArticleDTO(articleEntity);
+        return ArticleDTO.toDto(articleEntity);
     }
 }

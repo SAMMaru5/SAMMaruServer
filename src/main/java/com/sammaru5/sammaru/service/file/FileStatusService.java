@@ -31,7 +31,7 @@ public class FileStatusService {
         Optional<FileEntity> fileEntity = fileRepository.findByFilePath(filePath);
 
         if(!fileEntity.isPresent()) {
-            throw new CustomException(ErrorCode.FILE_NOT_FOUND, String.format("boardId: %d, filePath: %s", boardId, filePath));
+            throw new CustomException(ErrorCode.FILE_NOT_FOUND, filePath);
         }
 
         String path = fileDir + boardId + "/" + filePath;

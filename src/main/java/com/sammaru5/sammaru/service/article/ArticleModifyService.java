@@ -33,7 +33,7 @@ public class ArticleModifyService {
             ArticleEntity article = findArticle.get();
 
             if(article.getUser() != findUser){ //작성자가 아닌 사람이 접근하려고 할때
-                throw new CustomException(ErrorCode.ARTICLE_UNAUTHORIZED_ACCESS, String.format("userId: %d, articleId: %d", findUser.getId(), articleId));
+                throw new CustomException(ErrorCode.UNAUTHORIZED_USER_ACCESS, findUser.getId().toString());
            }
             article.modifyArticle(articleRequest);
 
@@ -44,7 +44,7 @@ public class ArticleModifyService {
             }
         } else {
             // 존재하지 않는 게시글에 접근했을때
-            throw new CustomException(ErrorCode.ARTICLE_NOT_FOUND, String.format("articleId: %d", articleId));
+            throw new CustomException(ErrorCode.ARTICLE_NOT_FOUND, articleId.toString());
         }
 
         return null;

@@ -30,7 +30,7 @@ public class CommentRegisterService {
         UserEntity user = userStatusService.getUser(authentication);
         Optional<ArticleEntity> findArticle = articleRepository.findById(articleId);
         if(findArticle.isEmpty())
-            throw new CustomException(ErrorCode.ARTICLE_NOT_FOUND, String.format("articleId: %d", articleId));
+            throw new CustomException(ErrorCode.ARTICLE_NOT_FOUND, articleId.toString());
         else {
             CommentEntity comment = new CommentEntity(commentRequest, user, findArticle.get());
             commentRepository.save(comment);

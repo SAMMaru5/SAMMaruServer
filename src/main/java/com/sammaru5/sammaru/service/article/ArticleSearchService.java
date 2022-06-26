@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Transactional(readOnly = true)
@@ -33,7 +32,7 @@ public class ArticleSearchService {
     @Cacheable(keyGenerator = "articleCacheKeyGenerator", value = "article", cacheManager = "cacheManager")
     public ArticleDTO findArticle(Long articleId) {
         ArticleEntity article = articleRepository.findById(articleId)
-                .orElseThrow(() -> new CustomException(ErrorCode.ARTICLE_NOT_FOUND, String.format("articleId: %d", articleId)));
+                .orElseThrow(() -> new CustomException(ErrorCode.ARTICLE_NOT_FOUND, articleId.toString()));
 
         article.plusViewCnt(); //조회수 증가
         List<FileEntity> files = fileRepository.findByArticle(article);
@@ -48,7 +47,7 @@ public class ArticleSearchService {
         Pageable pageable = PageRequest.of(pageNum, 15, Sort.by("createTime").descending());
         List<ArticleEntity> findArticlesByPaging = articleRepository.findByBoard(findBoard, pageable);
         if (findArticlesByPaging.isEmpty()) {
-            throw new CustomException(ErrorCode.BOARD_EMPTY, String.format("boardId: %d", boardId));
+            throw new CustomException(ErrorCode.BOARD_IS_EMPTY, boardId.toString());
         }
 
         return findArticlesByPaging.stream().map(ArticleDTO::toDto).collect(Collectors.toList());
@@ -60,7 +59,7 @@ public class ArticleSearchService {
         BoardEntity findBoard = boardStatusService.findBoard(boardId);
         List<ArticleEntity> findArticles = articleRepository.findByBoard(findBoard);
         if (findArticles.isEmpty()) {
-            throw new CustomException(ErrorCode.BOARD_EMPTY, String.format("boardId: %d", boardId));
+            throw new CustomException(ErrorCode.BOARD_IS_EMPTY, boardId.toString());
         }
 
         return findArticles.stream().map(ArticleDTO::toDto).collect(Collectors.toList());
@@ -73,7 +72,7 @@ public class ArticleSearchService {
         Pageable pageable = PageRequest.of(0, 7, Sort.by("createTime").descending());
         List<ArticleEntity> findArticles = articleRepository.findByBoard(findBoard, pageable);
         if (findArticles.isEmpty()) {
-            throw new CustomException(ErrorCode.BOARD_EMPTY, String.format("boardId: %d", findBoard.getId()));
+            throw new CustomException(ErrorCode.BOARD_IS_EMPTY, findBoard.getId().toString());
         }
 
         return findArticles.stream().map(ArticleDTO::toDto).collect(Collectors.toList());

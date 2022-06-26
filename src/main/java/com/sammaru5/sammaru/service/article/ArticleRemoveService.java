@@ -28,19 +28,19 @@ public class ArticleRemoveService {
         Optional<ArticleEntity> findArticle = articleRepository.findById(articleId);
         if(findArticle.isPresent()) {
             if(findArticle.get().getUser() != findUser){ //작성자가 아닌 사람이 접근하려고 할때때
-                throw new CustomException(ErrorCode.ARTICLE_UNAUTHORIZED_ACCESS, String.format("userId: %d, articleId: %d", findUser.getId(), articleId));
+                throw new CustomException(ErrorCode.UNAUTHORIZED_USER_ACCESS, findUser.getId().toString());
             }
             articleRepository.deleteById(findArticle.get().getId());
             return true;
         } else {
-            throw new CustomException(ErrorCode.ARTICLE_NOT_FOUND, String.format("articleId: %d", articleId));
+            throw new CustomException(ErrorCode.ARTICLE_NOT_FOUND, articleId.toString());
         }
     }
 
     public boolean removeArticleByAdmin(Long boardId) throws CustomException {
         List<ArticleDTO> articles = articleSearchService.findArticlesByBoardId(boardId);
         if (articles.isEmpty()) {
-            throw new CustomException(ErrorCode.BOARD_EMPTY, String.format("boardId: %d", boardId));
+            throw new CustomException(ErrorCode.BOARD_IS_EMPTY, boardId.toString());
         }
         List<Long> ids = new ArrayList<>();
         for (ArticleDTO a : articles) {

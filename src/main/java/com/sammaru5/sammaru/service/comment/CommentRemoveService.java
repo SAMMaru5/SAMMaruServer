@@ -22,7 +22,7 @@ public class CommentRemoveService {
     private final CommentRepository commentRepository;
     private final UserStatusService userStatusService;
 
-    public boolean removeComment(Authentication authentication, Long commentId) throws AccessDeniedException {
+    public boolean removeComment(Authentication authentication, Long commentId) throws CustomException {
         UserEntity user = userStatusService.getUser(authentication);
         Optional<CommentEntity> findComment = commentRepository.findById(commentId);
         if(findComment.isPresent()) {
@@ -30,10 +30,10 @@ public class CommentRemoveService {
                 commentRepository.deleteById(commentId);
                 return true;
             } else {
-                throw new CustomException(ErrorCode.COMMENT_UNAUTHORIZED_ACCESS, String.format("userId: %d, commentId: %d", user.getId(), commentId));
+                throw new CustomException(ErrorCode.UNAUTHORIZED_USER_ACCESS, user.getId().toString());
             }
         } else {
-            throw new CustomException(ErrorCode.COMMENT_NOT_FOUND, String.format("commentId: %d", commentId));
+            throw new CustomException(ErrorCode.COMMENT_NOT_FOUND, commentId.toString());
         }
     }
 }

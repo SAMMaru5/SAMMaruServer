@@ -7,7 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class CustomException extends RuntimeException {
     private final ErrorCode errorCode;
-    private final String relatedEntities;
+    private final String relatedEntityId;
 
     public CustomException(ErrorCode errorCode) {
         this(errorCode, null);
@@ -15,7 +15,7 @@ public class CustomException extends RuntimeException {
 
     @Override
     public String getMessage() {
-        if(relatedEntities == null) return errorCode.getDetail();
-        else return errorCode.getDetail() + ", " + relatedEntities;
+        if(relatedEntityId == null) return errorCode.getDetail();
+        else return errorCode.getDetail() + ", relatedEntityId: " + relatedEntityId;
     }
 }

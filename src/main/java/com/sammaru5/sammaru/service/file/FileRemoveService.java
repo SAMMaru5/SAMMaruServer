@@ -27,7 +27,7 @@ public class FileRemoveService {
         File targetFile = new File(fileDir + boardId + "/" + filePath);
         Optional<FileEntity> storageEntity = fileRepository.findByFilePath(filePath);
         if(!targetFile.exists() || !storageEntity.isPresent()){
-            throw new CustomException(ErrorCode.FILE_NOT_FOUND, String.format("boardId: %d, filePath: %s", boardId, filePath));
+            throw new CustomException(ErrorCode.FILE_NOT_FOUND, filePath);
         }
 
         fileRepository.delete(storageEntity.get());

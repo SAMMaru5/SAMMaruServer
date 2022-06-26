@@ -24,13 +24,16 @@ public class CommentRemoveService {
 
     public boolean removeComment(Authentication authentication, Long commentId) throws AccessDeniedException {
         UserEntity user = userStatusService.getUser(authentication);
-        Optional<CommentEntity> comment = commentRepository.findById(commentId);
-//        if (comment.get().getUser().getId().equals(user.getId())) {
-        if(comment.get().getUser() == user) {
-            commentRepository.deleteById(commentId);
-            return true;
+        Optional<CommentEntity> findComment = commentRepository.findById(commentId);
+        if(findComment.isPresent()) {
+            if (findComment.get().getUser() == user) {
+                commentRepository.deleteById(commentId);
+                return true;
+            } else {
+                throw new CustomException(ErrorCode.COMMENT_UNAUTHORIZED_ACCESS, String.format("userId: %d, commentId: %d", user.getId(), commentId));
+            }
         } else {
-            throw new CustomException(ErrorCode.COMMENT_UNAUTHORIZED_ACCESS, String.format("userId: %d, commentId: %d", user.getId(), commentId));
+            throw new CustomException(ErrorCode.COMMENT_NOT_FOUND, String.format("commentId: %d", commentId));
         }
     }
 }

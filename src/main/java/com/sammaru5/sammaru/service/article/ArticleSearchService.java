@@ -2,9 +2,9 @@ package com.sammaru5.sammaru.service.article;
 
 import com.sammaru5.sammaru.domain.ArticleEntity;
 import com.sammaru5.sammaru.domain.BoardEntity;
-import com.sammaru5.sammaru.web.dto.ArticleDTO;
 import com.sammaru5.sammaru.repository.ArticleRepository;
 import com.sammaru5.sammaru.service.board.BoardStatusService;
+import com.sammaru5.sammaru.web.dto.ArticleDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Transactional(readOnly = true)
@@ -25,15 +25,13 @@ public class ArticleSearchService {
 
     @Transactional
     @Cacheable(keyGenerator = "articleCacheKeyGenerator", value = "article", cacheManager = "cacheManager")
-    public ArticleDTO findArticle(Long articleId) throws NullPointerException {
+    public ArticleDTO findArticle(Long articleId){
 
-        Optional<ArticleEntity> findArticle = articleRepository.findById(articleId);
-        if (!findArticle.isPresent()) {
-            throw new NullPointerException("해당 articleId 게시글이 존재하지 않습니다!");
-        }
-        findArticle.get().plusViewCnt(); //조회수 증가
+        ArticleEntity article = articleRepository.findArticleWithFile(articleId)
+                .orElseThrow(() -> new NoSuchElementException("해당 articleId 게시글이 존재하지 않습니다!"));
 
-        return new ArticleDTO(findArticle.get());
+        article.plusViewCnt(); //조회수 증가
+        return new ArticleDTO(article);
     }
 
      //boardId에 해당하는 게시판의 게시글들을 paging

@@ -22,4 +22,9 @@ public class FileEntity {
     private ArticleEntity article;
     private String filePath;
     private String fileName;
+
+    //== 연관관계 메서드 ==//
+    public void belongToArticle(ArticleEntity article) {
+        this.article = article;
+    }
 }

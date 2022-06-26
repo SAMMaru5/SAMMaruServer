@@ -43,10 +43,25 @@ public class ArticleEntity {
     @BatchSize(size=100)
     private List<FileEntity> files = new ArrayList<>();
 
+    public ArticleEntity(ArticleRequest articleRequest, BoardEntity board, UserEntity user) {
+        this.title = articleRequest.getTitle();
+        this.content = articleRequest.getContent();
+        this.board = board;
+        this.user = user;
+        this.viewCnt = 0;
+        this.likeCnt = 0;
+    }
+
+    //== 연관관계 메서드 ==//
+    public void addFile(FileEntity file) {
+        files.add(file);
+        file.belongToArticle(this);
+    }
+
+    //== 비즈니스 메서드 ==//
     public void plusViewCnt() {
         this.viewCnt++;
     }
-
     public void minusViewCnt() {
         this.viewCnt--;
     }
@@ -60,19 +75,6 @@ public class ArticleEntity {
     public void modifyArticle(ArticleRequest articleRequest) {
         this.title = articleRequest.getTitle();
         this.content = articleRequest.getContent();
-    }
-
-    public ArticleEntity(ArticleRequest articleRequest, BoardEntity board, UserEntity user) {
-        this(articleRequest.getTitle(), articleRequest.getContent());
-        this.board = board;
-        this.user = user;
-        this.viewCnt = 0;
-        this.likeCnt = 0;
-    }
-
-    public ArticleEntity(String title, String content) {
-        this.title = title;
-        this.content = content;
     }
 
 }

@@ -1,21 +1,16 @@
 package com.sammaru5.sammaru.web.dto;
 
 import com.sammaru5.sammaru.domain.ArticleEntity;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.springframework.beans.BeanUtils.copyProperties;
 
 @Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class ArticleDTO {
     private Long id;
     private String title;
@@ -24,7 +19,7 @@ public class ArticleDTO {
     private String author;
     private Integer viewCnt;
     private Integer likeCnt;
-    private List<FileDTO> files;
+    private List<FileDTO> files = new ArrayList<>();
 
     public ArticleDTO(ArticleEntity articleEntity) {
         copyProperties(articleEntity, this);
@@ -32,6 +27,6 @@ public class ArticleDTO {
         this.author = articleEntity.getUser().getUsername();
         this.viewCnt = articleEntity.getViewCnt();
         this.likeCnt = articleEntity.getViewCnt();
-        this.files = articleEntity.getFiles().stream().map(FileDTO::new).collect(Collectors.toList());
+        if(!articleEntity.getFiles().isEmpty()) this.files = articleEntity.getFiles().stream().map(FileDTO::new).collect(Collectors.toList());
     }
 }

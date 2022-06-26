@@ -2,6 +2,8 @@ package com.sammaru5.sammaru.service.comment;
 
 import com.sammaru5.sammaru.domain.CommentEntity;
 import com.sammaru5.sammaru.domain.UserEntity;
+import com.sammaru5.sammaru.exception.CustomException;
+import com.sammaru5.sammaru.exception.ErrorCode;
 import com.sammaru5.sammaru.repository.CommentRepository;
 import com.sammaru5.sammaru.service.user.UserStatusService;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +30,7 @@ public class CommentRemoveService {
             commentRepository.deleteById(commentId);
             return true;
         } else {
-            throw new AccessDeniedException("해당 게시물에 권한이 없는 사용자 입니다");
+            throw new CustomException(ErrorCode.COMMENT_UNAUTHORIZED_ACCESS, String.format("userId: %d, commentId: %d", user.getId(), commentId));
         }
     }
 }

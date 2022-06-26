@@ -10,6 +10,7 @@ public enum ErrorCode {
 
     // UNAUTHORIZED
     ARTICLE_UNAUTHORIZED_ACCESS(HttpStatus.UNAUTHORIZED, "해당 게시글에 권한이 없는 사용자입니다"),
+    COMMENT_UNAUTHORIZED_ACCESS(HttpStatus.UNAUTHORIZED, "해당 댓글에 권한이 없는 사용자입니다"),
 
     // BAD REQUEST
     ARTICLE_NOT_FOUND(HttpStatus.BAD_REQUEST, "해당 articleId 게시글이 존재하지 않습니다!"),

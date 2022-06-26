@@ -2,7 +2,6 @@ package com.sammaru5.sammaru.web.controller.exception;
 
 import com.sammaru5.sammaru.exception.CustomException;
 import com.sammaru5.sammaru.web.apiresult.ApiResult;
-import com.sammaru5.sammaru.exception.InvalidRefreshTokenException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -40,11 +39,5 @@ public class ExceptionController {
     public ApiResult<?> handleIllegalArgumentException(IllegalArgumentException e){
         e.printStackTrace();
         return ApiResult.ERROR(e, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(InvalidRefreshTokenException.class)
-    public ApiResult<?> handleInvalidRefreshTokenException(InvalidRefreshTokenException e){
-        e.printStackTrace();
-        return ApiResult.ERROR(e, HttpStatus.UNAUTHORIZED);
     }
 }

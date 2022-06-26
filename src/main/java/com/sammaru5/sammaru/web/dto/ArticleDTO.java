@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.springframework.beans.BeanUtils.copyProperties;
-
 @Getter
 public class ArticleDTO {
     private Long id;
@@ -22,7 +20,9 @@ public class ArticleDTO {
     private List<FileDTO> files = new ArrayList<>();
 
     public ArticleDTO(ArticleEntity articleEntity) {
-        copyProperties(articleEntity, this);
+        this.id = articleEntity.getId();
+        this.title = articleEntity.getTitle();
+        this.content = articleEntity.getContent();
         this.createDt = articleEntity.getCreateTime();
         this.author = articleEntity.getUser().getUsername();
         this.viewCnt = articleEntity.getViewCnt();

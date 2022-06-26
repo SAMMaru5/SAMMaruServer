@@ -4,7 +4,9 @@ import com.sammaru5.sammaru.domain.ArticleEntity;
 import com.sammaru5.sammaru.domain.BoardEntity;
 import com.sammaru5.sammaru.exception.CustomException;
 import com.sammaru5.sammaru.exception.ErrorCode;
+import com.sammaru5.sammaru.domain.FileEntity;
 import com.sammaru5.sammaru.repository.ArticleRepository;
+import com.sammaru5.sammaru.repository.FileRepository;
 import com.sammaru5.sammaru.service.board.BoardStatusService;
 import com.sammaru5.sammaru.web.dto.ArticleDTO;
 import lombok.RequiredArgsConstructor;
@@ -20,33 +22,36 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Transactional(readOnly = true)
-@Service @RequiredArgsConstructor
+@Service
+@RequiredArgsConstructor
 public class ArticleSearchService {
     private final BoardStatusService boardStatusService;
+    private final FileRepository fileRepository;
     private final ArticleRepository articleRepository;
 
     @Transactional
     @Cacheable(keyGenerator = "articleCacheKeyGenerator", value = "article", cacheManager = "cacheManager")
-    public ArticleDTO findArticle(Long articleId){
-
-        ArticleEntity article = articleRepository.findArticleWithFile(articleId)
+    public ArticleDTO findArticle(Long articleId) {
+        ArticleEntity article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ARTICLE_NOT_FOUND, String.format("articleId: %d", articleId)));
 
         article.plusViewCnt(); //조회수 증가
-        return new ArticleDTO(article);
+        List<FileEntity> files = fileRepository.findByArticle(article);
+        if (files.isEmpty()) return ArticleDTO.toDto(article);
+        return ArticleDTO.toDtoWithFile(article, files);
     }
 
-     //boardId에 해당하는 게시판의 게시글들을 paging
+    //boardId에 해당하는 게시판의 게시글들을 paging
     public List<ArticleDTO> findArticlesByBoardIdAndPaging(Long boardId, Integer pageNum) throws CustomException {
 
         BoardEntity findBoard = boardStatusService.findBoard(boardId);
         Pageable pageable = PageRequest.of(pageNum, 15, Sort.by("createTime").descending());
         List<ArticleEntity> findArticlesByPaging = articleRepository.findByBoard(findBoard, pageable);
-        if(findArticlesByPaging.isEmpty()) {
+        if (findArticlesByPaging.isEmpty()) {
             throw new CustomException(ErrorCode.BOARD_EMPTY, String.format("boardId: %d", boardId));
         }
 
-        return findArticlesByPaging.stream().map(ArticleDTO::new).collect(Collectors.toList());
+        return findArticlesByPaging.stream().map(ArticleDTO::toDto).collect(Collectors.toList());
     }
 
     //boardId에 해당하는 게시판에 달린 모든 게시글들 조회
@@ -54,11 +59,11 @@ public class ArticleSearchService {
 
         BoardEntity findBoard = boardStatusService.findBoard(boardId);
         List<ArticleEntity> findArticles = articleRepository.findByBoard(findBoard);
-        if(findArticles.isEmpty()) {
+        if (findArticles.isEmpty()) {
             throw new CustomException(ErrorCode.BOARD_EMPTY, String.format("boardId: %d", boardId));
         }
 
-        return findArticles.stream().map(ArticleDTO::new).collect(Collectors.toList());
+        return findArticles.stream().map(ArticleDTO::toDto).collect(Collectors.toList());
     }
 
     // 메인페이지에 보여지는 7개의 공지사항을 가져오는 메서드 findArticlesByBoardName
@@ -67,10 +72,10 @@ public class ArticleSearchService {
         BoardEntity findBoard = boardStatusService.findBoardByName(boardName);
         Pageable pageable = PageRequest.of(0, 7, Sort.by("createTime").descending());
         List<ArticleEntity> findArticles = articleRepository.findByBoard(findBoard, pageable);
-        if(findArticles.isEmpty()){
+        if (findArticles.isEmpty()) {
             throw new CustomException(ErrorCode.BOARD_EMPTY, String.format("boardId: %d", findBoard.getId()));
         }
 
-        return findArticles.stream().map(ArticleDTO::new).collect(Collectors.toList());
+        return findArticles.stream().map(ArticleDTO::toDto).collect(Collectors.toList());
     }
 }

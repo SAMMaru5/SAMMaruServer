@@ -40,7 +40,7 @@ public class ArticleModifyService {
             if (multipartFiles != null) {
                 fileRemoveService.removeFilesByArticle(article);
                 fileRegisterService.addFiles(multipartFiles, article.getId());
-                return new ArticleDTO(article);
+                return ArticleDTO.toDto(article);
             }
         } else {
             // 존재하지 않는 게시글에 접근했을때

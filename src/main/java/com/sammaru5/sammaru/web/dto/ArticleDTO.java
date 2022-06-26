@@ -1,6 +1,7 @@
 package com.sammaru5.sammaru.web.dto;
 
 import com.sammaru5.sammaru.domain.ArticleEntity;
+import com.sammaru5.sammaru.domain.FileEntity;
 import lombok.Getter;
 
 import java.sql.Timestamp;
@@ -19,14 +20,25 @@ public class ArticleDTO {
     private Integer likeCnt;
     private List<FileDTO> files = new ArrayList<>();
 
-    public ArticleDTO(ArticleEntity articleEntity) {
-        this.id = articleEntity.getId();
-        this.title = articleEntity.getTitle();
-        this.content = articleEntity.getContent();
-        this.createDt = articleEntity.getCreateTime();
-        this.author = articleEntity.getUser().getUsername();
-        this.viewCnt = articleEntity.getViewCnt();
-        this.likeCnt = articleEntity.getViewCnt();
-        if(!articleEntity.getFiles().isEmpty()) this.files = articleEntity.getFiles().stream().map(FileDTO::new).collect(Collectors.toList());
+    public static ArticleDTO toDto(ArticleEntity article) {
+        return new ArticleDTO(article);
+    }
+
+    public static ArticleDTO toDtoWithFile(ArticleEntity article, List<FileEntity> files) {
+        return new ArticleDTO(article, files);
+    }
+
+    private ArticleDTO(ArticleEntity article, List<FileEntity> files) {
+        this(article);
+        this.files = files.stream().map(FileDTO::new).collect(Collectors.toList());
+    }
+    private ArticleDTO(ArticleEntity article) {
+        this.id = article.getId();
+        this.title = article.getTitle();
+        this.content = article.getContent();
+        this.createDt = article.getCreateTime();
+        this.author = article.getUser().getUsername();
+        this.viewCnt = article.getViewCnt();
+        this.likeCnt = article.getViewCnt();
     }
 }

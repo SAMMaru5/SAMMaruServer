@@ -14,9 +14,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "board")
 @Getter
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
 public class BoardEntity {
 
     @Id @GeneratedValue
@@ -26,12 +24,8 @@ public class BoardEntity {
     private String description;
 
     public BoardEntity(BoardRequest boardRequest) {
-        this(boardRequest.getName(), boardRequest.getDescription());
-    }
-
-    public BoardEntity(String boardName, String description) {
-        this.name = boardName;
-        this.description = description;
+        this.name = boardRequest.getBoardName();
+        this.description = boardRequest.getDescription();
     }
 
 }

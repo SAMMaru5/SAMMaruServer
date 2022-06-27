@@ -2,12 +2,14 @@ package com.sammaru5.sammaru.service.article;
 
 import com.sammaru5.sammaru.domain.ArticleEntity;
 import com.sammaru5.sammaru.domain.UserEntity;
+import com.sammaru5.sammaru.exception.CustomException;
+import com.sammaru5.sammaru.exception.ErrorCode;
+import com.sammaru5.sammaru.web.dto.ArticleDTO;
 import com.sammaru5.sammaru.repository.ArticleRepository;
 import com.sammaru5.sammaru.service.user.UserStatusService;
 import com.sammaru5.sammaru.web.dto.ArticleDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,22 +26,26 @@ public class ArticleRemoveService {
     private final UserStatusService userStatusService;
 
     @CacheEvict(keyGenerator = "articleCacheKeyGenerator", value = "article", cacheManager = "cacheManager")
-    public boolean removeArticle(Long articleId, UserEntity findUser, Long boardId) throws AccessDeniedException, NullPointerException {
-        ArticleEntity article = articleRepository.findById(articleId)
-                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 게시글입니다."));
-
-        if (article.getUser() != findUser) { //작성자가 아닌 사람이 접근하려고 할때때
-            throw new AccessDeniedException("해당 게시물에 권한이 없는 사용자 입니다");
+    public boolean removeArticle(Long articleId, UserEntity findUser, Long boardId) throws CustomException {
+        Optional<ArticleEntity> findArticle = articleRepository.findById(articleId);
+        if(findArticle.isPresent()) {
+            if(findArticle.get().getUser() != findUser){ //작성자가 아닌 사람이 접근하려고 할때때
+                throw new CustomException(ErrorCode.UNAUTHORIZED_USER_ACCESS, findUser.getId().toString());
+            }
+            articleRepository.deleteById(findArticle.get().getId());
+            return true;
+        } else {
+            throw new CustomException(ErrorCode.ARTICLE_NOT_FOUND, articleId.toString());
         }
 
         articleRepository.delete(article);
         return true;
     }
 
-    public boolean removeArticleByAdmin(Long boardId) throws NullPointerException {
+    public boolean removeArticleByAdmin(Long boardId) throws CustomException {
         List<ArticleDTO> articles = articleSearchService.findArticlesByBoardId(boardId);
         if (articles.isEmpty()) {
-            throw new NoSuchElementException("해당 게시판에 게시글이 존재하지 않습니다!");
+            throw new CustomException(ErrorCode.BOARD_IS_EMPTY, boardId.toString());
         }
 
         List<Long> ids = new ArrayList<>();

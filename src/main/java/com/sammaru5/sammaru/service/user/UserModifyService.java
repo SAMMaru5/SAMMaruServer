@@ -2,6 +2,8 @@ package com.sammaru5.sammaru.service.user;
 
 import com.sammaru5.sammaru.domain.UserAuthority;
 import com.sammaru5.sammaru.domain.UserEntity;
+import com.sammaru5.sammaru.exception.CustomException;
+import com.sammaru5.sammaru.exception.ErrorCode;
 import com.sammaru5.sammaru.web.dto.UserDTO;
 import com.sammaru5.sammaru.repository.UserRepository;
 import com.sammaru5.sammaru.web.request.PointRequest;
@@ -39,10 +41,10 @@ public class UserModifyService {
         return new UserDTO(userRepository.save(userEntity));
     }
 
-    public UserDTO addUserPoint(Long userId, PointRequest pointRequest) throws IllegalArgumentException {
+    public UserDTO addUserPoint(Long userId, PointRequest pointRequest) throws CustomException {
         UserEntity userEntity = userRepository.getById(userId);
         if(userEntity.getPoint() + pointRequest.getAddPoint() < 0){
-            throw new IllegalArgumentException("사용자의 포인트는 음수가 될 수 없습니다!");
+            throw new CustomException(ErrorCode.USER_POINT_CANT_NEGATIVE, userId.toString());
         }
         userEntity.setPoint(userEntity.getPoint() + pointRequest.getAddPoint());
         return new UserDTO(userRepository.save(userEntity));

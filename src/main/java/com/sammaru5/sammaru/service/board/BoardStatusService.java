@@ -1,6 +1,8 @@
 package com.sammaru5.sammaru.service.board;
 
 import com.sammaru5.sammaru.domain.BoardEntity;
+import com.sammaru5.sammaru.exception.CustomException;
+import com.sammaru5.sammaru.exception.ErrorCode;
 import com.sammaru5.sammaru.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,13 +19,13 @@ public class BoardStatusService {
 
     public BoardEntity findBoard(Long boardId) {
         return boardRepository.findById(boardId)
-                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 게시판입니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND, boardId.toString()));
     }
 
     public BoardEntity findByBoardName(String boardName) {
         List<BoardEntity> boards = boardRepository.findByBoardName(boardName);
         if(boards.isEmpty()) {
-           throw new IllegalArgumentException("존재하지 않는 게시판입니다.");
+           throw new CustomException(ErrorCode.BOARD_NOT_FOUND, boardName);
         }
         return boards.get(0);
     }

@@ -2,6 +2,8 @@ package com.sammaru5.sammaru.service.file;
 
 import com.sammaru5.sammaru.domain.ArticleEntity;
 import com.sammaru5.sammaru.domain.FileEntity;
+import com.sammaru5.sammaru.exception.CustomException;
+import com.sammaru5.sammaru.exception.ErrorCode;
 import com.sammaru5.sammaru.repository.FileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,12 +22,12 @@ public class FileRemoveService {
     private String fileDir;
 
     //해당 파일 삭제
-    public boolean removeFile(Long boardId, String filePath) throws NullPointerException {
+    public boolean removeFile(Long boardId, String filePath) throws CustomException {
 
         File targetFile = new File(fileDir + boardId + "/" + filePath);
         Optional<FileEntity> storageEntity = fileRepository.findByFilePath(filePath);
         if(!targetFile.exists() || !storageEntity.isPresent()){
-            throw new NullPointerException("해당 파일은 존재하지 않습니다!");
+            throw new CustomException(ErrorCode.FILE_NOT_FOUND, filePath);
         }
 
         fileRepository.delete(storageEntity.get());
@@ -33,7 +35,7 @@ public class FileRemoveService {
     }
 
     //Article에 속한 모든 파일 삭제
-    public boolean removeFilesByArticle(ArticleEntity articleEntity) throws NullPointerException {
+    public boolean removeFilesByArticle(ArticleEntity articleEntity) throws CustomException {
 
         List<FileEntity> storageEntities = fileRepository.findByArticle(articleEntity);
         for(FileEntity fileEntity : storageEntities){

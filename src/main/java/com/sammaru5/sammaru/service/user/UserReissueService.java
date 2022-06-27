@@ -1,7 +1,8 @@
 package com.sammaru5.sammaru.service.user;
 
+import com.sammaru5.sammaru.exception.CustomException;
+import com.sammaru5.sammaru.exception.ErrorCode;
 import com.sammaru5.sammaru.web.dto.JwtDTO;
-import com.sammaru5.sammaru.exception.InvalidRefreshTokenException;
 import com.sammaru5.sammaru.config.jwt.JwtTokenProvider;
 import com.sammaru5.sammaru.service.redis.RedisService;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ public class UserReissueService {
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisService redisService;
 
-    public JwtDTO reissueUser(HttpServletRequest request) throws InvalidRefreshTokenException {
+    public JwtDTO reissueUser(HttpServletRequest request) throws CustomException {
 
         String accessToken = jwtTokenProvider.getTokenFromRequest(request);
         String refreshToken = jwtTokenProvider.getRefreshTokenFromRequest(request);
@@ -30,10 +31,10 @@ public class UserReissueService {
             if((redisService.getValues(refreshToken) != null) && (redisService.getValues(refreshToken).equals(Long.toString(jwtTokenProvider.getIdFromToken(accessToken))))) {
                 newAccessToken = jwtTokenProvider.generateToken(jwtTokenProvider.getIdFromToken(accessToken));
             } else {
-                throw new InvalidRefreshTokenException();
+                throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
             }
         } else {
-            throw new InvalidRefreshTokenException();
+            throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
         }
 
         return new JwtDTO(newAccessToken, refreshToken);

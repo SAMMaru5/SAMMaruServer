@@ -1,7 +1,7 @@
 package com.sammaru5.sammaru.web.controller.exception;
 
+import com.sammaru5.sammaru.exception.CustomException;
 import com.sammaru5.sammaru.web.apiresult.ApiResult;
-import com.sammaru5.sammaru.exception.InvalidRefreshTokenException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -10,6 +10,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class ExceptionController {
+
+    @ExceptionHandler(CustomException.class)
+    public ApiResult<?> handleCustomException(CustomException e) {
+        e.printStackTrace();
+        return ApiResult.ERROR(e, e.getErrorCode().getHttpStatus());
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class) //@Valid 검사
     public ApiResult<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException e){
@@ -33,11 +39,5 @@ public class ExceptionController {
     public ApiResult<?> handleIllegalArgumentException(IllegalArgumentException e){
         e.printStackTrace();
         return ApiResult.ERROR(e, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(InvalidRefreshTokenException.class)
-    public ApiResult<?> handleInvalidRefreshTokenException(InvalidRefreshTokenException e){
-        e.printStackTrace();
-        return ApiResult.ERROR(e, HttpStatus.UNAUTHORIZED);
     }
 }

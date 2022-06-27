@@ -2,6 +2,8 @@ package com.sammaru5.sammaru.service.user;
 
 import com.sammaru5.sammaru.domain.UserAuthority;
 import com.sammaru5.sammaru.domain.UserEntity;
+import com.sammaru5.sammaru.exception.CustomException;
+import com.sammaru5.sammaru.exception.ErrorCode;
 import com.sammaru5.sammaru.web.dto.UserDTO;
 import com.sammaru5.sammaru.repository.UserRepository;
 import com.sammaru5.sammaru.web.request.SignUpRequest;
@@ -16,9 +18,9 @@ public class UserRegisterService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserDTO signUpUser(SignUpRequest signUpRequest) throws IllegalArgumentException {
+    public UserDTO signUpUser(SignUpRequest signUpRequest) throws CustomException {
         if(userRepository.existsByStudentId(signUpRequest.getStudentId())) {
-            throw new IllegalArgumentException("해당 학번의 사옹자가 이미 존재합니다");
+            throw new CustomException(ErrorCode.ALREADY_EXIST_USER, signUpRequest.getStudentId().toString());
         }
         UserEntity userEntity = UserEntity.builder()
                 .studentId(signUpRequest.getStudentId())

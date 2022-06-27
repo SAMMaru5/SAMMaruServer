@@ -2,9 +2,9 @@ package com.sammaru5.sammaru.service.article;
 
 import com.sammaru5.sammaru.domain.ArticleEntity;
 import com.sammaru5.sammaru.domain.BoardEntity;
+import com.sammaru5.sammaru.domain.FileEntity;
 import com.sammaru5.sammaru.exception.CustomException;
 import com.sammaru5.sammaru.exception.ErrorCode;
-import com.sammaru5.sammaru.domain.FileEntity;
 import com.sammaru5.sammaru.repository.ArticleRepository;
 import com.sammaru5.sammaru.repository.FileRepository;
 import com.sammaru5.sammaru.service.board.BoardStatusService;
@@ -41,8 +41,7 @@ public class ArticleSearchService {
     }
 
     //boardId에 해당하는 게시판의 게시글들을 paging
-    public List<ArticleDTO> findArticlesByBoardIdAndPaging(Long boardId, Integer pageNum) throws CustomException {
-
+    public List<ArticleDTO> findArticlesByBoardIdAndPaging(Long boardId, Integer pageNum) {
         BoardEntity findBoard = boardStatusService.findBoard(boardId);
         Pageable pageable = PageRequest.of(pageNum, 15, Sort.by("createTime").descending());
         List<ArticleEntity> findArticlesByPaging = articleRepository.findByBoard(findBoard, pageable);
@@ -54,8 +53,7 @@ public class ArticleSearchService {
     }
 
     //boardId에 해당하는 게시판에 달린 모든 게시글들 조회
-    public List<ArticleDTO> findArticlesByBoardId(Long boardId) throws CustomException {
-
+    public List<ArticleDTO> findArticlesByBoardId(Long boardId) {
         BoardEntity findBoard = boardStatusService.findBoard(boardId);
         List<ArticleEntity> findArticles = articleRepository.findByBoard(findBoard);
         if (findArticles.isEmpty()) {
@@ -66,8 +64,7 @@ public class ArticleSearchService {
     }
 
     // 메인페이지에 보여지는 7개의 공지사항을 가져오는 메서드 findArticlesByBoardName
-    public List<ArticleDTO> findArticlesByBoardName(String boardName) throws CustomException {
-
+    public List<ArticleDTO> findArticlesByBoardName(String boardName) {
         BoardEntity findBoard = boardStatusService.findBoardByName(boardName);
         Pageable pageable = PageRequest.of(0, 7, Sort.by("createTime").descending());
         List<ArticleEntity> findArticles = articleRepository.findByBoard(findBoard, pageable);

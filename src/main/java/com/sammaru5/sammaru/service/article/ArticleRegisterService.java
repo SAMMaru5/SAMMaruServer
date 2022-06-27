@@ -20,8 +20,7 @@ public class ArticleRegisterService {
     private final BoardStatusService boardStatusService;
     private final FileRegisterService fileRegisterService;
 
-    public ArticleDTO addArticle(UserEntity findUser, Long boardId, ArticleRequest articleRequest, MultipartFile[] multipartFiles) throws NullPointerException {
-
+    public ArticleDTO addArticle(UserEntity findUser, Long boardId, ArticleRequest articleRequest, MultipartFile[] multipartFiles) {
         BoardEntity findBoard = boardStatusService.findBoard(boardId);
         ArticleEntity articleEntity = articleRepository.save(new ArticleEntity(articleRequest, findBoard, findUser));
 

@@ -14,6 +14,7 @@ public enum ErrorCode {
     BOARD_IS_EMPTY(HttpStatus.BAD_REQUEST, "해당 게시판에 게시글이 존재하지 않습니다!"),
     COMMENT_NOT_FOUND(HttpStatus.BAD_REQUEST, "해당 댓글은 존재하지 않습니다!"),
     FILE_NOT_FOUND(HttpStatus.BAD_REQUEST, "해당 파일은 존재하지 않습니다!"),
+    BOARD_NOT_REMOVE(HttpStatus.BAD_REQUEST, "해당 게시판은 삭제할 수 없습니다!"),
 
     // 401 UNAUTHORIZED
     UNAUTHORIZED_USER_ACCESS(HttpStatus.UNAUTHORIZED, "권한이 없는 사용자의 접근입니다!"),

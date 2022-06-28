@@ -24,26 +24,21 @@ public class ArticleModifyService {
     private final FileRegisterService fileRegisterService;
 
     @CacheEvict(keyGenerator = "articleCacheKeyGenerator", value = "article", cacheManager = "cacheManager")
-    public ArticleDTO modifyArticle(Long articleId, User findUser, Long boardId, ArticleRequest articleRequest, MultipartFile[] multipartFiles) throws CustomException {
-        Optional<Article> findArticle = articleRepository.findById(articleId);
-        if (findArticle.isPresent()) {
-            Article article = findArticle.get();
+    public ArticleDTO modifyArticle(Long articleId, User findUser, Long boardId, ArticleRequest articleRequest, MultipartFile[] multipartFiles) {
+        Article article = articleRepository.findById(articleId)
+                .orElseThrow(() -> new CustomException(ErrorCode.ARTICLE_NOT_FOUND, articleId.toString()));
 
-            if(article.getUser() != findUser){ //작성자가 아닌 사람이 접근하려고 할때
-                throw new CustomException(ErrorCode.UNAUTHORIZED_USER_ACCESS, findUser.getId().toString());
-           }
-            article.modifyArticle(articleRequest);
-
-            if (multipartFiles != null) {
-                fileRemoveService.removeFilesByArticle(article);
-                fileRegisterService.addFiles(multipartFiles, article.getId());
-                return ArticleDTO.toDto(article);
-            }
-        } else {
-            // 존재하지 않는 게시글에 접근했을때
-            throw new CustomException(ErrorCode.ARTICLE_NOT_FOUND, articleId.toString());
+        if (article.getUser() != findUser) { //작성자가 아닌 사람이 접근하려고 할때
+            throw new CustomException(ErrorCode.UNAUTHORIZED_USER_ACCESS, findUser.getId().toString());
         }
 
+        article.modifyArticle(articleRequest);
+
+        if (multipartFiles != null) {
+            fileRemoveService.removeFilesByArticle(article);
+            fileRegisterService.addFiles(multipartFiles, article.getId());
+            return ArticleDTO.toDto(article);
+        }
         return null;
     }
 

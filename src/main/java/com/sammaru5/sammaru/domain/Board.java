@@ -18,11 +18,11 @@ public class Board {
     @Column(name = "board_id")
     private Long id;
 
-    private String name;
+    private String boardName;
     private String description;
 
     public Board(BoardRequest boardRequest) {
-        this.name = boardRequest.getBoardName();
+        this.boardName = boardRequest.getBoardName();
         this.description = boardRequest.getDescription();
     }
 

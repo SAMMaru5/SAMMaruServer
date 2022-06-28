@@ -24,16 +24,12 @@ public class ArticleRemoveService {
     private final UserStatusService userStatusService;
 
     @CacheEvict(keyGenerator = "articleCacheKeyGenerator", value = "article", cacheManager = "cacheManager")
-    public boolean removeArticle(Long articleId, User findUser, Long boardId) throws CustomException {
-        Optional<Article> findArticle = articleRepository.findById(articleId);
-        if(findArticle.isPresent()) {
-            if(findArticle.get().getUser() != findUser){ //작성자가 아닌 사람이 접근하려고 할때때
-                throw new CustomException(ErrorCode.UNAUTHORIZED_USER_ACCESS, findUser.getId().toString());
-            }
-            articleRepository.deleteById(findArticle.get().getId());
-            return true;
-        } else {
-            throw new CustomException(ErrorCode.ARTICLE_NOT_FOUND, articleId.toString());
+    public boolean removeArticle(Long articleId, User findUser, Long boardId) {
+        Article article = articleRepository.findById(articleId)
+                .orElseThrow(() -> new CustomException(ErrorCode.ARTICLE_NOT_FOUND, articleId.toString()));
+
+        if (article.getUser() != findUser) { //작성자가 아닌 사람이 접근하려고 할때때
+            throw new CustomException(ErrorCode.UNAUTHORIZED_USER_ACCESS, findUser.getId().toString());
         }
 
         articleRepository.delete(article);

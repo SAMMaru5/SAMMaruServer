@@ -20,8 +20,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
 
-    #docker
-    url: jdbc:mysql://mysql:3306/sammaru?serverTimezone=UTC&characterEncoding=UTF-8
+    # 로컬 테스트용 DB
+    url: jdbc:mysql://${MYSQL_HOST:localhost}:3307/sammaru?serverTimezone=UTC&characterEncoding=UTF-8
     username: sammaru
     password: sammaru
 

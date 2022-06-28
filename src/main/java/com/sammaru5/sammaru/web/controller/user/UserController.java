@@ -2,7 +2,7 @@ package com.sammaru5.sammaru.web.controller.user;
 
 import com.sammaru5.sammaru.web.apiresult.ApiResult;
 import com.sammaru5.sammaru.domain.UserAuthority;
-import com.sammaru5.sammaru.domain.UserEntity;
+import com.sammaru5.sammaru.domain.User;
 import com.sammaru5.sammaru.web.dto.UserDTO;
 import com.sammaru5.sammaru.web.request.PointRequest;
 import com.sammaru5.sammaru.web.request.RoleRequest;
@@ -41,7 +41,7 @@ public class UserController {
 
     @GetMapping("/api/user/info")
     @ApiOperation(value = "회원 정보", notes = "회원 정보 가져오기", response = UserDTO.class)
-    public ApiResult<?> userDetails(@AuthUser UserEntity user) {
+    public ApiResult<?> userDetails(@AuthUser User user) {
         return ApiResult.OK(new UserDTO(user));
     }
 

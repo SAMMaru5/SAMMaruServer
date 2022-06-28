@@ -1,16 +1,16 @@
 package com.sammaru5.sammaru.repository;
 
 import com.sammaru5.sammaru.domain.UserAuthority;
-import com.sammaru5.sammaru.domain.UserEntity;
+import com.sammaru5.sammaru.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<UserEntity, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
-    Optional<UserEntity> findByStudentId(String studentId);
+    Optional<User> findByStudentId(String studentId);
     boolean existsByStudentId(String studentId);
-    List<UserEntity> findByRole(UserAuthority userAuthority);
-    List<UserEntity> findByGeneration(Integer generationNum);
+    List<User> findByRole(UserAuthority userAuthority);
+    List<User> findByGeneration(Integer generationNum);
 }

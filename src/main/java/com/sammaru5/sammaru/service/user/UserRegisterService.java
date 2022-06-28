@@ -1,7 +1,7 @@
 package com.sammaru5.sammaru.service.user;
 
 import com.sammaru5.sammaru.domain.UserAuthority;
-import com.sammaru5.sammaru.domain.UserEntity;
+import com.sammaru5.sammaru.domain.User;
 import com.sammaru5.sammaru.exception.CustomException;
 import com.sammaru5.sammaru.exception.ErrorCode;
 import com.sammaru5.sammaru.web.dto.UserDTO;
@@ -22,7 +22,7 @@ public class UserRegisterService {
         if(userRepository.existsByStudentId(signUpRequest.getStudentId())) {
             throw new CustomException(ErrorCode.ALREADY_EXIST_USER, signUpRequest.getStudentId().toString());
         }
-        UserEntity userEntity = UserEntity.builder()
+        User user = User.builder()
                 .studentId(signUpRequest.getStudentId())
                 .username(signUpRequest.getUsername())
                 .password(passwordEncoder.encode(signUpRequest.getPassword()))
@@ -31,6 +31,6 @@ public class UserRegisterService {
                 .role(UserAuthority.ROLE_TEMP)
                 .build();
 
-        return new UserDTO(userRepository.save(userEntity));
+        return new UserDTO(userRepository.save(user));
     }
 }

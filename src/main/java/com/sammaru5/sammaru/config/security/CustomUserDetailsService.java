@@ -1,6 +1,6 @@
 package com.sammaru5.sammaru.config.security;
 
-import com.sammaru5.sammaru.domain.UserEntity;
+import com.sammaru5.sammaru.domain.User;
 import com.sammaru5.sammaru.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,16 +20,16 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String studentId) throws UsernameNotFoundException {
-        UserEntity userEntity = userRepository.findByStudentId(studentId)
+        User user = userRepository.findByStudentId(studentId)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with Student Id : " + studentId));
-        return new UserDetail(userEntity);
+        return new UserDetail(user);
     }
 
     @Transactional
     public UserDetails loadUserById(Long id) {
-        UserEntity userEntity = userRepository.findById(id)
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("Member not found with Id : " + id));
-        return new UserDetail(userEntity);
+        return new UserDetail(user);
     }
 
 }

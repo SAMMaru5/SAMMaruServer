@@ -8,23 +8,23 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "file")
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FileEntity {
+public class File {
 
     @Id @GeneratedValue
+    @Column(name = "file_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private ArticleEntity article;
+    private Article article;
     private String filePath;
     private String fileName;
 
     //== 연관관계 메서드 ==//
-    public void belongToArticle(ArticleEntity article) {
+    public void belongToArticle(Article article) {
         this.article = article;
     }
 }

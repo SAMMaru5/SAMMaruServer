@@ -1,12 +1,12 @@
 package com.sammaru5.sammaru.repository;
 
-import com.sammaru5.sammaru.domain.ArticleEntity;
-import com.sammaru5.sammaru.domain.CommentEntity;
+import com.sammaru5.sammaru.domain.Article;
+import com.sammaru5.sammaru.domain.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface CommentRepository extends JpaRepository<CommentEntity, Long> {
+public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-    List<CommentEntity> findByArticle(ArticleEntity article);
+    List<Comment> findByArticle(Article article);
 }

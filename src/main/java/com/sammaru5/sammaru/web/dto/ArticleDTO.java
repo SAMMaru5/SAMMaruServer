@@ -1,7 +1,7 @@
 package com.sammaru5.sammaru.web.dto;
 
-import com.sammaru5.sammaru.domain.ArticleEntity;
-import com.sammaru5.sammaru.domain.FileEntity;
+import com.sammaru5.sammaru.domain.Article;
+import com.sammaru5.sammaru.domain.File;
 import lombok.Getter;
 
 import java.sql.Timestamp;
@@ -20,19 +20,19 @@ public class ArticleDTO {
     private Integer likeCnt;
     private List<FileDTO> files = new ArrayList<>();
 
-    public static ArticleDTO toDto(ArticleEntity article) {
+    public static ArticleDTO toDto(Article article) {
         return new ArticleDTO(article);
     }
 
-    public static ArticleDTO toDtoWithFile(ArticleEntity article, List<FileEntity> files) {
+    public static ArticleDTO toDtoWithFile(Article article, List<File> files) {
         return new ArticleDTO(article, files);
     }
 
-    private ArticleDTO(ArticleEntity article, List<FileEntity> files) {
+    private ArticleDTO(Article article, List<File> files) {
         this(article);
         this.files = files.stream().map(FileDTO::new).collect(Collectors.toList());
     }
-    private ArticleDTO(ArticleEntity article) {
+    private ArticleDTO(Article article) {
         this.id = article.getId();
         this.title = article.getTitle();
         this.content = article.getContent();

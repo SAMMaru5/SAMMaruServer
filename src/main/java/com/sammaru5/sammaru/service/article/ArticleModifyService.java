@@ -1,7 +1,7 @@
 package com.sammaru5.sammaru.service.article;
 
-import com.sammaru5.sammaru.domain.ArticleEntity;
-import com.sammaru5.sammaru.domain.UserEntity;
+import com.sammaru5.sammaru.domain.Article;
+import com.sammaru5.sammaru.domain.User;
 import com.sammaru5.sammaru.exception.CustomException;
 import com.sammaru5.sammaru.exception.ErrorCode;
 import com.sammaru5.sammaru.web.dto.ArticleDTO;
@@ -27,10 +27,10 @@ public class ArticleModifyService {
     private final FileRegisterService fileRegisterService;
 
     @CacheEvict(keyGenerator = "articleCacheKeyGenerator", value = "article", cacheManager = "cacheManager")
-    public ArticleDTO modifyArticle(Long articleId, UserEntity findUser, Long boardId, ArticleRequest articleRequest, MultipartFile[] multipartFiles) throws CustomException {
-        Optional<ArticleEntity> findArticle = articleRepository.findById(articleId);
+    public ArticleDTO modifyArticle(Long articleId, User findUser, Long boardId, ArticleRequest articleRequest, MultipartFile[] multipartFiles) throws CustomException {
+        Optional<Article> findArticle = articleRepository.findById(articleId);
         if (findArticle.isPresent()) {
-            ArticleEntity article = findArticle.get();
+            Article article = findArticle.get();
 
             if(article.getUser() != findUser){ //작성자가 아닌 사람이 접근하려고 할때
                 throw new CustomException(ErrorCode.UNAUTHORIZED_USER_ACCESS, findUser.getId().toString());

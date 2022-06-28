@@ -14,14 +14,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "article")
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ArticleEntity {
+public class Article {
 
     @Id @GeneratedValue
+    @Column(name = "article_id")
     private Long id;
 
     private String title;
@@ -34,16 +34,16 @@ public class ArticleEntity {
     private Integer likeCnt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private BoardEntity board;
+    private Board board;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private UserEntity user;
+    private User user;
 
     @OneToMany(mappedBy = "article")
     @BatchSize(size=100)
-    private List<FileEntity> files = new ArrayList<>();
+    private List<File> files = new ArrayList<>();
 
-    public ArticleEntity(ArticleRequest articleRequest, BoardEntity board, UserEntity user) {
+    public Article(ArticleRequest articleRequest, Board board, User user) {
         this.title = articleRequest.getTitle();
         this.content = articleRequest.getContent();
         this.board = board;
@@ -53,7 +53,7 @@ public class ArticleEntity {
     }
 
     //== 연관관계 메서드 ==//
-    public void addFile(FileEntity file) {
+    public void addFile(File file) {
         files.add(file);
         file.belongToArticle(this);
     }

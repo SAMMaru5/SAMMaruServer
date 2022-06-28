@@ -1,6 +1,6 @@
 package com.sammaru5.sammaru.config.security;
 
-import com.sammaru5.sammaru.domain.UserEntity;
+import com.sammaru5.sammaru.domain.User;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,10 +20,10 @@ public class UserDetail implements UserDetails {
 //    private String email;
 //    private Long point;
 //    private UserAuthority userAuthority;
-    private UserEntity userEntity;
+    private User user;
 
-    public UserDetail (UserEntity userEntity) {
-        this.userEntity = userEntity;
+    public UserDetail (User user) {
+        this.user = user;
 //        this.id = userEntity.getId();
 //        this.studentId = userEntity.getStudentId();
 //        this.username = userEntity.getUsername();
@@ -33,23 +33,23 @@ public class UserDetail implements UserDetails {
 //        this.userAuthority = userEntity.getRole();
     }
 
-    public Long getId() {return userEntity.getId();}
+    public Long getId() {return user.getId();}
 
     @Override
     public String getUsername() {
-        return userEntity.getUsername();
+        return user.getUsername();
     }
 
     @Override
     public String getPassword() {
-        return userEntity.getPassword();
+        return user.getPassword();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
 
-        authorities.add(new SimpleGrantedAuthority(this.userEntity.getRole().name()));
+        authorities.add(new SimpleGrantedAuthority(this.user.getRole().name()));
 
         return authorities;
     }
@@ -81,11 +81,11 @@ public class UserDetail implements UserDetails {
         if(o == null || getClass() != o.getClass())
             return false;
         UserDetail that = (UserDetail) o;
-        return Objects.equals(this.userEntity.getId(), that.userEntity.getId());
+        return Objects.equals(this.user.getId(), that.user.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.userEntity.getId());
+        return Objects.hash(this.user.getId());
     }
 }

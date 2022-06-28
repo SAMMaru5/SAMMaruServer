@@ -4,18 +4,19 @@ import com.sammaru5.sammaru.web.request.ScheduleRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Table;
 import java.sql.Date;
 
 @Entity
-@Table(name = "schedule")
 @Getter
 @NoArgsConstructor
-public class ScheduleEntity {
+public class Schedule {
+
     @Id @GeneratedValue
+    @Column(name = "schedule_id")
     private Long id;
 
     private String title;
@@ -23,7 +24,7 @@ public class ScheduleEntity {
     private Date end;
     private String content;
 
-    public ScheduleEntity(ScheduleRequest scheduleRequest) {
+    public Schedule(ScheduleRequest scheduleRequest) {
         this.title = scheduleRequest.getTitle();
         this.start = scheduleRequest.getStart();
         this.end = scheduleRequest.getEnd();

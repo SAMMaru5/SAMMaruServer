@@ -1,6 +1,7 @@
 package com.sammaru5.sammaru.domain;
 
 import com.sammaru5.sammaru.web.request.BoardRequest;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import javax.persistence.Id;
 @Entity
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Board {
 
     @Id @GeneratedValue

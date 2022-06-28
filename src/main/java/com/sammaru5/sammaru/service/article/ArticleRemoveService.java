@@ -4,7 +4,6 @@ import com.sammaru5.sammaru.domain.ArticleEntity;
 import com.sammaru5.sammaru.domain.UserEntity;
 import com.sammaru5.sammaru.exception.CustomException;
 import com.sammaru5.sammaru.exception.ErrorCode;
-import com.sammaru5.sammaru.web.dto.ArticleDTO;
 import com.sammaru5.sammaru.repository.ArticleRepository;
 import com.sammaru5.sammaru.service.user.UserStatusService;
 import com.sammaru5.sammaru.web.dto.ArticleDTO;
@@ -15,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Transactional
 @Service

@@ -20,8 +20,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
-public class Article {
+public class Article extends BaseTime {
 
     @Id @GeneratedValue
     @Column(name = "article_id")
@@ -29,9 +28,6 @@ public class Article {
 
     private String title;
     private String content;
-
-    @CreatedDate
-    private Timestamp createTime;
 
     private Integer viewCnt;
     private Integer likeCnt;

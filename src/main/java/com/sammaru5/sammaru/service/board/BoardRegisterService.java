@@ -1,6 +1,6 @@
 package com.sammaru5.sammaru.service.board;
 
-import com.sammaru5.sammaru.domain.BoardEntity;
+import com.sammaru5.sammaru.domain.Board;
 import com.sammaru5.sammaru.exception.CustomException;
 import com.sammaru5.sammaru.exception.ErrorCode;
 import com.sammaru5.sammaru.web.dto.BoardDTO;
@@ -11,8 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Transactional
 @Service @RequiredArgsConstructor
@@ -25,7 +23,7 @@ public class BoardRegisterService {
     }
 
     private void validateDuplicateBoard(String boardName) {
-        List<BoardEntity> boards = boardRepository.findByBoardName(boardName);
+        List<Board> boards = boardRepository.findByBoardName(boardName);
         if(!boards.isEmpty()) throw new CustomException(ErrorCode.ALREADY_EXIST_BOARD);
     }
 }

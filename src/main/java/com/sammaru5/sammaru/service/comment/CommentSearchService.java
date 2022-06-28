@@ -1,7 +1,7 @@
 package com.sammaru5.sammaru.service.comment;
 
-import com.sammaru5.sammaru.domain.ArticleEntity;
-import com.sammaru5.sammaru.domain.CommentEntity;
+import com.sammaru5.sammaru.domain.Article;
+import com.sammaru5.sammaru.domain.Comment;
 import com.sammaru5.sammaru.exception.CustomException;
 import com.sammaru5.sammaru.exception.ErrorCode;
 import com.sammaru5.sammaru.repository.ArticleRepository;
@@ -24,10 +24,10 @@ public class CommentSearchService {
     private final ArticleRepository articleRepository;
 
     public List<CommentDTO> findCommentsByArticleId(Long articleId) throws CustomException {
-        Optional<ArticleEntity> article = articleRepository.findById(articleId);
+        Optional<Article> article = articleRepository.findById(articleId);
         if(article.isEmpty()) throw new CustomException(ErrorCode.ARTICLE_NOT_FOUND, articleId.toString());
         else {
-            List<CommentEntity> comments = commentRepository.findByArticle(article.get());
+            List<Comment> comments = commentRepository.findByArticle(article.get());
             return comments.stream().map(CommentDTO::new).collect(Collectors.toList());
         }
     }

@@ -1,6 +1,6 @@
 package com.sammaru5.sammaru.web.dto;
 
-import com.sammaru5.sammaru.domain.ArticleEntity;
+import com.sammaru5.sammaru.domain.Article;
 import lombok.Getter;
 
 import java.sql.Timestamp;
@@ -13,9 +13,9 @@ public class AnnouncementDTO {
     private String author;
     private Timestamp createDt;
 
-    public AnnouncementDTO(ArticleEntity articleEntity) {
-        copyProperties(articleEntity, this);
-        this.author = articleEntity.getUser().getUsername();
-        this.createDt = articleEntity.getCreateTime();
+    public AnnouncementDTO(Article article) {
+        copyProperties(article, this);
+        this.author = article.getUser().getUsername();
+        this.createDt = article.getCreateTime();
     }
 }

@@ -1,7 +1,7 @@
 package com.sammaru5.sammaru.service.file;
 
-import com.sammaru5.sammaru.domain.ArticleEntity;
-import com.sammaru5.sammaru.domain.FileEntity;
+import com.sammaru5.sammaru.domain.Article;
+import com.sammaru5.sammaru.domain.File;
 import com.sammaru5.sammaru.repository.FileRepository;
 import com.sammaru5.sammaru.service.article.ArticleStatusService;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.apache.commons.io.FilenameUtils;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
@@ -27,12 +26,12 @@ public class FileRegisterService {
 
     public boolean addFiles(MultipartFile[] multipartFiles, Long articleId) {
 
-        ArticleEntity articleEntity = articleStatusService.findArticle(articleId).get();
+        Article article = articleStatusService.findArticle(articleId).get();
 
         for(MultipartFile multipartFile : multipartFiles){
             UUID uid = UUID.randomUUID();
             String extension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
-            File targetFile = new File(fileDir + articleEntity.getBoard().getId() + "/" + uid.toString() + "." + extension);
+            java.io.File targetFile = new java.io.File(fileDir + article.getBoard().getId() + "/" + uid.toString() + "." + extension);
             try {
                 InputStream fileStream = multipartFile.getInputStream();
                 FileUtils.copyInputStreamToFile(fileStream, targetFile);
@@ -41,8 +40,8 @@ public class FileRegisterService {
                 e.printStackTrace();
             }
             fileRepository.save(
-                    FileEntity.builder()
-                            .article(articleEntity)
+                    File.builder()
+                            .article(article)
                             .filePath(uid.toString() + "." + extension)
                             .fileName(multipartFile.getOriginalFilename())
                             .build()

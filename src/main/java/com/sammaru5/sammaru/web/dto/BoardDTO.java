@@ -1,6 +1,6 @@
 package com.sammaru5.sammaru.web.dto;
 
-import com.sammaru5.sammaru.domain.BoardEntity;
+import com.sammaru5.sammaru.domain.Board;
 import lombok.Getter;
 
 import static org.springframework.beans.BeanUtils.copyProperties;
@@ -11,9 +11,9 @@ public class BoardDTO {
     private String name;
     private String description;
 
-    public BoardDTO(BoardEntity boardEntity) {
-        this.id = boardEntity.getId();
-        this.name = boardEntity.getName();
-        this.description = boardEntity.getDescription();
+    public BoardDTO(Board board) {
+        this.id = board.getId();
+        this.name = board.getName();
+        this.description = board.getDescription();
     }
 }

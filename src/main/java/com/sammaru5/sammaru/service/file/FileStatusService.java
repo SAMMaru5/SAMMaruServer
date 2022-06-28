@@ -1,6 +1,6 @@
 package com.sammaru5.sammaru.service.file;
 
-import com.sammaru5.sammaru.domain.FileEntity;
+import com.sammaru5.sammaru.domain.File;
 import com.sammaru5.sammaru.exception.CustomException;
 import com.sammaru5.sammaru.exception.ErrorCode;
 import com.sammaru5.sammaru.repository.FileRepository;
@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Optional;
@@ -28,14 +27,14 @@ public class FileStatusService {
 
     public ResponseEntity<InputStreamResource> downloadFile(Long boardId, String filePath) throws CustomException, FileNotFoundException {
 
-        Optional<FileEntity> fileEntity = fileRepository.findByFilePath(filePath);
+        Optional<File> fileEntity = fileRepository.findByFilePath(filePath);
 
         if(!fileEntity.isPresent()) {
             throw new CustomException(ErrorCode.FILE_NOT_FOUND, filePath);
         }
 
         String path = fileDir + boardId + "/" + filePath;
-        File file = new File(path);
+        java.io.File file = new java.io.File(path);
         HttpHeaders header = new HttpHeaders();
 
         header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+fileEntity.get().getFileName());

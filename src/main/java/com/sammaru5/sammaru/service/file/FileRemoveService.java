@@ -1,7 +1,7 @@
 package com.sammaru5.sammaru.service.file;
 
-import com.sammaru5.sammaru.domain.ArticleEntity;
-import com.sammaru5.sammaru.domain.FileEntity;
+import com.sammaru5.sammaru.domain.Article;
+import com.sammaru5.sammaru.domain.File;
 import com.sammaru5.sammaru.exception.CustomException;
 import com.sammaru5.sammaru.exception.ErrorCode;
 import com.sammaru5.sammaru.repository.FileRepository;
@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,8 +23,8 @@ public class FileRemoveService {
     //해당 파일 삭제
     public boolean removeFile(Long boardId, String filePath) throws CustomException {
 
-        File targetFile = new File(fileDir + boardId + "/" + filePath);
-        Optional<FileEntity> storageEntity = fileRepository.findByFilePath(filePath);
+        java.io.File targetFile = new java.io.File(fileDir + boardId + "/" + filePath);
+        Optional<File> storageEntity = fileRepository.findByFilePath(filePath);
         if(!targetFile.exists() || !storageEntity.isPresent()){
             throw new CustomException(ErrorCode.FILE_NOT_FOUND, filePath);
         }
@@ -35,11 +34,11 @@ public class FileRemoveService {
     }
 
     //Article에 속한 모든 파일 삭제
-    public boolean removeFilesByArticle(ArticleEntity articleEntity) throws CustomException {
+    public boolean removeFilesByArticle(Article article) throws CustomException {
 
-        List<FileEntity> storageEntities = fileRepository.findByArticle(articleEntity);
-        for(FileEntity fileEntity : storageEntities){
-            removeFile(articleEntity.getBoard().getId(), fileEntity.getFilePath());
+        List<File> storageEntities = fileRepository.findByArticle(article);
+        for(File file : storageEntities){
+            removeFile(article.getBoard().getId(), file.getFilePath());
         }
         return true;
     }

@@ -1,8 +1,8 @@
 package com.sammaru5.sammaru.service.article;
 
-import com.sammaru5.sammaru.domain.ArticleEntity;
-import com.sammaru5.sammaru.domain.BoardEntity;
-import com.sammaru5.sammaru.domain.UserEntity;
+import com.sammaru5.sammaru.domain.Article;
+import com.sammaru5.sammaru.domain.Board;
+import com.sammaru5.sammaru.domain.User;
 import com.sammaru5.sammaru.web.dto.ArticleDTO;
 import com.sammaru5.sammaru.repository.ArticleRepository;
 import com.sammaru5.sammaru.web.request.ArticleRequest;
@@ -20,15 +20,15 @@ public class ArticleRegisterService {
     private final BoardStatusService boardStatusService;
     private final FileRegisterService fileRegisterService;
 
-    public ArticleDTO addArticle(UserEntity findUser, Long boardId, ArticleRequest articleRequest, MultipartFile[] multipartFiles) throws NullPointerException {
+    public ArticleDTO addArticle(User findUser, Long boardId, ArticleRequest articleRequest, MultipartFile[] multipartFiles) throws NullPointerException {
 
-        BoardEntity findBoard = boardStatusService.findBoard(boardId);
-        ArticleEntity articleEntity = articleRepository.save(new ArticleEntity(articleRequest, findBoard, findUser));
+        Board findBoard = boardStatusService.findBoard(boardId);
+        Article article = articleRepository.save(new Article(articleRequest, findBoard, findUser));
 
         if(multipartFiles != null){
-            fileRegisterService.addFiles(multipartFiles, articleEntity.getId());
+            fileRegisterService.addFiles(multipartFiles, article.getId());
         }
         
-        return ArticleDTO.toDto(articleEntity);
+        return ArticleDTO.toDto(article);
     }
 }

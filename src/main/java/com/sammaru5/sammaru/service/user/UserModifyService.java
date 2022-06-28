@@ -1,7 +1,7 @@
 package com.sammaru5.sammaru.service.user;
 
 import com.sammaru5.sammaru.domain.UserAuthority;
-import com.sammaru5.sammaru.domain.UserEntity;
+import com.sammaru5.sammaru.domain.User;
 import com.sammaru5.sammaru.exception.CustomException;
 import com.sammaru5.sammaru.exception.ErrorCode;
 import com.sammaru5.sammaru.web.dto.UserDTO;
@@ -22,31 +22,31 @@ public class UserModifyService {
     private final PasswordEncoder passwordEncoder;
 
     public UserDTO modifyUser(Authentication authentication, UserRequest userRequest) {
-        UserEntity userEntity = userStatusService.getUser(authentication);
+        User user = userStatusService.getUser(authentication);
         if (userRequest.getUsername() != null) {
-            userEntity.setUsername(userRequest.getUsername());
+            user.setUsername(userRequest.getUsername());
         }
         if (userRequest.getEmail() != null) {
-            userEntity.setEmail(userRequest.getEmail());
+            user.setEmail(userRequest.getEmail());
         }
         if (userRequest.getPassword() != null) {
-            userEntity.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+            user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         }
-        return new UserDTO(userRepository.save(userEntity));
+        return new UserDTO(userRepository.save(user));
     }
 
     public UserDTO modifyUserRole(Long userId, UserAuthority role){
-        UserEntity userEntity = userRepository.findById(userId).get();
-        userEntity.setRole(role);
-        return new UserDTO(userRepository.save(userEntity));
+        User user = userRepository.findById(userId).get();
+        user.setRole(role);
+        return new UserDTO(userRepository.save(user));
     }
 
     public UserDTO addUserPoint(Long userId, PointRequest pointRequest) throws CustomException {
-        UserEntity userEntity = userRepository.getById(userId);
-        if(userEntity.getPoint() + pointRequest.getAddPoint() < 0){
+        User user = userRepository.getById(userId);
+        if(user.getPoint() + pointRequest.getAddPoint() < 0){
             throw new CustomException(ErrorCode.USER_POINT_CANT_NEGATIVE, userId.toString());
         }
-        userEntity.setPoint(userEntity.getPoint() + pointRequest.getAddPoint());
-        return new UserDTO(userRepository.save(userEntity));
+        user.setPoint(user.getPoint() + pointRequest.getAddPoint());
+        return new UserDTO(userRepository.save(user));
     }
 }

@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -18,7 +20,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Article {
+public class Article extends BaseTime {
 
     @Id @GeneratedValue
     @Column(name = "article_id")
@@ -26,9 +28,6 @@ public class Article {
 
     private String title;
     private String content;
-
-    @CreationTimestamp
-    private Timestamp createTime;
 
     private Integer viewCnt;
     private Integer likeCnt;

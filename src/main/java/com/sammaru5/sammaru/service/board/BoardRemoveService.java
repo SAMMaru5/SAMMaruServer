@@ -1,5 +1,6 @@
 package com.sammaru5.sammaru.service.board;
 
+import com.sammaru5.sammaru.domain.IndelibleBoardName;
 import com.sammaru5.sammaru.exception.CustomException;
 import com.sammaru5.sammaru.exception.ErrorCode;
 import com.sammaru5.sammaru.repository.BoardRepository;
@@ -20,8 +21,9 @@ public class BoardRemoveService {
     public boolean removeBoard(Long boardId)  {
 
         String boardname = boardRepository.findById(boardId).get().getBoardName();
-        if(boardname.equals("족보") || boardname.equals("사진첩") || boardname.equals("공지사항")) {
-            new CustomException(ErrorCode.BOARD_NOT_REMOVE, boardId.toString());
+
+        if(IndelibleBoardName.contain(boardname)) {
+            new CustomException(ErrorCode.INDELIBLE_BOARD, boardId.toString());
         }
 
         articleRemoveService.removeArticleByAdmin(boardId);

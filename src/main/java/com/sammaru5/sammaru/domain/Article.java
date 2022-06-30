@@ -17,7 +17,6 @@ import java.util.List;
 
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Article extends BaseTime {
@@ -33,16 +32,27 @@ public class Article extends BaseTime {
     private Integer likeCnt;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_id")
     private Board board;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "article")
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
     @BatchSize(size=100)
     private List<File> files = new ArrayList<>();
 
-    public Article(ArticleRequest articleRequest, Board board, User user) {
+    public static Article createArticle(ArticleRequest articleRequest, Board board, User user) {
+        return Article.builder()
+                .articleRequest(articleRequest)
+                .board(board)
+                .user(user)
+                .build();
+    }
+
+    @Builder
+    private Article(ArticleRequest articleRequest, Board board, User user) {
         this.title = articleRequest.getTitle();
         this.content = articleRequest.getContent();
         this.board = board;

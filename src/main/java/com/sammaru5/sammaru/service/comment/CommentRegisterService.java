@@ -15,8 +15,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Transactional
 @RequiredArgsConstructor
 @Service
@@ -26,15 +24,12 @@ public class CommentRegisterService {
     private final ArticleRepository articleRepository;
     private final UserStatusService userStatusService;
 
-    public CommentDTO addComment(Authentication authentication, CommentRequest commentRequest, Long articleId) throws CustomException {
+    public CommentDTO addComment(Authentication authentication, CommentRequest commentRequest, Long articleId) {
         User user = userStatusService.getUser(authentication);
-        Optional<Article> findArticle = articleRepository.findById(articleId);
-        if(findArticle.isEmpty())
-            throw new CustomException(ErrorCode.ARTICLE_NOT_FOUND, articleId.toString());
-        else {
-            Comment comment = new Comment(commentRequest, user, findArticle.get());
-            commentRepository.save(comment);
-            return new CommentDTO(comment);
-        }
+        Article article = articleRepository.findById(articleId)
+                .orElseThrow(() -> new CustomException(ErrorCode.ARTICLE_NOT_FOUND, articleId.toString()));
+
+        Comment comment = commentRepository.save(Comment.createComment(commentRequest, article, user));
+        return new CommentDTO(comment);
     }
 }

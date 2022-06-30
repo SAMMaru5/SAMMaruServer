@@ -13,24 +13,10 @@ import java.util.Objects;
 @Getter
 public class UserDetail implements UserDetails {
 
-//    private Long id;
-//    private String studentId;
-//    private String username;
-//    private String password;
-//    private String email;
-//    private Long point;
-//    private UserAuthority userAuthority;
     private User user;
 
     public UserDetail (User user) {
         this.user = user;
-//        this.id = userEntity.getId();
-//        this.studentId = userEntity.getStudentId();
-//        this.username = userEntity.getUsername();
-//        this.password = userEntity.getPassword();
-//        this.email = userEntity.getEmail();
-//        this.point = userEntity.getPoint();
-//        this.userAuthority = userEntity.getRole();
     }
 
     public Long getId() {return user.getId();}

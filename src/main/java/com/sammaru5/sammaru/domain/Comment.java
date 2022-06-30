@@ -1,6 +1,7 @@
 package com.sammaru5.sammaru.domain;
 
 import com.sammaru5.sammaru.web.request.CommentRequest;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,12 +19,23 @@ public class Comment extends BaseTime {
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "article_id")
     private Article article;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 
-    public Comment(CommentRequest commentRequest, User user, Article article) {
+    public static Comment createComment(CommentRequest commentRequest, Article article, User user) {
+        return Comment.builder()
+                .commentRequest(commentRequest)
+                .article(article)
+                .user(user)
+                .build();
+    }
+
+    @Builder
+    private Comment(CommentRequest commentRequest, User user, Article article) {
         this.content = commentRequest.getContent();
         this.article = article;
         this.user = user;

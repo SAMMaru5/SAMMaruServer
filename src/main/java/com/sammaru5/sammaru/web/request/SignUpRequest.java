@@ -1,5 +1,7 @@
 package com.sammaru5.sammaru.web.request;
 
+import com.sammaru5.sammaru.domain.User;
+import com.sammaru5.sammaru.domain.UserAuthority;
 import lombok.Getter;
 
 import javax.validation.constraints.Email;
@@ -24,4 +26,15 @@ public class SignUpRequest {
     @NotBlank(message = "이메일은 필수 입력입니다")
     @Email(message = "이메일은 이메일 형식에 맞아야 됩니다")
     private String email;
+
+    public User toEntity() {
+        return User.builder()
+                .studentId(studentId)
+                .username(username)
+                .password(password)
+                .email(email)
+                .role(UserAuthority.ROLE_TEMP)
+                .point(0L)
+                .build();
+    }
 }

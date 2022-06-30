@@ -4,12 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
@@ -25,6 +25,21 @@ public class User {
     private Long point;
     private Integer generation;
     private UserAuthority role;
+
+    @Builder
+    public User(String studentId, String username, String password, String email, Long point, Integer generation, UserAuthority role) {
+        this.studentId = studentId;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.point = point;
+        this.generation = generation;
+        this.role = role;
+    }
+
+    public void encodePassword(PasswordEncoder passwordEncoder) {
+        this.password = passwordEncoder.encode(this.password);
+    }
 
     public void setRole(UserAuthority role) {
         this.role = role;

@@ -18,14 +18,12 @@ public class UserRegisterService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserDTO signUpUser(SignUpRequest signUpRequest) throws CustomException {
+    public UserDTO signUpUser(SignUpRequest signUpRequest) {
         if(userRepository.existsByStudentId(signUpRequest.getStudentId())) {
             throw new CustomException(ErrorCode.ALREADY_EXIST_USER, signUpRequest.getStudentId());
         }
 
-        User user = signUpRequest.toEntity();
-        user.encodePassword(passwordEncoder);
-
+        User user = signUpRequest.toEntityWithEncryptingPassword(passwordEncoder);
         return new UserDTO(userRepository.save(user));
     }
 }

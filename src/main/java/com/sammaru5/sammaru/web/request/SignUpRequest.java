@@ -3,6 +3,7 @@ package com.sammaru5.sammaru.web.request;
 import com.sammaru5.sammaru.domain.User;
 import com.sammaru5.sammaru.domain.UserAuthority;
 import lombok.Getter;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -27,14 +28,15 @@ public class SignUpRequest {
     @Email(message = "이메일은 이메일 형식에 맞아야 됩니다")
     private String email;
 
-    public User toEntity() {
+    public User toEntityWithEncryptingPassword(PasswordEncoder passwordEncoder) {
         return User.builder()
                 .studentId(studentId)
                 .username(username)
-                .password(password)
+                .password(passwordEncoder.encode(password))
                 .email(email)
                 .role(UserAuthority.ROLE_TEMP)
                 .point(0L)
                 .build();
     }
+
 }

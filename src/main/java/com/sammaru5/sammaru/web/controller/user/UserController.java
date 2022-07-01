@@ -1,6 +1,7 @@
 package com.sammaru5.sammaru.web.controller.user;
 
 import com.sammaru5.sammaru.util.OverAdminRole;
+import com.sammaru5.sammaru.util.OverMemberRole;
 import com.sammaru5.sammaru.web.apiresult.ApiResult;
 import com.sammaru5.sammaru.domain.UserAuthority;
 import com.sammaru5.sammaru.domain.User;
@@ -70,7 +71,7 @@ public class UserController {
 
     @GetMapping("/api/users/gen/{generationNum}")
     @ApiOperation(value = "기수에 대한 회원 정보 조회", notes = "generationNum으로 넘어온 기수에 대한 회원들에 대한 정보를 조회합니다.", response = UserDTO.class)
-    @OverAdminRole
+    @OverMemberRole
     public ApiResult<List<UserDTO>> userListOfGeneration(@PathVariable Integer generationNum) {
         return ApiResult.OK(userSearchService.findUsersByGeneration(generationNum));
     }

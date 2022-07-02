@@ -1,5 +1,6 @@
 package com.sammaru5.sammaru.web.controller.board;
 
+import com.sammaru5.sammaru.util.OverAdminRole;
 import com.sammaru5.sammaru.web.apiresult.ApiResult;
 import com.sammaru5.sammaru.web.dto.ArticleDTO;
 import com.sammaru5.sammaru.web.dto.BoardDTO;
@@ -28,12 +29,14 @@ public class BoardController {
 
     @PostMapping("/api/boards")
     @ApiOperation(value = "게시판 생성", notes = "게시판을 생성", response = BoardDTO.class)
+    @OverAdminRole
     public ApiResult<BoardDTO> boardAdd(@Valid @RequestBody BoardRequest boardRequest) {
         return ApiResult.OK(boardRegisterService.addBoard(boardRequest));
     }
 
     @DeleteMapping("/api/boards/{boardId}")
     @ApiOperation(value = "게시판 삭제", notes = "관리자가 게시판과 게시판에 속한 모든 게시글 삭제", response = Boolean.class)
+    @OverAdminRole
     public ApiResult<Boolean> boardRemove(@PathVariable Long boardId) {
         return ApiResult.OK(boardRemoveService.removeBoard(boardId));
     }

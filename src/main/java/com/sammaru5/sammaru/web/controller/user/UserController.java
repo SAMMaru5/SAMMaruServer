@@ -1,5 +1,7 @@
 package com.sammaru5.sammaru.web.controller.user;
 
+import com.sammaru5.sammaru.util.OverAdminRole;
+import com.sammaru5.sammaru.util.OverMemberRole;
 import com.sammaru5.sammaru.web.apiresult.ApiResult;
 import com.sammaru5.sammaru.domain.UserAuthority;
 import com.sammaru5.sammaru.domain.User;
@@ -29,12 +31,14 @@ public class UserController {
 
     @PatchMapping("/api/users/{userId}/role")
     @ApiOperation(value = "유저 권한 변경", notes = "userId에 해당하는 유저 권한 변경", response = UserDTO.class)
+    @OverAdminRole
     public ApiResult<?> userRoleModify(@Valid  @RequestBody RoleRequest roleRequest, @PathVariable Long userId){
         return ApiResult.OK(userModifyService.modifyUserRole(userId, roleRequest.getRole()));
     }
 
     @PostMapping("/api/users/{userId}/point")
     @ApiOperation(value = "유저 포인트 추가", notes = "userId에 해당하는 유저 포인트 부여 (음수 가능)", response = UserDTO.class)
+    @OverAdminRole
     public ApiResult<?> userPointAdd(@Valid @RequestBody PointRequest pointRequest, @PathVariable Long userId){
         return ApiResult.OK(userModifyService.addUserPoint(userId, pointRequest));
     }
@@ -47,12 +51,14 @@ public class UserController {
 
     @GetMapping("/api/users/info")
     @ApiOperation(value = "전체 회원 정보", notes = "전체 회원 정보 가져오기", responseContainer = "List", response = UserDTO.class)
+    @OverAdminRole
     public ApiResult<?> userList() {
         return ApiResult.OK(userSearchService.findUsers());
     }
 
     @GetMapping("/api/users")
     @ApiOperation(value = "해당 역할의 회원 정보", notes = "쿼리의 역할에 맞는 회원 정보들 가져오기", responseContainer = "List", response = UserDTO.class)
+    @OverAdminRole
     public ApiResult<?> UserListByRole(@RequestParam UserAuthority role) {
         return ApiResult.OK(userSearchService.findUsersByRole(role));
     }
@@ -65,6 +71,7 @@ public class UserController {
 
     @GetMapping("/api/users/gen/{generationNum}")
     @ApiOperation(value = "기수에 대한 회원 정보 조회", notes = "generationNum으로 넘어온 기수에 대한 회원들에 대한 정보를 조회합니다.", response = UserDTO.class)
+    @OverMemberRole
     public ApiResult<List<UserDTO>> userListOfGeneration(@PathVariable Integer generationNum) {
         return ApiResult.OK(userSearchService.findUsersByGeneration(generationNum));
     }

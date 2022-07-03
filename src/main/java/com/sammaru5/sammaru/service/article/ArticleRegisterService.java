@@ -4,10 +4,10 @@ import com.sammaru5.sammaru.domain.Article;
 import com.sammaru5.sammaru.domain.Board;
 import com.sammaru5.sammaru.domain.File;
 import com.sammaru5.sammaru.domain.User;
+import com.sammaru5.sammaru.exception.CustomException;
+import com.sammaru5.sammaru.exception.ErrorCode;
 import com.sammaru5.sammaru.repository.ArticleRepository;
-import com.sammaru5.sammaru.service.board.BoardStatusService;
-import com.sammaru5.sammaru.service.file.FileRegisterService;
-import com.sammaru5.sammaru.web.dto.ArticleDTO;
+import com.sammaru5.sammaru.repository.BoardRepository;
 import com.sammaru5.sammaru.web.request.ArticleRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,26 +15,28 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+@RequiredArgsConstructor
 @Transactional
-@Service @RequiredArgsConstructor
+@Service
 public class ArticleRegisterService {
     private final ArticleRepository articleRepository;
-    private final BoardStatusService boardStatusService;
-    private final FileRegisterService fileRegisterService;
+    private final BoardRepository boardRepository;
 
     @Value("${app.fileDir}")
     private String fileDir;
 
-    public ArticleDTO addArticle(User findUser, Long boardId, ArticleRequest articleRequest, MultipartFile[] multipartFiles) {
+    public Long addArticle(User findUser, Long boardId, ArticleRequest articleRequest, MultipartFile[] multipartFiles) {
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND, boardId.toString()));
 
-        Board board = boardStatusService.findBoard(boardId);
         Article article = Article.createArticle(articleRequest, board, findUser);
 
         if(multipartFiles != null){
-            fileRegisterService.addFiles(multipartFiles, article.getId());
+            for(MultipartFile multipartFile : multipartFiles) {
+                article.addFile(File.createFile(multipartFile, fileDir, boardId));
+            }
         }
 
-        articleRepository.save(article);
-        return ArticleDTO.toDto(article);
+        return articleRepository.save(article).getId();
     }
 }

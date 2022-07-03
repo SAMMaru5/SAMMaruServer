@@ -39,7 +39,7 @@ public class Article extends BaseTime {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
     @BatchSize(size=100)
     private List<File> files = new ArrayList<>();
 
@@ -65,6 +65,10 @@ public class Article extends BaseTime {
     public void addFile(File file) {
         files.add(file);
         file.belongToArticle(this);
+    }
+
+    public void removeFile() {
+        files.clear();
     }
 
     //== 비즈니스 메서드 ==//

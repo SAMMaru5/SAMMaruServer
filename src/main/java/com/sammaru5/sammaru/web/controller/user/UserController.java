@@ -44,16 +44,21 @@ public class UserController {
     }
 
     @GetMapping("/api/user/info")
-    @ApiOperation(value = "회원 정보", notes = "회원 정보 가져오기", response = UserDTO.class)
-    public ApiResult<?> userDetails(@AuthUser User user) {
+    @ApiOperation(value = "자기 자신 회원 정보", notes = "자기 자신의 회원 정보 가져오기", response = UserDTO.class)
+    public ApiResult<?> loginUserSelfDetail(@AuthUser User user) {
         return ApiResult.OK(new UserDTO(user));
+    }
+
+    @GetMapping("/api/user/info/{userId}")
+    public ApiResult<UserDTO> userDetail(@PathVariable Long userId) {
+        return ApiResult.OK(userSearchService.findOne(userId));
     }
 
     @GetMapping("/api/users/info")
     @ApiOperation(value = "전체 회원 정보", notes = "전체 회원 정보 가져오기", responseContainer = "List", response = UserDTO.class)
     @OverAdminRole
     public ApiResult<?> userList() {
-        return ApiResult.OK(userSearchService.findUsers());
+        return ApiResult.OK(userSearchService.findAllUsers());
     }
 
     @GetMapping("/api/users")

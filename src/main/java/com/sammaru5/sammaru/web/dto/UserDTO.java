@@ -1,15 +1,12 @@
 package com.sammaru5.sammaru.web.dto;
 
-import com.sammaru5.sammaru.domain.UserAuthority;
 import com.sammaru5.sammaru.domain.User;
+import com.sammaru5.sammaru.domain.UserAuthority;
 import lombok.Getter;
-import lombok.Setter;
-
-import static org.springframework.beans.BeanUtils.copyProperties;
 
 @Getter
-@Setter
 public class UserDTO {
+    private Long userId;
     private String studentId;
     private String username;
     private String email;
@@ -19,7 +16,13 @@ public class UserDTO {
     private String nickname;
 
     public UserDTO(User user){
-        copyProperties(user, this);
+        this.userId = user.getId();
+        this.studentId = user.getStudentId();
+        this.username = user.getUsername();
+        this.email = user.getEmail();
+        this.point = user.getPoint();
+        this.role = user.getRole();
+        this.generation = user.getGeneration();
         this.nickname = studentId.substring(2,4) + " " + user.getUsername();
     }
 }

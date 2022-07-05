@@ -49,6 +49,8 @@ public class UserController {
         return ApiResult.OK(new UserDTO(user));
     }
 
+    @ApiOperation(value = "특정 회원 조회", notes = "userId에 대한 특정 회원 정보를 반환합니다.")
+    @OverAdminRole
     @GetMapping("/api/user/info/{userId}")
     public ApiResult<UserDTO> userDetail(@PathVariable Long userId) {
         return ApiResult.OK(userSearchService.findOne(userId));

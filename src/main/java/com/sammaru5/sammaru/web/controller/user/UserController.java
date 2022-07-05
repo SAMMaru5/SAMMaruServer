@@ -29,22 +29,23 @@ public class UserController {
     private final UserModifyService userModifyService;
     private final UserSearchService userSearchService;
 
-    @PatchMapping("/api/users/{userId}/role")
-    @ApiOperation(value = "유저 권한 변경", notes = "userId에 해당하는 유저 권한 변경", response = UserDTO.class)
+    @ApiOperation(value = "유저 권한 변경", notes = "userId에 해당하는 유저 권한 변경")
     @OverAdminRole
+    @PatchMapping("/api/users/{userId}/role")
     public ApiResult<UserDTO> userRoleModify(@Valid  @RequestBody RoleRequest roleRequest, @PathVariable Long userId){
         return ApiResult.OK(userModifyService.modifyUserRole(userId, roleRequest.getRole()));
     }
 
-    @PostMapping("/api/users/{userId}/point")
-    @ApiOperation(value = "유저 포인트 추가", notes = "userId에 해당하는 유저 포인트 부여 (음수 가능)", response = UserDTO.class)
+    @ApiOperation(value = "유저 포인트 추가", notes = "userId에 해당하는 유저 포인트 부여 (음수 가능)")
     @OverAdminRole
+    @PostMapping("/api/users/{userId}/point")
     public ApiResult<UserDTO> userPointAdd(@Valid @RequestBody PointRequest pointRequest, @PathVariable Long userId){
         return ApiResult.OK(userModifyService.addUserPoint(userId, pointRequest));
     }
 
+    @ApiOperation(value = "자기 자신 회원 정보", notes = "자기 자신의 회원 정보 가져오기, 토큰만 보내면 됩니다.")
+    @OverMemberRole
     @GetMapping("/api/user/info")
-    @ApiOperation(value = "자기 자신 회원 정보", notes = "자기 자신의 회원 정보 가져오기", response = UserDTO.class)
     public ApiResult<UserDTO> loginUserSelfDetail(@AuthUser User user) {
         return ApiResult.OK(new UserDTO(user));
     }
@@ -56,28 +57,29 @@ public class UserController {
         return ApiResult.OK(userSearchService.findOne(userId));
     }
 
-    @GetMapping("/api/users/info")
-    @ApiOperation(value = "전체 회원 정보", notes = "전체 회원 정보 가져오기", responseContainer = "List", response = UserDTO.class)
+    @ApiOperation(value = "전체 회원 정보", notes = "전체 회원 정보 가져오기", responseContainer = "List")
     @OverAdminRole
+    @GetMapping("/api/users/info")
     public ApiResult<List<UserDTO>> userList() {
         return ApiResult.OK(userSearchService.findAllUsers());
     }
 
-    @GetMapping("/api/users")
-    @ApiOperation(value = "해당 역할의 회원 정보", notes = "쿼리의 역할에 맞는 회원 정보들 가져오기", responseContainer = "List", response = UserDTO.class)
+    @ApiOperation(value = "해당 역할의 회원 정보", notes = "쿼리의 역할에 맞는 회원 정보들 가져오기")
     @OverAdminRole
+    @GetMapping("/api/users")
     public ApiResult<List<UserDTO>> UserListByRole(@RequestParam UserAuthority role) {
         return ApiResult.OK(userSearchService.findUsersByRole(role));
     }
 
+    @ApiOperation(value = "회원 정보 수정", notes = "회원 정보 수정하기")
+    @OverMemberRole
     @PatchMapping("/api/user/info")
-    @ApiOperation(value = "회원 정보 수정", notes = "회원 정보 수정하기", response = UserDTO.class)
     public ApiResult<UserDTO> userModify(Authentication authentication, @Valid @RequestBody UserRequest userRequest){
         return ApiResult.OK(userModifyService.modifyUser(authentication, userRequest));
     }
 
     @GetMapping("/api/users/gen/{generationNum}")
-    @ApiOperation(value = "기수에 대한 회원 정보 조회", notes = "generationNum으로 넘어온 기수에 대한 회원들에 대한 정보를 조회합니다.", response = UserDTO.class)
+    @ApiOperation(value = "기수에 대한 회원 정보 조회", notes = "generationNum으로 넘어온 기수에 대한 회원들에 대한 정보를 조회합니다.")
     @OverMemberRole
     public ApiResult<List<UserDTO>> userListOfGeneration(@PathVariable Integer generationNum) {
         return ApiResult.OK(userSearchService.findUsersByGeneration(generationNum));

@@ -74,8 +74,8 @@ public class UserController {
     @ApiOperation(value = "회원 정보 수정", notes = "회원 정보 수정하기")
     @OverMemberRole
     @PatchMapping("/api/user/info")
-    public ApiResult<UserDTO> userModify(Authentication authentication, @Valid @RequestBody UserRequest userRequest){
-        return ApiResult.OK(userModifyService.modifyUser(authentication, userRequest));
+    public ApiResult<UserDTO> userModify(@AuthUser User user, @Valid @RequestBody UserRequest userRequest){
+        return ApiResult.OK(userModifyService.modifyUser(user, userRequest));
     }
 
     @GetMapping("/api/users/gen/{generationNum}")

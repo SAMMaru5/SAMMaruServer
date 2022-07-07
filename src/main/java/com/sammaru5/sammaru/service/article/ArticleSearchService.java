@@ -31,25 +31,21 @@ public class ArticleSearchService {
     @Transactional
     @Cacheable(keyGenerator = "articleCacheKeyGenerator", value = "article", cacheManager = "cacheManager")
     public ArticleDTO findArticle(Long articleId) {
-        Article article = articleRepository.findById(articleId)
+        Article article = articleRepository.findOneWithFilesAndUserById(articleId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ARTICLE_NOT_FOUND, articleId.toString()));
 
         article.plusViewCnt(); //조회수 증가
-        List<File> files = fileRepository.findByArticle(article);
-        if (files.isEmpty()) return ArticleDTO.toDto(article);
-        return ArticleDTO.toDtoWithFile(article, files);
+
+        return ArticleDTO.toDto(article);
     }
 
     //boardId에 해당하는 게시판의 게시글들을 paging
     public List<ArticleDTO> findArticlesByBoardIdAndPaging(Long boardId, Integer pageNum) {
         Board findBoard = boardStatusService.findBoard(boardId);
         Pageable pageable = PageRequest.of(pageNum, 15, Sort.by("createTime").descending());
-        List<Article> findArticlesByPaging = articleRepository.findByBoard(findBoard, pageable);
-        if (findArticlesByPaging.isEmpty()) {
-            throw new CustomException(ErrorCode.BOARD_IS_EMPTY, boardId.toString());
-        }
+        List<Article> articles = articleRepository.findArticlesWithFilesAndUserByBoard(findBoard, pageable);
 
-        return findArticlesByPaging.stream().map(ArticleDTO::toDto).collect(Collectors.toList());
+        return articles.stream().map(ArticleDTO::toDto).collect(Collectors.toList());
     }
 
     //boardId에 해당하는 게시판에 달린 모든 게시글들 조회

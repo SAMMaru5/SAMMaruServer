@@ -24,14 +24,6 @@ public class ArticleDTO {
         return new ArticleDTO(article);
     }
 
-    public static ArticleDTO toDtoWithFile(Article article, List<File> files) {
-        return new ArticleDTO(article, files);
-    }
-
-    private ArticleDTO(Article article, List<File> files) {
-        this(article);
-        this.files = files.stream().map(FileDTO::new).collect(Collectors.toList());
-    }
     private ArticleDTO(Article article) {
         this.id = article.getId();
         this.title = article.getTitle();
@@ -40,5 +32,8 @@ public class ArticleDTO {
         this.author = article.getUser().getUsername();
         this.viewCnt = article.getViewCnt();
         this.likeCnt = article.getViewCnt();
+        if(!article.getFiles().isEmpty()) {
+            this.files = article.getFiles().stream().map(FileDTO::new).collect(Collectors.toList());
+        }
     }
 }

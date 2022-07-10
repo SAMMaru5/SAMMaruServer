@@ -46,8 +46,8 @@ public class AuthController {
     }
 
     @PostMapping("/auth/tempPassword")
-    @ApiOperation(value = "임시 비밀번호 생성", notes = "계정에 등록되어 있는 메일로 임시 비밀번호 발송")
-    public ApiResult<?> sendTempPassword(@RequestParam String userEmail) {
+    @ApiOperation(value = "임시 비밀번호 생성", notes = "계정에 등록되어 있는 메일로 임시 비밀번호 발송", response = UserDTO.class)
+    public ApiResult<UserDTO> sendTempPassword(@RequestParam String userEmail) {
         return ApiResult.OK(userTempPasswordService.sendTempPassword(userEmail));
     }
 }

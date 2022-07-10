@@ -4,7 +4,10 @@ import com.sammaru5.sammaru.domain.User;
 import com.sammaru5.sammaru.exception.CustomException;
 import com.sammaru5.sammaru.exception.ErrorCode;
 import com.sammaru5.sammaru.repository.UserRepository;
+import com.sammaru5.sammaru.web.dto.UserDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,17 +22,18 @@ import java.util.Optional;
 public class UserTempPasswordService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JavaMailSender javaMailSender;
 
-    public String sendTempPassword(String email) {
-        Optional<User> findUser = userRepository.findByEmail(email);
-        if (findUser.isEmpty()) throw new CustomException(ErrorCode.USER_NOT_FOUND, email);
+    public UserDTO sendTempPassword(String userEmail) {
+        Optional<User> findUser = userRepository.findByEmail(userEmail);
+        if (findUser.isEmpty()) throw new CustomException(ErrorCode.USER_NOT_FOUND, userEmail);
         User user = findUser.get();
 
         String tempPassword = getRandomPassword((int) (Math.random() * 13) + 8);
         user.setPassword(passwordEncoder.encode(tempPassword));
 
-        // TODO : 메일 발송
-        return tempPassword;
+        sendMail(userEmail, tempPassword);
+        return new UserDTO(user);
     }
 
     public String getRandomPassword(int size) {
@@ -48,5 +52,14 @@ public class UserTempPasswordService {
             sb.append(charSet[idx]);
         }
         return sb.toString();
+    }
+
+    public void sendMail(String userEmail, String tempPassword) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(userEmail);
+        message.setSubject("샘마루 홈페이지 임시 비밀번호");
+        message.setText(tempPassword);
+
+        javaMailSender.send(message);
     }
 }

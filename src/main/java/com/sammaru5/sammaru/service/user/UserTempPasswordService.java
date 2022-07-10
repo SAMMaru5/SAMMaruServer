@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
 import java.util.Date;
-import java.util.Optional;
 
 @Transactional
 @Service
@@ -25,9 +24,9 @@ public class UserTempPasswordService {
     private final JavaMailSender javaMailSender;
 
     public UserDTO sendTempPassword(String userEmail) {
-        Optional<User> findUser = userRepository.findByEmail(userEmail);
-        if (findUser.isEmpty()) throw new CustomException(ErrorCode.USER_NOT_FOUND, userEmail);
-        User user = findUser.get();
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, userEmail));
+
 
         String tempPassword = getRandomPassword((int) (Math.random() * 13) + 8);
         user.setPassword(passwordEncoder.encode(tempPassword));

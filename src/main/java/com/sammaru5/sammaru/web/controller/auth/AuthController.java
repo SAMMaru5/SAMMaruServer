@@ -1,18 +1,21 @@
 package com.sammaru5.sammaru.web.controller.auth;
 
+import com.sammaru5.sammaru.service.user.UserLoginService;
+import com.sammaru5.sammaru.service.user.UserRegisterService;
+import com.sammaru5.sammaru.service.user.UserReissueService;
 import com.sammaru5.sammaru.service.user.UserTempPasswordService;
 import com.sammaru5.sammaru.web.apiresult.ApiResult;
 import com.sammaru5.sammaru.web.dto.JwtDTO;
 import com.sammaru5.sammaru.web.dto.UserDTO;
 import com.sammaru5.sammaru.web.request.SignInRequest;
 import com.sammaru5.sammaru.web.request.SignUpRequest;
-import com.sammaru5.sammaru.service.user.UserLoginService;
-import com.sammaru5.sammaru.service.user.UserRegisterService;
-import com.sammaru5.sammaru.service.user.UserReissueService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -29,7 +32,7 @@ public class AuthController {
 
     @PostMapping("/auth/signup")
     @ApiOperation(value = "회원가입", notes = "사용자 회원가입", response = UserDTO.class)
-    public ApiResult<?> userSignUp(@Valid @RequestBody SignUpRequest signUpRequest){
+    public ApiResult<?> userSignUp(@Valid @RequestBody SignUpRequest signUpRequest) {
         return ApiResult.OK(userRegisterService.signUpUser(signUpRequest));
     }
 
@@ -46,8 +49,8 @@ public class AuthController {
     }
 
     @PostMapping("/auth/tempPassword")
-    @ApiOperation(value = "임시 비밀번호 생성", notes = "계정에 등록되어 있는 메일로 임시 비밀번호 발송", response = UserDTO.class)
-    public ApiResult<UserDTO> sendTempPassword(@RequestParam String userEmail) {
+    @ApiOperation(value = "임시 비밀번호 생성", notes = "계정에 등록되어 있는 메일로 임시 비밀번호 발송, 성공시 해당 유저의 id 반환", response = Long.class)
+    public ApiResult<Long> sendTempPassword(@RequestParam String userEmail) {
         return ApiResult.OK(userTempPasswordService.sendTempPassword(userEmail));
     }
 }

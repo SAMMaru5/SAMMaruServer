@@ -4,7 +4,6 @@ import com.sammaru5.sammaru.domain.User;
 import com.sammaru5.sammaru.exception.CustomException;
 import com.sammaru5.sammaru.exception.ErrorCode;
 import com.sammaru5.sammaru.repository.UserRepository;
-import com.sammaru5.sammaru.web.dto.UserDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -24,16 +23,15 @@ public class UserTempPasswordService {
     private final PasswordEncoder passwordEncoder;
     private final JavaMailSender javaMailSender;
 
-    public UserDTO sendTempPassword(String userEmail) {
+    public Long sendTempPassword(String userEmail) {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, userEmail));
-
 
         String tempPassword = getRandomPassword((int) (Math.random() * 13) + 8);
         user.setPassword(passwordEncoder.encode(tempPassword));
 
         sendMail(userEmail, tempPassword);
-        return new UserDTO(user);
+        return user.getId();
     }
 
     public String getRandomPassword(int size) {

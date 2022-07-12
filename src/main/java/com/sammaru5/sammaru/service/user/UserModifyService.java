@@ -25,6 +25,9 @@ public class UserModifyService {
             user.setUsername(userRequest.getUsername());
         }
         if (userRequest.getEmail() != null) {
+            if (userRepository.existsByEmail(userRequest.getEmail())) {
+                throw new CustomException(ErrorCode.ALREADY_EXIST_EMAIL, userRequest.getEmail());
+            }
             user.setEmail(userRequest.getEmail());
         }
         if (userRequest.getPassword() != null) {

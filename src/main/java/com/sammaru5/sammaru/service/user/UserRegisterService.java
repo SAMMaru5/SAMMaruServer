@@ -23,6 +23,10 @@ public class UserRegisterService {
             throw new CustomException(ErrorCode.ALREADY_EXIST_USER, signUpRequest.getStudentId());
         }
 
+        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+            throw new CustomException(ErrorCode.ALREADY_EXIST_EMAIL, signUpRequest.getEmail());
+        }
+
         User user = signUpRequest.toEntityWithEncryptingPassword(passwordEncoder);
         return new UserDTO(userRepository.save(user));
     }

@@ -26,6 +26,7 @@ public enum ErrorCode {
 
     // 409 CONFLICT
     ALREADY_EXIST_USER(HttpStatus.CONFLICT, "해당 학번의 사용자가 이미 존재합니다!"),
+    ALREADY_EXIST_EMAIL(HttpStatus.CONFLICT, "해당 email 계정의 사용자가 이미 존재합니다!"),
     ALREADY_EXIST_BOARD(HttpStatus.CONFLICT, "해당 게시판이 이미 존재합니다!"),
     ;
 

@@ -43,3 +43,5 @@ redis/logs/
 
 ### file ###
 src/main/resources/files/
+
+.DS_Store

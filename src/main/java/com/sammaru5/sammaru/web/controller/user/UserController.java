@@ -84,4 +84,11 @@ public class UserController {
     public ApiResult<List<UserDTO>> userListOfGeneration(@PathVariable Integer generationNum) {
         return ApiResult.OK(userSearchService.findUsersByGeneration(generationNum));
     }
+
+    @GetMapping("/api/users/detail")
+    @ApiOperation(value = "username으로 회원 정보 조회", notes = "관리자 권한이 username으로 해당 회원의 정보를 조회합니다.")
+    @OverAdminRole
+    public ApiResult<UserDTO> userDetailByUsername(@RequestParam String username) {
+        return ApiResult.OK(userSearchService.findByUsername(username));
+    }
 }

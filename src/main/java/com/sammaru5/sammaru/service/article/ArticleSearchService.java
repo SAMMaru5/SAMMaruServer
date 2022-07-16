@@ -2,7 +2,7 @@ package com.sammaru5.sammaru.service.article;
 
 import com.sammaru5.sammaru.domain.Article;
 import com.sammaru5.sammaru.domain.Board;
-import com.sammaru5.sammaru.domain.File;
+import com.sammaru5.sammaru.domain.SearchSubject;
 import com.sammaru5.sammaru.exception.CustomException;
 import com.sammaru5.sammaru.exception.ErrorCode;
 import com.sammaru5.sammaru.repository.ArticleRepository;
@@ -69,5 +69,58 @@ public class ArticleSearchService {
         }
 
         return findArticles.stream().map(ArticleDTO::toDto).collect(Collectors.toList());
+    }
+
+    public List<ArticleDTO> findArticlesByBoardIdAndKeywordAndPaging(Long boardId, Integer pageNum, SearchSubject searchSubject, String keyword) {
+        Board findBoard = boardStatusService.findBoard(boardId);
+        Pageable pageable = PageRequest.of(pageNum, 15, Sort.by("createTime").descending());
+
+        List<Article> articles;
+        switch (searchSubject) {
+            case WRITER_STUDENT_ID:
+                articles = articleRepository.findArticlesWithFilesAndUserByBoardAndWriterStudentId(findBoard, pageable, keyword);
+                break;
+            case WRITER_NAME:
+                articles = articleRepository.findArticlesWithFilesAndUserByBoardAndWriterUsername(findBoard, pageable, keyword);
+                break;
+            case ARTICLE_TITLE:
+                articles = articleRepository.findArticlesWithFilesAndUserByBoardAndKeywordForArticleTitle(findBoard, pageable, keyword);
+                break;
+            case ARTICLE_CONTENT:
+                articles = articleRepository.findArticlesWithFilesAndUserByBoardAndKeywordForArticleContent(findBoard, pageable, keyword);
+                break;
+            case ARTICLE_TITLE_AND_CONTENT:
+                articles = articleRepository.findArticlesWithFilesAndUserByBoardAndKeywordForArticleTitleAndArticleContent(findBoard, pageable, keyword);
+                break;
+            default:
+                throw new CustomException(ErrorCode.WRONG_SEARCH_SUBJECT, searchSubject.name());
+        }
+        return articles.stream().map(ArticleDTO::toDto).collect(Collectors.toList());
+    }
+
+    public List<ArticleDTO> findArticlesByKeywordAndPaging(Integer pageNum, SearchSubject searchSubject, String keyword) {
+        Pageable pageable = PageRequest.of(pageNum, 15, Sort.by("createTime").descending());
+
+        List<Article> articles;
+        switch (searchSubject) {
+            case WRITER_STUDENT_ID:
+                articles = articleRepository.findArticlesWithFilesAndUserByWriterStudentId(pageable, keyword);
+                break;
+            case WRITER_NAME:
+                articles = articleRepository.findArticlesWithFilesAndUserByWriterUsername(pageable, keyword);
+                break;
+            case ARTICLE_TITLE:
+                articles = articleRepository.findArticlesWithFilesAndUserByKeywordForArticleTitle(pageable, keyword);
+                break;
+            case ARTICLE_CONTENT:
+                articles = articleRepository.findArticlesWithFilesAndUserByKeywordForArticleContent(pageable, keyword);
+                break;
+            case ARTICLE_TITLE_AND_CONTENT:
+                articles = articleRepository.findArticlesWithFilesAndUserByKeywordForArticleTitleAndArticleContent(pageable, keyword);
+                break;
+            default:
+                throw new CustomException(ErrorCode.WRONG_SEARCH_SUBJECT, searchSubject.name());
+        }
+        return articles.stream().map(ArticleDTO::toDto).collect(Collectors.toList());
     }
 }

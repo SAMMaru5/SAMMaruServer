@@ -34,4 +34,8 @@ public class UserSearchService {
     public List<UserDTO> findUsersByGeneration(Integer generationNum) {
         return userRepository.findByGeneration(generationNum).stream().map(UserDTO::new).collect(Collectors.toList());
     }
+
+    public UserDTO findByUsername(String username) {
+        return new UserDTO(userRepository.findByUsername(username).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, username)));
+    }
 }

@@ -78,19 +78,19 @@ public class ArticleSearchService {
         List<Article> articles;
         switch (searchSubject) {
             case WRITER_STUDENT_ID:
-                articles = articleRepository.findArticlesWithFilesAndUserByBoardAndWriterStudentId(findBoard, pageable, keyword);
+                articles = articleRepository.searchArticlesByBoardAndStudentId(findBoard, pageable, keyword);
                 break;
             case WRITER_NAME:
-                articles = articleRepository.findArticlesWithFilesAndUserByBoardAndWriterUsername(findBoard, pageable, keyword);
+                articles = articleRepository.searchArticlesByBoardAndUsername(findBoard, pageable, keyword);
                 break;
             case ARTICLE_TITLE:
-                articles = articleRepository.findArticlesWithFilesAndUserByBoardAndKeywordForArticleTitle(findBoard, pageable, keyword);
+                articles = articleRepository.searchArticlesByBoardAndTitle(findBoard, pageable, keyword);
                 break;
             case ARTICLE_CONTENT:
-                articles = articleRepository.findArticlesWithFilesAndUserByBoardAndKeywordForArticleContent(findBoard, pageable, keyword);
+                articles = articleRepository.searchArticlesByBoardAndContent(findBoard, pageable, keyword);
                 break;
             case ARTICLE_TITLE_AND_CONTENT:
-                articles = articleRepository.findArticlesWithFilesAndUserByBoardAndKeywordForArticleTitleAndArticleContent(findBoard, pageable, keyword);
+                articles = articleRepository.searchArticlesByBoardAndTitleAndContent(findBoard, pageable, keyword);
                 break;
             default:
                 throw new CustomException(ErrorCode.WRONG_SEARCH_SUBJECT, searchSubject.name());
@@ -104,19 +104,19 @@ public class ArticleSearchService {
         List<Article> articles;
         switch (searchSubject) {
             case WRITER_STUDENT_ID:
-                articles = articleRepository.findArticlesWithFilesAndUserByWriterStudentId(pageable, keyword);
+                articles = articleRepository.searchArticlesByStudentId(pageable, keyword);
                 break;
             case WRITER_NAME:
-                articles = articleRepository.findArticlesWithFilesAndUserByWriterUsername(pageable, keyword);
+                articles = articleRepository.searchArticlesByUsername(pageable, keyword);
                 break;
             case ARTICLE_TITLE:
-                articles = articleRepository.findArticlesWithFilesAndUserByKeywordForArticleTitle(pageable, keyword);
+                articles = articleRepository.searchArticlesByTitle(pageable, keyword);
                 break;
             case ARTICLE_CONTENT:
-                articles = articleRepository.findArticlesWithFilesAndUserByKeywordForArticleContent(pageable, keyword);
+                articles = articleRepository.searchArticlesByContent(pageable, keyword);
                 break;
             case ARTICLE_TITLE_AND_CONTENT:
-                articles = articleRepository.findArticlesWithFilesAndUserByKeywordForArticleTitleAndArticleContent(pageable, keyword);
+                articles = articleRepository.searchArticlesByTitleAndContent(pageable, keyword);
                 break;
             default:
                 throw new CustomException(ErrorCode.WRONG_SEARCH_SUBJECT, searchSubject.name());

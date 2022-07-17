@@ -47,12 +47,7 @@ class ArticleRepositoryTest {
         boardRepository.save(board);
 
         // when
-        Article article = Article.builder()
-                .title("title")
-                .content("content")
-                .board(board)
-                .user(user)
-                .build();
+        Article article = new Article(null, "title", "content", 0, 0, board, user, null);
         articleRepository.save(article);
 
         // then

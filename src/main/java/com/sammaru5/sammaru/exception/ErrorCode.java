@@ -16,6 +16,7 @@ public enum ErrorCode {
     FILE_NOT_FOUND(HttpStatus.BAD_REQUEST, "해당 파일은 존재하지 않습니다!"),
     USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "해당 회원은 존재하지 않습니다!"),
     INDELIBLE_BOARD(HttpStatus.BAD_REQUEST, "해당 게시판은 삭제할 수 없습니다!"),
+    WRONG_SEARCH_SUBJECT(HttpStatus.BAD_REQUEST, "올바르지 않은 검색 주제입니다!"),
 
     // 401 UNAUTHORIZED
     UNAUTHORIZED_USER_ACCESS(HttpStatus.UNAUTHORIZED, "권한이 없는 사용자의 접근입니다!"),

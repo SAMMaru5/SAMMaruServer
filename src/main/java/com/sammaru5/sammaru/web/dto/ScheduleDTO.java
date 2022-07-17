@@ -1,11 +1,14 @@
 package com.sammaru5.sammaru.web.dto;
 
 import com.sammaru5.sammaru.domain.Schedule;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.sql.Date;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ScheduleDTO {
 
     private Long id;

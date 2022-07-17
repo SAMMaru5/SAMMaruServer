@@ -2,7 +2,9 @@ package com.sammaru5.sammaru.web.dto;
 
 import com.sammaru5.sammaru.domain.Article;
 import com.sammaru5.sammaru.domain.File;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -10,6 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ArticleDTO {
     private Long id;
     private String title;

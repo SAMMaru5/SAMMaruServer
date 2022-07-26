@@ -26,9 +26,7 @@ public class UserModifyService {
             throw new CustomException(ErrorCode.ALREADY_EXIST_EMAIL, userRequest.getEmail());
         }
 
-        user.setUsername(userRequest.getUsername());
-        user.setEmail(userRequest.getEmail());
-        user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+        user.modifyUserInfo(userRequest, passwordEncoder);
         return new UserDTO(userRepository.save(user));
     }
 

@@ -1,5 +1,6 @@
 package com.sammaru5.sammaru.domain;
 
+import com.sammaru5.sammaru.web.request.UserRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -59,5 +60,11 @@ public class User {
 
     public void setPoint(Long point) {
         this.point = point;
+    }
+
+    public void modifyUserInfo(UserRequest userRequest, PasswordEncoder passwordEncoder) {
+        this.username = userRequest.getUsername();
+        this.email = userRequest.getEmail();
+        this.password = passwordEncoder.encode(userRequest.getPassword());
     }
 }

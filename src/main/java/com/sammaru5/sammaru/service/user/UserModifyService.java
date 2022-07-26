@@ -14,29 +14,23 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-@Service @RequiredArgsConstructor
+@Service
+@RequiredArgsConstructor
 public class UserModifyService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
     public UserDTO modifyUser(User user, UserRequest userRequest) {
-        if (userRequest.getUsername() != null) {
-            user.setUsername(userRequest.getUsername());
+        if (!user.getEmail().equals(userRequest.getEmail()) && userRepository.existsByEmail(userRequest.getEmail())) {
+            throw new CustomException(ErrorCode.ALREADY_EXIST_EMAIL, userRequest.getEmail());
         }
-        if (userRequest.getEmail() != null) {
-            if (userRepository.existsByEmail(userRequest.getEmail())) {
-                throw new CustomException(ErrorCode.ALREADY_EXIST_EMAIL, userRequest.getEmail());
-            }
-            user.setEmail(userRequest.getEmail());
-        }
-        if (userRequest.getPassword() != null) {
-            user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
-        }
+
+        user.modifyUserInfo(userRequest, passwordEncoder);
         return new UserDTO(userRepository.save(user));
     }
 
-    public UserDTO modifyUserRole(Long userId, UserAuthority role){
+    public UserDTO modifyUserRole(Long userId, UserAuthority role) {
         User user = userRepository.findById(userId).get();
         user.setRole(role);
         return new UserDTO(userRepository.save(user));
@@ -44,7 +38,7 @@ public class UserModifyService {
 
     public UserDTO addUserPoint(Long userId, PointRequest pointRequest) throws CustomException {
         User user = userRepository.getById(userId);
-        if(user.getPoint() + pointRequest.getAddPoint() < 0){
+        if (user.getPoint() + pointRequest.getAddPoint() < 0) {
             throw new CustomException(ErrorCode.USER_POINT_CANT_NEGATIVE, userId.toString());
         }
         user.setPoint(user.getPoint() + pointRequest.getAddPoint());

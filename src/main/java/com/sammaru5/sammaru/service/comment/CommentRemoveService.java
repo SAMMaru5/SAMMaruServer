@@ -13,16 +13,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
 public class CommentRemoveService {
 
     private final CommentRepository commentRepository;
-    private final UserStatusService userStatusService;
 
-    public boolean removeComment(Authentication authentication, Long commentId) throws CustomException {
-        User user = userStatusService.getUser(authentication);
+    @Transactional
+    public boolean removeComment(User user, Long commentId) throws CustomException {
         Optional<Comment> findComment = commentRepository.findById(commentId);
         if(findComment.isPresent()) {
             if (findComment.get().getUser() == user) {

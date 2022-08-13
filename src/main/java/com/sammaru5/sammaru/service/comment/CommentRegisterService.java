@@ -15,17 +15,16 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
 public class CommentRegisterService {
 
     private final CommentRepository commentRepository;
     private final ArticleRepository articleRepository;
-    private final UserStatusService userStatusService;
 
-    public CommentDTO addComment(Authentication authentication, CommentRequest commentRequest, Long articleId) {
-        User user = userStatusService.getUser(authentication);
+    @Transactional
+    public CommentDTO addComment(User user, CommentRequest commentRequest, Long articleId) {
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ARTICLE_NOT_FOUND, articleId.toString()));
 

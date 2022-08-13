@@ -23,7 +23,7 @@ public class BoardRemoveService {
         String boardname = boardRepository.findById(boardId).get().getBoardName();
 
         if(IndelibleBoardName.contain(boardname)) {
-            new CustomException(ErrorCode.INDELIBLE_BOARD, boardId.toString());
+            throw new CustomException(ErrorCode.INDELIBLE_BOARD, boardId.toString());
         }
 
         articleRemoveService.removeArticleByAdmin(boardId);

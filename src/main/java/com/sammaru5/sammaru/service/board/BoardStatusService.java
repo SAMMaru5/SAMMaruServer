@@ -15,19 +15,6 @@ import java.util.List;
 public class BoardStatusService {
     private final BoardRepository boardRepository;
 
-    public Board findBoard(Long boardId) {
-        return boardRepository.findById(boardId)
-                .orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND, boardId.toString()));
-    }
-
-    public Board findByBoardName(String boardName) {
-        List<Board> boards = boardRepository.findByBoardName(boardName);
-        if(boards.isEmpty()) {
-           throw new CustomException(ErrorCode.BOARD_NOT_FOUND, boardName);
-        }
-        return boards.get(0);
-    }
-
     public List<Board> findBoards() {
         return boardRepository.findAll();
     }

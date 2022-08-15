@@ -7,6 +7,7 @@ import com.sammaru5.sammaru.service.user.UserSearchService;
 import com.sammaru5.sammaru.util.AuthUser;
 import com.sammaru5.sammaru.util.OverAdminRole;
 import com.sammaru5.sammaru.util.OverMemberRole;
+import com.sammaru5.sammaru.util.OverTempRole;
 import com.sammaru5.sammaru.web.apiresult.ApiResult;
 import com.sammaru5.sammaru.web.dto.UserDTO;
 import com.sammaru5.sammaru.web.request.PointRequest;
@@ -44,8 +45,7 @@ public class UserController {
     }
 
     @ApiOperation(value = "자기 자신 회원 정보", notes = "자기 자신의 회원 정보 가져오기, 토큰만 보내면 됩니다.")
-    @OverMemberRole
-    @GetMapping("/api/user/info")
+    @GetMapping("/no-permit/api/user/info")
     public ApiResult<UserDTO> loginUserSelfDetail(@AuthUser User user) {
         return ApiResult.OK(new UserDTO(user));
     }

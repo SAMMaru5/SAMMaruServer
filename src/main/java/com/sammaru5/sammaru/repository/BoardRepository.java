@@ -12,8 +12,7 @@ import java.util.Optional;
 @Repository
 public interface BoardRepository extends JpaRepository<Board, Long> {
 
-    List<Board> findByBoardName(String boardName);
+    Optional<Board> findByBoardName(String boardName);
 
-    @Query(value = "select b from Board b where b.boardName = :boardName")
-    Optional<Board> findByBoardNameNotice(@Param("boardName") String boardName);
+    boolean existsByBoardName(String boardName);
 }

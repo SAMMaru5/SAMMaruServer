@@ -59,7 +59,7 @@ public class ArticleSearchService {
 
     // 메인페이지에 보여지는 7개의 공지사항을 가져오는 메서드 findArticlesByBoardName
     public List<ArticleDTO> findArticlesByBoardName(String boardName) {
-        Board board = boardRepository.findByBoardNameNotice(boardName)
+        Board board = boardRepository.findByBoardName(boardName)
                 .orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND));
         Pageable pageable = PageRequest.of(0, 7, Sort.by("createTime").descending());
         List<Article> findArticles = articleRepository.findByBoard(board, pageable);

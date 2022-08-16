@@ -23,7 +23,6 @@ public class BoardRegisterService {
     }
 
     private void validateDuplicateBoard(String boardName) {
-        List<Board> boards = boardRepository.findByBoardName(boardName);
-        if(!boards.isEmpty()) throw new CustomException(ErrorCode.ALREADY_EXIST_BOARD);
+        if(boardRepository.existsByBoardName(boardName)) throw new CustomException(ErrorCode.ALREADY_EXIST_BOARD);
     }
 }

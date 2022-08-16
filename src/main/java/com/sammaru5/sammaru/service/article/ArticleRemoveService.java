@@ -5,15 +5,10 @@ import com.sammaru5.sammaru.domain.User;
 import com.sammaru5.sammaru.exception.CustomException;
 import com.sammaru5.sammaru.exception.ErrorCode;
 import com.sammaru5.sammaru.repository.ArticleRepository;
-import com.sammaru5.sammaru.service.user.UserStatusService;
-import com.sammaru5.sammaru.web.dto.ArticleDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Transactional
 @Service
@@ -21,7 +16,6 @@ import java.util.List;
 public class ArticleRemoveService {
     private final ArticleRepository articleRepository;
     private final ArticleSearchService articleSearchService;
-    private final UserStatusService userStatusService;
 
     @CacheEvict(keyGenerator = "articleCacheKeyGenerator", value = "article", cacheManager = "cacheManager")
     public boolean removeArticle(Long articleId, User findUser, Long boardId) {
@@ -37,16 +31,7 @@ public class ArticleRemoveService {
     }
 
     public boolean removeArticleByAdmin(Long boardId) {
-        List<ArticleDTO> articles = articleSearchService.findArticlesByBoardId(boardId);
-        if (articles.isEmpty()) {
-            throw new CustomException(ErrorCode.BOARD_IS_EMPTY, boardId.toString());
-        }
-
-        List<Long> ids = new ArrayList<>();
-        for (ArticleDTO a : articles) {
-            ids.add(a.getId());
-        }
-        articleRepository.deleteAllByIdInQuery(ids);
+        articleRepository.deleteArticlesByBoardId(boardId);
         return true;
     }
 

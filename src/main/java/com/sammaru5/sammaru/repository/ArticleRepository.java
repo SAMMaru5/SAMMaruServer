@@ -38,6 +38,12 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     @Query(value = "delete from Article a where a.id in :ids")
     void deleteAllByIdInQuery(@Param("ids") List<Long> ids);
 
+    @Query(value = "select a from Article a where a.board.id = :boardId")
+    List<Article> findArticlesByBoardId(@Param("boardId") Long boardId);
+
+    @Query(value = "delete from Article a where a.board.id = :boardId")
+    void deleteArticlesByBoardId(@Param("boardId") Long boardId);
+
     // -------------------------- 특정 게시판 게시글 검색 --------------------------------------
 
     @Query(value = "select a from Article a left join fetch a.files join fetch a.user where a.board = :board and a.user.studentId = :studentId",

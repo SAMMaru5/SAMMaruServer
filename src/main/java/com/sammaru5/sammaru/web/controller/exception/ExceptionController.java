@@ -3,6 +3,7 @@ package com.sammaru5.sammaru.web.controller.exception;
 import com.sammaru5.sammaru.exception.CustomException;
 import com.sammaru5.sammaru.web.apiresult.ApiResult;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -12,9 +13,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ExceptionController {
 
     @ExceptionHandler(CustomException.class)
-    public ApiResult<?> handleCustomException(CustomException e) {
+    public ResponseEntity<?> handleCustomException(CustomException e) {
         e.printStackTrace();
-        return ApiResult.ERROR(e, e.getErrorCode().getHttpStatus());
+        return new ResponseEntity<>(
+                ApiResult.ERROR(e, e.getErrorCode().getHttpStatus()),
+                e.getErrorCode().getHttpStatus()
+        );
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class) //@Valid 검사

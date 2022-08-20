@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # 로컬 테스트용 DB
+    url: jdbc:mysql://localhost:3306/sammaru?serverTimezone=UTC&characterEncoding=UTF-8
+    username: sammaru
+    password: sammaru
+
+    jpa:
+      hibernate:
+        ddl-auto: update
+      properties:
+        hibernate:
+          show_sql: true
+          format_sql: true

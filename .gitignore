@@ -45,3 +45,6 @@ redis/logs/
 src/main/resources/files/
 
 .DS_Store
+
+jwt.yml
+mail.yml

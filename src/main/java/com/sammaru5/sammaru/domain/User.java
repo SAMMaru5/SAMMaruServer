@@ -25,6 +25,8 @@ public class User {
     private String email;
     private Long point;
     private Integer generation;
+
+    @Enumerated(value = EnumType.STRING)
     private UserAuthority role;
 
     @Builder

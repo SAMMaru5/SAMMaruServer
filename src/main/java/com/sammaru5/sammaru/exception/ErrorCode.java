@@ -17,6 +17,9 @@ public enum ErrorCode {
     USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "해당 회원은 존재하지 않습니다!"),
     INDELIBLE_BOARD(HttpStatus.BAD_REQUEST, "해당 게시판은 삭제할 수 없습니다!"),
     WRONG_SEARCH_SUBJECT(HttpStatus.BAD_REQUEST, "올바르지 않은 검색 주제입니다!"),
+    VALID_CHECK_FAIL(HttpStatus.BAD_REQUEST, "입력 값에 대한 유효성 검사가 실패했습니다!"),
+    NULL_POINTER_EXCEPTION(HttpStatus.BAD_REQUEST, "Null pointer exception 오류가 발생했습니다!"),
+    ILLEGAL_ARGUMENT_EXCEPTION(HttpStatus.BAD_REQUEST, "Illegal argument exception 오류가 발생했습니다!"),
 
     // 401 UNAUTHORIZED
     UNAUTHORIZED_USER_ACCESS(HttpStatus.UNAUTHORIZED, "권한이 없는 사용자의 접근입니다!"),
@@ -24,6 +27,9 @@ public enum ErrorCode {
 
     // 403 FORBIDDEN
     USER_POINT_CANT_NEGATIVE(HttpStatus.FORBIDDEN, "사용자의 포인트는 음수가 될 수 없습니다!"),
+
+    // 406 NOT ACCEPTABLE
+    ACCESS_DENIED(HttpStatus.NOT_ACCEPTABLE, "접근이 거부되었습니다!"),
 
     // 409 CONFLICT
     ALREADY_EXIST_USER(HttpStatus.CONFLICT, "해당 학번의 사용자가 이미 존재합니다!"),

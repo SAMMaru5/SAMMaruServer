@@ -1,6 +1,7 @@
 package com.sammaru5.sammaru.web.controller.exception;
 
 import com.sammaru5.sammaru.exception.CustomException;
+import com.sammaru5.sammaru.exception.ErrorCode;
 import com.sammaru5.sammaru.web.apiresult.ApiResult;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,26 +21,34 @@ public class ExceptionController {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class) //@Valid 검사
-    public ApiResult<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException e){
+    public ResponseEntity<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException e){
         e.printStackTrace();
-        return ApiResult.ERROR(e.getBindingResult().getAllErrors().get(0).getDefaultMessage(), HttpStatus.BAD_REQUEST);
+        CustomException ce = new CustomException(ErrorCode.VALID_CHECK_FAIL);
+        return ResponseEntity.status(ce.getErrorCode().getHttpStatus())
+                .body(ApiResult.ERROR(ce, ce.getErrorCode().getHttpStatus()));
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ApiResult<?> handleAccessDeniedException(AccessDeniedException e){
+    public ResponseEntity<?> handleAccessDeniedException(AccessDeniedException e){
         e.printStackTrace();
-        return ApiResult.ERROR(e, HttpStatus.NOT_ACCEPTABLE);
+        CustomException ce = new CustomException(ErrorCode.ACCESS_DENIED);
+        return ResponseEntity.status(ce.getErrorCode().getHttpStatus())
+                .body(ApiResult.ERROR(ce, ce.getErrorCode().getHttpStatus()));
     }
 
     @ExceptionHandler(NullPointerException.class)
-    public ApiResult<?> handleNullPointerException(NullPointerException e){
+    public ResponseEntity<?> handleNullPointerException(NullPointerException e){
         e.printStackTrace();
-        return ApiResult.ERROR(e, HttpStatus.BAD_REQUEST);
+        CustomException ce = new CustomException(ErrorCode.NULL_POINTER_EXCEPTION);
+        return ResponseEntity.status(ce.getErrorCode().getHttpStatus())
+                .body(ApiResult.ERROR(ce, ce.getErrorCode().getHttpStatus()));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ApiResult<?> handleIllegalArgumentException(IllegalArgumentException e){
+    public ResponseEntity<?> handleIllegalArgumentException(IllegalArgumentException e){
         e.printStackTrace();
-        return ApiResult.ERROR(e, HttpStatus.BAD_REQUEST);
+        CustomException ce = new CustomException(ErrorCode.ILLEGAL_ARGUMENT_EXCEPTION);
+        return ResponseEntity.status(ce.getErrorCode().getHttpStatus())
+                .body(ApiResult.ERROR(ce, ce.getErrorCode().getHttpStatus()));
     }
 }

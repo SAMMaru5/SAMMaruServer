@@ -4,10 +4,7 @@ import com.sammaru5.sammaru.web.request.ScheduleRequest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
@@ -15,7 +12,7 @@ import java.sql.Date;
 @NoArgsConstructor
 public class Schedule {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name = "schedule_id")
     private Long id;
 

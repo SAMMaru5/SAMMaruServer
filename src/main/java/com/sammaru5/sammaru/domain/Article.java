@@ -26,6 +26,7 @@ public class Article extends BaseTime {
     private Long id;
 
     private String title;
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     private Integer viewCnt;

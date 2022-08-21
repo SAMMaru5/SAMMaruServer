@@ -16,6 +16,7 @@ public class Comment extends BaseTime {
     @Column(name = "comment_id")
     private Long id;
 
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)

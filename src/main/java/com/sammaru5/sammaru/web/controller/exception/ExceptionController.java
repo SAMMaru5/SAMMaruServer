@@ -15,10 +15,8 @@ public class ExceptionController {
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<?> handleCustomException(CustomException e) {
         e.printStackTrace();
-        return new ResponseEntity<>(
-                ApiResult.ERROR(e, e.getErrorCode().getHttpStatus()),
-                e.getErrorCode().getHttpStatus()
-        );
+        return ResponseEntity.status(e.getErrorCode().getHttpStatus())
+                .body(ApiResult.ERROR(e, e.getErrorCode().getHttpStatus()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class) //@Valid 검사

@@ -21,7 +21,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Article extends BaseTime {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name = "article_id")
     private Long id;
 

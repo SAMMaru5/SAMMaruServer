@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://mysql:3306/sammaru?serverTimezone=UTC&characterEncoding=UTF-8
+    url: jdbc:mysql://mysql:3309/sammaru?serverTimezone=UTC&characterEncoding=UTF-8
     username: sammaru
     password: sammaru
 

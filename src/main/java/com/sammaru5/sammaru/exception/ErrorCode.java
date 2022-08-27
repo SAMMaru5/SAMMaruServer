@@ -24,6 +24,8 @@ public enum ErrorCode {
     // 401 UNAUTHORIZED
     UNAUTHORIZED_USER_ACCESS(HttpStatus.UNAUTHORIZED, "권한이 없는 사용자의 접근입니다!"),
     INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "리프레쉬 토큰이 유효하지 않습니다!"),
+    EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "만료된 토큰입니다."),
+    TOKEN_WITHOUT_AUTHORITY(HttpStatus.UNAUTHORIZED, "권한이 없는 토큰입니다."),
 
     // 403 FORBIDDEN
     USER_POINT_CANT_NEGATIVE(HttpStatus.FORBIDDEN, "사용자의 포인트는 음수가 될 수 없습니다!"),

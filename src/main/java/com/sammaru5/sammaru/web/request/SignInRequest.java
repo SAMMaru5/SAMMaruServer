@@ -1,6 +1,7 @@
 package com.sammaru5.sammaru.web.request;
 
 import lombok.Getter;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 import javax.validation.constraints.NotBlank;
 
@@ -10,4 +11,8 @@ public class SignInRequest {
     private String studentId;
     @NotBlank(message = "패스워드를 입력해주세요")
     private String password;
+
+    public UsernamePasswordAuthenticationToken toAuthentication() {
+        return new UsernamePasswordAuthenticationToken(studentId, password);
+    }
 }

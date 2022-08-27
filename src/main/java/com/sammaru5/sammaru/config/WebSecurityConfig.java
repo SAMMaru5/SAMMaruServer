@@ -2,7 +2,7 @@ package com.sammaru5.sammaru.config;
 
 import com.sammaru5.sammaru.config.security.CustomUserDetailsService;
 import com.sammaru5.sammaru.config.jwt.JwtAuthenticationFilter;
-import com.sammaru5.sammaru.config.jwt.JwtTokenProvider;
+import com.sammaru5.sammaru.config.jwt.TokenProvider;
 import com.sammaru5.sammaru.config.security.UnauthorizedHandler;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -26,7 +26,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final CustomUserDetailsService customUserDetailsService;
     private final UnauthorizedHandler unauthorizedHandler;
-    private final JwtTokenProvider jwtTokenProvider;
+    private final TokenProvider jwtTokenProvider;
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {

@@ -1,40 +1,35 @@
 package com.sammaru5.sammaru.service.user;
 
-import com.sammaru5.sammaru.web.dto.JwtDTO;
+import com.sammaru5.sammaru.config.jwt.TokenDto;
+import com.sammaru5.sammaru.config.jwt.TokenProvider;
+import com.sammaru5.sammaru.util.redis.RedisUtil;
 import com.sammaru5.sammaru.web.request.SignInRequest;
-import com.sammaru5.sammaru.config.jwt.JwtTokenProvider;
-import com.sammaru5.sammaru.config.security.UserDetail;
-import com.sammaru5.sammaru.service.redis.RedisService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.concurrent.TimeUnit;
 
 @Transactional
 @Service @RequiredArgsConstructor
 public class UserLoginService {
-    private final AuthenticationManager authenticationManager;
-    private final JwtTokenProvider jwtTokenProvider;
-    private final RedisService redisService;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final TokenProvider tokenProvider;
+    private final RedisUtil redisUtil;
 
-    public JwtDTO signInUser(SignInRequest signInRequest) {
+    public TokenDto login(SignInRequest signInRequest) {
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        signInRequest.getStudentId(),
-                        signInRequest.getPassword()
-                )
-        );
+        UsernamePasswordAuthenticationToken authenticationToken = signInRequest.toAuthentication();
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
-        String accessToken = jwtTokenProvider.generateToken(((UserDetail)authentication.getPrincipal()).getId());
-        String refreshToken = jwtTokenProvider.generateRefreshToken();
-        redisService.setValues(refreshToken, Long.toString(((UserDetail)authentication.getPrincipal()).getId()));
+        TokenDto tokenDto = tokenProvider.generateTokenDto(authentication);
 
-        return new JwtDTO(accessToken, refreshToken);
+        redisUtil.setDataExpire("RT:"+authentication.getName(), tokenDto.getRefreshToken(), tokenDto.getRefreshTokenExpiresTime(), TimeUnit.MILLISECONDS);
+
+        return tokenDto;
     }
 }

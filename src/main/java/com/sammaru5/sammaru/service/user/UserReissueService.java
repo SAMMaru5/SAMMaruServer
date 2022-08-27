@@ -3,7 +3,7 @@ package com.sammaru5.sammaru.service.user;
 import com.sammaru5.sammaru.exception.CustomException;
 import com.sammaru5.sammaru.exception.ErrorCode;
 import com.sammaru5.sammaru.web.dto.JwtDTO;
-import com.sammaru5.sammaru.config.jwt.JwtTokenProvider;
+import com.sammaru5.sammaru.config.jwt.TokenProvider;
 import com.sammaru5.sammaru.service.redis.RedisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 @Transactional
 @Service @RequiredArgsConstructor
 public class UserReissueService {
-    private final JwtTokenProvider jwtTokenProvider;
+    private final TokenProvider jwtTokenProvider;
     private final RedisService redisService;
 
     public JwtDTO reissueUser(HttpServletRequest request) throws CustomException {

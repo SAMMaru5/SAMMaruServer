@@ -6,14 +6,14 @@ spring:
     username: sammaru
     password: sammaru
 
-    jpa:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
       hibernate:
-        ddl-auto: update
-      properties:
-        hibernate:
-          show_sql: true
-          format_sql: true
-
+        show_sql: true
+        format_sql: true
+    database: mysql
 sammaru:
   cookie:
     domain: sammaru.cbnu.ac.kr

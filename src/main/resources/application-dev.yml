@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://mysql:3309/sammaru?serverTimezone=UTC&characterEncoding=UTF-8
+    url: jdbc:mysql://host.docker.internal:3309/sammaru
     username: sammaru
     password: sammaru
 
@@ -13,6 +13,7 @@ spring:
         show_sql: true
         format_sql: true
     database: mysql
+    database-platform: org.hibernate.dialect.MySQL8Dialect
 
 sammaru:
   cookie:

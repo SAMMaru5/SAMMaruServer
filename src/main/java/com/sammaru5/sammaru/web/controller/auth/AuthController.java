@@ -19,10 +19,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -47,8 +44,8 @@ public class AuthController {
         return ApiResult.OK(userRegisterService.signUpUser(signUpRequest));
     }
 
-    @PostMapping("/auth/signin")
-    @ApiOperation(value = "로그인", notes = "엑세스 토큰과 리프레쉬 토큰 발급", response = JwtDTO.class)
+    @PostMapping("/auth/login")
+    @ApiOperation(value = "로그인", notes = "엑세스 토큰과 리프레쉬 토큰 발급", response = AccessTokenResponseDto.class)
     public ResponseEntity<? extends ApiResult> userSignIn(@Valid @RequestBody SignInRequest signInRequest) {
 
         TokenDto tokenDto = userLoginService.login(signInRequest);
@@ -60,9 +57,14 @@ public class AuthController {
     }
 
     @PostMapping("/auth/reissue")
-    @ApiOperation(value = "엑세스 토큰 재발급", notes = "만료된 엑세스 토큰과, 리프레쉬 토큰을 이용해 토큰 재 발급", response = JwtDTO.class)
-    public ApiResult<?> userReissue(HttpServletRequest request) {
-        return ApiResult.OK(userReissueService.reissueUser(request));
+    @ApiOperation(value = "엑세스 토큰 재발급", notes = "만료된 엑세스 토큰과, 리프레쉬 토큰을 이용해 토큰 재 발급", response = AccessTokenResponseDto.class)
+    public ResponseEntity<? extends ApiResult> userReissue(@CookieValue(name = "SammaruAccessToken") String accessToken, @CookieValue(name = "SammaruRefreshToken") String refreshToken) {
+        TokenDto tokenDto = userReissueService.reissue(accessToken, refreshToken);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .header(HttpHeaders.SET_COOKIE, createAccessTokenCookie(tokenDto).toString())
+                .header(HttpHeaders.SET_COOKIE, createRefreshTokenCookie(tokenDto).toString())
+                .body(ApiResult.OK(new AccessTokenResponseDto(tokenDto)));
     }
 
     @PostMapping("/auth/tempPassword")
@@ -72,7 +74,7 @@ public class AuthController {
     }
 
     private ResponseCookie createRefreshTokenCookie(TokenDto tokenDto) {
-        return ResponseCookie.from("InfoMansionRefreshToken", tokenDto.getRefreshToken())
+        return ResponseCookie.from("SammaruRefreshToken", tokenDto.getRefreshToken())
                 .httpOnly(true)
                 .secure(true)
                 .path("/auth/reissue")
@@ -83,7 +85,7 @@ public class AuthController {
     }
 
     private ResponseCookie createAccessTokenCookie(TokenDto tokenDto) {
-        return ResponseCookie.from("InfoMansionAccessToken", tokenDto.getAccessToken())
+        return ResponseCookie.from("SammaruAccessToken", tokenDto.getAccessToken())
                 .httpOnly(false)
                 .secure(true)
                 .path("/")

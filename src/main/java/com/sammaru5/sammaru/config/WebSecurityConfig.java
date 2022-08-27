@@ -1,5 +1,7 @@
 package com.sammaru5.sammaru.config;
 
+import com.sammaru5.sammaru.config.jwt.JwtAccessDeniedHandler;
+import com.sammaru5.sammaru.config.jwt.JwtAuthenticationEntryPoint;
 import com.sammaru5.sammaru.config.security.CustomUserDetailsService;
 import com.sammaru5.sammaru.config.jwt.JwtAuthenticationFilter;
 import com.sammaru5.sammaru.config.jwt.TokenProvider;
@@ -25,7 +27,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final CustomUserDetailsService customUserDetailsService;
-    private final UnauthorizedHandler unauthorizedHandler;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+
     private final TokenProvider jwtTokenProvider;
 
     @Bean
@@ -64,7 +68,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .csrf().disable()
-                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
+                .exceptionHandling()
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .accessDeniedHandler(jwtAccessDeniedHandler)
 
                 .and()
                 .sessionManagement()

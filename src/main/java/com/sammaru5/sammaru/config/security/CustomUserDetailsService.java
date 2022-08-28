@@ -2,7 +2,7 @@ package com.sammaru5.sammaru.config.security;
 
 import com.sammaru5.sammaru.domain.User;
 import com.sammaru5.sammaru.repository.UserRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -12,7 +12,7 @@ import javax.transaction.Transactional;
 
 //Spring Security에서 유저를 찾는 메소드 제공
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;

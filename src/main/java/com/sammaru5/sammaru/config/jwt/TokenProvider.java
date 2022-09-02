@@ -32,10 +32,10 @@ public class TokenProvider {
     private static final String BEARER_TYPE = "bearer";
 
     @Value("${app.jwtTokenValidTime}") //설정파일의 토큰 유효시간
-    private static long ACCESS_TOKEN_EXPIRE_TIME;
+    private long ACCESS_TOKEN_EXPIRE_TIME;
 
     @Value("${app.jwtRefreshTokenValidTime}") //리프레쉬 토큰 유효시간
-    private static long REFRESH_TOKEN_EXPIRE_TIME;
+    private long REFRESH_TOKEN_EXPIRE_TIME;
 
     private final Key key;
 

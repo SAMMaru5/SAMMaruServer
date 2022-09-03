@@ -13,7 +13,7 @@ import java.util.Objects;
 @Getter
 public class UserDetail implements UserDetails {
 
-    private User user;
+    private final User user;
 
     public UserDetail (User user) {
         this.user = user;
@@ -23,7 +23,7 @@ public class UserDetail implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return user.getStudentId();
     }
 
     @Override

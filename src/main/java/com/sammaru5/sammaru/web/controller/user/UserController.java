@@ -33,14 +33,14 @@ public class UserController {
     @ApiOperation(value = "유저 권한 변경", notes = "userId에 해당하는 유저 권한 변경")
     @OverAdminRole
     @PatchMapping("/api/users/{userId}/role")
-    public ApiResult<UserDTO> userRoleModify(@Valid  @RequestBody RoleRequest roleRequest, @PathVariable Long userId){
+    public ApiResult<UserDTO> userRoleModify(@Valid @RequestBody RoleRequest roleRequest, @PathVariable Long userId) {
         return ApiResult.OK(userModifyService.modifyUserRole(userId, roleRequest.getRole()));
     }
 
     @ApiOperation(value = "유저 포인트 추가", notes = "userId에 해당하는 유저 포인트 부여 (음수 가능)")
     @OverAdminRole
     @PostMapping("/api/users/{userId}/point")
-    public ApiResult<UserDTO> userPointAdd(@Valid @RequestBody PointRequest pointRequest, @PathVariable Long userId){
+    public ApiResult<UserDTO> userPointAdd(@Valid @RequestBody PointRequest pointRequest, @PathVariable Long userId) {
         return ApiResult.OK(userModifyService.addUserPoint(userId, pointRequest));
     }
 
@@ -74,7 +74,7 @@ public class UserController {
     @ApiOperation(value = "회원 정보 수정", notes = "회원 정보 수정하기")
     @OverMemberRole
     @PatchMapping("/api/user/info")
-    public ApiResult<UserDTO> userModify(@AuthUser User user, @Valid @RequestBody UserRequest userRequest){
+    public ApiResult<UserDTO> userModify(@AuthUser User user, @Valid @RequestBody UserRequest userRequest) {
         return ApiResult.OK(userModifyService.modifyUser(user, userRequest));
     }
 
@@ -88,7 +88,7 @@ public class UserController {
     @GetMapping("/api/users/detail")
     @ApiOperation(value = "username으로 회원 정보 조회", notes = "관리자 권한이 username으로 해당 회원의 정보를 조회합니다.")
     @OverAdminRole
-    public ApiResult<UserDTO> userDetailByUsername(@RequestParam String username) {
+    public ApiResult<List<UserDTO>> userDetailByUsername(@RequestParam String username) {
         return ApiResult.OK(userSearchService.findByUsername(username));
     }
 }

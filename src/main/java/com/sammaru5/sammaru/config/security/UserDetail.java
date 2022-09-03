@@ -5,6 +5,7 @@ import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -13,17 +14,19 @@ import java.util.Objects;
 @Getter
 public class UserDetail implements UserDetails {
 
-    private User user;
+    private final User user;
 
-    public UserDetail (User user) {
+    public UserDetail(User user) {
         this.user = user;
     }
 
-    public Long getId() {return user.getId();}
+    public Long getId() {
+        return user.getId();
+    }
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return user.getStudentId();
     }
 
     @Override
@@ -33,10 +36,8 @@ public class UserDetail implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-
+        List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(this.user.getRole().name()));
-
         return authorities;
     }
 
@@ -62,9 +63,9 @@ public class UserDetail implements UserDetails {
 
     @Override
     public boolean equals(Object o) {
-        if(this == o)
+        if (this == o)
             return true;
-        if(o == null || getClass() != o.getClass())
+        if (o == null || getClass() != o.getClass())
             return false;
         UserDetail that = (UserDetail) o;
         return Objects.equals(this.user.getId(), that.user.getId());

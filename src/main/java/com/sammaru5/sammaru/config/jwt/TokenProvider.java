@@ -1,5 +1,7 @@
 package com.sammaru5.sammaru.config.jwt;
 
+import com.sammaru5.sammaru.config.security.UserDetail;
+import com.sammaru5.sammaru.domain.User;
 import com.sammaru5.sammaru.domain.UserAuthority;
 import com.sammaru5.sammaru.exception.CustomException;
 import com.sammaru5.sammaru.exception.ErrorCode;
@@ -12,16 +14,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.security.Key;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -95,14 +93,17 @@ public class TokenProvider {
         }
 
         // 2. Claim에서 권한 정보를 가져옵니다.
-        Collection<? extends GrantedAuthority> authorities = Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+        UserAuthority userRole = UserAuthority.valueOf(claims.get(AUTHORITIES_KEY).toString());
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(userRole.name()));
 
         // 3. UserDetails 객체를 만들어서 Authentication을 반환합니다.
-        UserDetails principal = new User(claims.getSubject(), "", authorities);
-
-        return new UsernamePasswordAuthenticationToken(principal, "", authorities);
+        UserDetail principal = new UserDetail(
+                User.builder()
+                        .studentId(claims.getSubject())
+                        .role(userRole)
+                        .build());
+        return new UsernamePasswordAuthenticationToken(principal, accessToken, authorities);
     }
 
     public boolean validateToken(String token) {

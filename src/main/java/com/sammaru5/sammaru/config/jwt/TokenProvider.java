@@ -15,11 +15,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.security.Key;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -49,7 +49,8 @@ public class TokenProvider {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
-        if(authorities.contains(UserAuthority.ROLE_TEMP.toString())) throw new CustomException(ErrorCode.UNAUTHORIZED_USER_ACCESS);
+        if (authorities.contains(UserAuthority.ROLE_TEMP.toString()))
+            throw new CustomException(ErrorCode.UNAUTHORIZED_USER_ACCESS);
 
         long now = (new Date()).getTime();
 

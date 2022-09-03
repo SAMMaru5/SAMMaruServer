@@ -1,12 +1,8 @@
 package com.sammaru5.sammaru.config.jwt;
 
-import com.sammaru5.sammaru.config.security.CustomUserDetailsService;
 import lombok.AllArgsConstructor;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -40,7 +36,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private String resolveToken(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
-        if(cookies == null) return null;
+        if (cookies == null) return null;
         for (Cookie cookie : cookies) {
             if (!cookie.getName().equals("SammaruAccessToken")) continue;
             return cookie.getValue();

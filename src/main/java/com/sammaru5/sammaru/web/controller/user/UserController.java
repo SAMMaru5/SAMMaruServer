@@ -10,9 +10,7 @@ import com.sammaru5.sammaru.util.OverMemberRole;
 import com.sammaru5.sammaru.util.OverTempRole;
 import com.sammaru5.sammaru.web.apiresult.ApiResult;
 import com.sammaru5.sammaru.web.dto.UserDTO;
-import com.sammaru5.sammaru.web.request.PointRequest;
-import com.sammaru5.sammaru.web.request.RoleRequest;
-import com.sammaru5.sammaru.web.request.UserRequest;
+import com.sammaru5.sammaru.web.request.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +33,13 @@ public class UserController {
     @PatchMapping("/api/users/{userId}/role")
     public ApiResult<UserDTO> userRoleModify(@Valid @RequestBody RoleRequest roleRequest, @PathVariable Long userId) {
         return ApiResult.OK(userModifyService.modifyUserRole(userId, roleRequest.getRole()));
+    }
+
+    @ApiOperation(value = "유저 기수 설정", notes = "userId에 해당하는 유저 기수 변경")
+    @PatchMapping("/api/users/{userId}/generation")
+    @OverAdminRole
+    public ApiResult<UserDTO> userGenerationModify(@Valid @RequestBody GenerationRequest generationRequest, @PathVariable Long userId) {
+        return ApiResult.OK(userModifyService.modifyUserGeneration(userId, generationRequest.getGeneration()));
     }
 
     @ApiOperation(value = "유저 포인트 추가", notes = "userId에 해당하는 유저 포인트 부여 (음수 가능)")

@@ -39,10 +39,10 @@ public class ArticleSearchService {
     }
 
     //boardId에 해당하는 게시판의 게시글들을 paging
-    public Page<ArticleDTO> findArticlesByBoardIdAndPaging(Long boardId, Integer pageNum) {
+    public Page<ArticleDTO> findArticlesByBoardIdAndPaging(Long boardId, Integer pageNum, Integer pageSize) {
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND));
-        Pageable pageable = PageRequest.of(pageNum, 15, Sort.by("createTime").descending());
+        Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.by("createTime").descending());
         Page<Article> articles = articleRepository.findArticlesWithFilesAndUserByBoard(board, pageable);
         return articles.map(ArticleDTO::toDto);
     }
@@ -70,10 +70,10 @@ public class ArticleSearchService {
         return findArticles.stream().map(ArticleDTO::toDto).collect(Collectors.toList());
     }
 
-    public Page<ArticleDTO> findArticlesByBoardIdAndKeywordAndPaging(Long boardId, Integer pageNum, SearchSubject searchSubject, String keyword) {
+    public Page<ArticleDTO> findArticlesByBoardIdAndKeywordAndPaging(Long boardId, Integer pageNum, Integer pageSize, SearchSubject searchSubject, String keyword) {
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND));
-        Pageable pageable = PageRequest.of(pageNum, 15, Sort.by("createTime").descending());
+        Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.by("createTime").descending());
 
         Page<Article> articles;
         switch (searchSubject) {
@@ -98,8 +98,8 @@ public class ArticleSearchService {
         return articles.map(ArticleDTO::toDto);
     }
 
-    public Page<ArticleDTO> findArticlesByKeywordAndPaging(Integer pageNum, SearchSubject searchSubject, String keyword) {
-        Pageable pageable = PageRequest.of(pageNum, 15, Sort.by("createTime").descending());
+    public Page<ArticleDTO> findArticlesByKeywordAndPaging(Integer pageNum, Integer pageSize, SearchSubject searchSubject, String keyword) {
+        Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.by("createTime").descending());
 
         Page<Article> articles;
         switch (searchSubject) {

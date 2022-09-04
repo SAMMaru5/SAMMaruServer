@@ -47,7 +47,7 @@ public class UserController {
     @ApiOperation(value = "자기 자신 회원 정보", notes = "자기 자신의 회원 정보 가져오기, 토큰만 보내면 됩니다.")
     @GetMapping("/no-permit/api/user/info")
     public ApiResult<UserDTO> loginUserSelfDetail(@AuthUser User user) {
-        return ApiResult.OK(userSearchService.findByStudentId(user.getStudentId()));
+        return ApiResult.OK(userSearchService.findOne(user.getId()));
     }
 
     @ApiOperation(value = "특정 회원 조회", notes = "userId에 대한 특정 회원 정보를 반환합니다.")

@@ -38,4 +38,8 @@ public class UserSearchService {
     public List<UserDTO> findByUsername(String username) {
         return userRepository.findByUsernameContaining(username).stream().map(UserDTO::new).collect(Collectors.toList());
     }
+
+    public UserDTO findByStudentId(String studentId) {
+        return new UserDTO(userRepository.findByStudentId(studentId).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, studentId)));
+    }
 }

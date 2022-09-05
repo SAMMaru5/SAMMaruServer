@@ -48,6 +48,6 @@ public class UserModifyService {
     public UserDTO modifyUserGeneration(Long userId, Integer generation) {
         User user = userRepository.findById(userId).get();
         user.setGeneration(generation);
-        return new UserDTO(userRepository.save(user));
+        return new UserDTO(user);
     }
 }

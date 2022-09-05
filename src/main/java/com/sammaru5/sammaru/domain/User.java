@@ -15,7 +15,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class User {
 
-    @Id @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
 
@@ -62,6 +62,10 @@ public class User {
 
     public void setPoint(Long point) {
         this.point = point;
+    }
+
+    public void setGeneration(Integer generation) {
+        this.generation = generation;
     }
 
     public void modifyUserInfo(UserRequest userRequest, PasswordEncoder passwordEncoder) {

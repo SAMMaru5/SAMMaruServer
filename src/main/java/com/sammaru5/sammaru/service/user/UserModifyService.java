@@ -44,4 +44,10 @@ public class UserModifyService {
         user.setPoint(user.getPoint() + pointRequest.getAddPoint());
         return new UserDTO(userRepository.save(user));
     }
+
+    public UserDTO modifyUserGeneration(Long userId, Integer generation) {
+        User user = userRepository.findById(userId).get();
+        user.setGeneration(generation);
+        return new UserDTO(user);
+    }
 }

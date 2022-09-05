@@ -15,28 +15,30 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class User {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
-
     private String studentId;
     private String username;
     private String password;
     private String email;
     private Long point;
     private Integer generation;
+    private Integer grade;
 
     @Enumerated(value = EnumType.STRING)
     private UserAuthority role;
 
     @Builder
-    public User(String studentId, String username, String password, String email, Long point, Integer generation, UserAuthority role) {
+    public User(String studentId, String username, String password, String email, Long point, Integer generation, Integer grade, UserAuthority role) {
         this.studentId = studentId;
         this.username = username;
         this.password = password;
         this.email = email;
         this.point = point;
         this.generation = generation;
+        this.grade = grade;
         this.role = role;
     }
 
@@ -68,9 +70,14 @@ public class User {
         this.generation = generation;
     }
 
+    public void setGrade(Integer grade) {
+        this.grade = grade;
+    }
+
     public void modifyUserInfo(UserRequest userRequest, PasswordEncoder passwordEncoder) {
         this.username = userRequest.getUsername();
         this.email = userRequest.getEmail();
         this.password = passwordEncoder.encode(userRequest.getPassword());
+        this.grade = userRequest.getGrade();
     }
 }

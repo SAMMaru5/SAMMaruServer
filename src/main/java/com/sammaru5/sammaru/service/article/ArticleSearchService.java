@@ -50,10 +50,6 @@ public class ArticleSearchService {
     //boardId에 해당하는 게시판에 달린 모든 게시글들 조회
     public List<ArticleDTO> findArticlesByBoardId(Long boardId) {
         List<Article> findArticles = articleRepository.findArticlesByBoardId(boardId);
-        if (findArticles.isEmpty()) {
-            throw new CustomException(ErrorCode.BOARD_IS_EMPTY, boardId.toString());
-        }
-
         return findArticles.stream().map(ArticleDTO::toDto).collect(Collectors.toList());
     }
 
@@ -63,10 +59,6 @@ public class ArticleSearchService {
                 .orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND));
         Pageable pageable = PageRequest.of(0, 7, Sort.by("createTime").descending());
         List<Article> findArticles = articleRepository.findByBoard(board, pageable);
-        if (findArticles.isEmpty()) {
-            throw new CustomException(ErrorCode.BOARD_IS_EMPTY, board.getId().toString());
-        }
-
         return findArticles.stream().map(ArticleDTO::toDto).collect(Collectors.toList());
     }
 

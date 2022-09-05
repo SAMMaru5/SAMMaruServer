@@ -37,7 +37,7 @@ public class ArticleController {
     @ApiOperation(value = "게시글 생성", notes = "게시판에 게시글 추가")
     @OverMemberRole
     public ApiResult<Long> articleAdd(@AuthUser User user, @PathVariable Long boardId, @RequestPart(value="article") @Valid ArticleRequest articleRequest, @RequestPart(value="file", required = false) MultipartFile[] multipartFiles) {
-        return ApiResult.OK(articleRegisterService.addArticle(user, boardId, articleRequest, multipartFiles));
+        return ApiResult.OK(articleRegisterService.addArticle(user.getStudentId(), boardId, articleRequest, multipartFiles));
     }
 
     @GetMapping("/api/boards/{boardId}/articles/{articleId}")
@@ -51,14 +51,14 @@ public class ArticleController {
     @ApiOperation(value = "게시글 삭제", notes = "게시글 삭제")
     @OverMemberRole
     public ApiResult<Boolean> articleRemove(@AuthUser User user, @PathVariable Long boardId, @PathVariable Long articleId) {
-        return ApiResult.OK(articleRemoveService.removeArticle(articleId, user, boardId));
+        return ApiResult.OK(articleRemoveService.removeArticle(articleId, user.getStudentId(), boardId));
     }
 
     @PatchMapping(value = "/api/boards/{boardId}/articles/{articleId}", consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
     @ApiOperation(value = "게시글 수정", notes = "작성자가 게시글 수정")
     @OverMemberRole
     public ApiResult<Long> articleModify(@AuthUser User user, @PathVariable Long boardId, @PathVariable Long articleId, @RequestPart(value="article", required = false) @Valid ArticleRequest articleRequest, @RequestPart(value="file", required = false) MultipartFile[] multipartFiles) {
-        return ApiResult.OK(articleModifyService.modifyArticle(articleId, user, boardId, articleRequest, multipartFiles));
+        return ApiResult.OK(articleModifyService.modifyArticle(articleId, user.getStudentId(), boardId, articleRequest, multipartFiles));
     }
 
     //파일 다운로드

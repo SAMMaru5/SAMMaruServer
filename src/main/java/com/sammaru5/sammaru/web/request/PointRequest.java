@@ -2,10 +2,10 @@ package com.sammaru5.sammaru.web.request;
 
 import lombok.Getter;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Getter
 public class PointRequest {
-    @NotBlank(message = "부여할 점수는 필수 입력입니다")
+    @NotNull(message = "부여할 점수를 입력해주세요")
     Long addPoint;
 }

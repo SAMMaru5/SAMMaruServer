@@ -9,6 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class ArticlesSearchTest {
 
     @Autowired
@@ -73,7 +75,7 @@ class ArticlesSearchTest {
     void findArticlesWithFilesAndUserByBoardAndWriterStudentId() {
         //when
         Pageable pageable = PageRequest.of(0, 15, Sort.by("createTime").descending());
-        List<Article> searchedArticles = articleRepository.searchArticlesByBoardAndStudentId(boards[0], pageable, users[0].getStudentId());
+        List<Article> searchedArticles = articleRepository.searchArticlesByBoardAndStudentId(boards[0], pageable, users[0].getStudentId()).getContent();
 
         //then
         List<Long> searchedArticlesIds = searchedArticles.stream().map(Article::getId).collect(Collectors.toList());
@@ -85,7 +87,7 @@ class ArticlesSearchTest {
     void findArticlesWithFilesAndUserByBoardAndWriterUsername() {
         //when
         Pageable pageable = PageRequest.of(0, 15, Sort.by("createTime").descending());
-        List<Article> searchedArticles = articleRepository.searchArticlesByBoardAndUsername(boards[1], pageable, users[1].getUsername());
+        List<Article> searchedArticles = articleRepository.searchArticlesByBoardAndUsername(boards[1], pageable, users[1].getUsername()).getContent();
 
         //then
         List<Long> searchedArticlesIds = searchedArticles.stream().map(Article::getId).collect(Collectors.toList());
@@ -97,7 +99,7 @@ class ArticlesSearchTest {
     void findArticlesWithFilesAndUserByBoardAndKeywordForArticleTitle() {
         //when
         Pageable pageable = PageRequest.of(0, 15, Sort.by("createTime").descending());
-        List<Article> searchedArticles = articleRepository.searchArticlesByBoardAndTitle(boards[2], pageable, "키워드");
+        List<Article> searchedArticles = articleRepository.searchArticlesByBoardAndTitle(boards[2], pageable, "키워드").getContent();
 
         //then
         List<Long> searchedArticlesIds = searchedArticles.stream().map(Article::getId).collect(Collectors.toList());
@@ -109,7 +111,7 @@ class ArticlesSearchTest {
     void findArticlesWithFilesAndUserByBoardAndKeywordForArticleContent() {
         //when
         Pageable pageable = PageRequest.of(0, 15, Sort.by("createTime").descending());
-        List<Article> searchedArticles = articleRepository.searchArticlesByBoardAndContent(boards[0], pageable, "키워드");
+        List<Article> searchedArticles = articleRepository.searchArticlesByBoardAndContent(boards[0], pageable, "키워드").getContent();
 
         //then
         List<Long> searchedArticlesIds = searchedArticles.stream().map(Article::getId).collect(Collectors.toList());
@@ -121,7 +123,7 @@ class ArticlesSearchTest {
     void findArticlesWithFilesAndUserByBoardAndKeywordForArticleTitleAndArticleContent() {
         //when
         Pageable pageable = PageRequest.of(0, 15, Sort.by("createTime").descending());
-        List<Article> searchedArticles = articleRepository.searchArticlesByBoardAndTitleAndContent(boards[1], pageable, "키워드");
+        List<Article> searchedArticles = articleRepository.searchArticlesByBoardAndTitleAndContent(boards[1], pageable, "키워드").getContent();
 
         //then
         List<Long> searchedArticlesIds = searchedArticles.stream().map(Article::getId).collect(Collectors.toList());
@@ -135,7 +137,7 @@ class ArticlesSearchTest {
     void findArticlesWithFilesAndUserByWriterStudentId() {
         //when
         Pageable pageable = PageRequest.of(0, 15, Sort.by("createTime").descending());
-        List<Article> searchedArticles = articleRepository.searchArticlesByStudentId(pageable, users[0].getStudentId());
+        List<Article> searchedArticles = articleRepository.searchArticlesByStudentId(pageable, users[0].getStudentId()).getContent();
 
         //then
         List<Long> searchedArticlesIds = searchedArticles.stream().map(Article::getId).collect(Collectors.toList());
@@ -152,7 +154,7 @@ class ArticlesSearchTest {
     void findArticlesWithFilesAndUserByWriterUsername() {
         //when
         Pageable pageable = PageRequest.of(0, 15, Sort.by("createTime").descending());
-        List<Article> searchedArticles = articleRepository.searchArticlesByUsername(pageable, users[1].getUsername());
+        List<Article> searchedArticles = articleRepository.searchArticlesByUsername(pageable, users[1].getUsername()).getContent();
 
         //then
         List<Long> searchedArticlesIds = searchedArticles.stream().map(Article::getId).collect(Collectors.toList());
@@ -169,7 +171,7 @@ class ArticlesSearchTest {
     void findArticlesWithFilesAndUserByKeywordForArticleTitle() {
         //when
         Pageable pageable = PageRequest.of(0, 15, Sort.by("createTime").descending());
-        List<Article> searchedArticles = articleRepository.searchArticlesByTitle(pageable, "키워드");
+        List<Article> searchedArticles = articleRepository.searchArticlesByTitle(pageable, "키워드").getContent();
 
         //then
         List<Long> searchedArticlesIds = searchedArticles.stream().map(Article::getId).collect(Collectors.toList());
@@ -186,7 +188,7 @@ class ArticlesSearchTest {
     void findArticlesWithFilesAndUserByKeywordForArticleContent() {
         //when
         Pageable pageable = PageRequest.of(0, 15, Sort.by("createTime").descending());
-        List<Article> searchedArticles = articleRepository.searchArticlesByContent(pageable, "키워드");
+        List<Article> searchedArticles = articleRepository.searchArticlesByContent(pageable, "키워드").getContent();
 
         //then
         List<Long> searchedArticlesIds = searchedArticles.stream().map(Article::getId).collect(Collectors.toList());
@@ -203,7 +205,7 @@ class ArticlesSearchTest {
     void findArticlesWithFilesAndUserByKeywordForArticleTitleAndArticleContent() {
         //when
         Pageable pageable = PageRequest.of(0, 15, Sort.by("createTime").descending());
-        List<Article> searchedArticles = articleRepository.searchArticlesByTitleAndContent(pageable, "키워드");
+        List<Article> searchedArticles = articleRepository.searchArticlesByTitleAndContent(pageable, "키워드").getContent();
 
         //then
         List<Long> searchedArticlesIds = searchedArticles.stream().map(Article::getId).collect(Collectors.toList());

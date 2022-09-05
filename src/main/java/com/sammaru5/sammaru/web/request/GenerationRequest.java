@@ -6,6 +6,6 @@ import javax.validation.constraints.NotNull;
 @Getter
 public class GenerationRequest {
 
-//    @NotNull(message = "기수를 입력해주세요")
+    @NotNull(message = "기수를 입력해주세요")
     private Integer generation;
 }

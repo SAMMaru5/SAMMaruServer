@@ -13,6 +13,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class User {
 
     @Id
@@ -29,18 +30,6 @@ public class User {
 
     @Enumerated(value = EnumType.STRING)
     private UserAuthority role;
-
-    @Builder
-    public User(String studentId, String username, String password, String email, Long point, Integer generation, Integer grade, UserAuthority role) {
-        this.studentId = studentId;
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.point = point;
-        this.generation = generation;
-        this.grade = grade;
-        this.role = role;
-    }
 
     public void encodePassword(PasswordEncoder passwordEncoder) {
         this.password = passwordEncoder.encode(this.password);

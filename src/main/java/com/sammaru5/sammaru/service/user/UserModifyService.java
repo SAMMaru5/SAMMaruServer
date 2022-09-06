@@ -34,7 +34,8 @@ public class UserModifyService {
     }
 
     public UserDTO modifyUserRole(Long userId, UserAuthority role) {
-        User user = userRepository.findById(userId).get();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, userId.toString()));
         user.setRole(role);
         return new UserDTO(userRepository.save(user));
     }
@@ -49,7 +50,8 @@ public class UserModifyService {
     }
 
     public UserDTO modifyUserGeneration(Long userId, Integer generation) {
-        User user = userRepository.findById(userId).get();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, userId.toString()));
         user.setGeneration(generation);
         return new UserDTO(user);
     }

@@ -23,7 +23,12 @@ public class UserSearchService {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, userId.toString())));
     }
 
-    public List<UserDTO> findAllUsers(){
+    public UserDTO findUserByStudentId(String studentId) {
+        return new UserDTO(userRepository.findByStudentId(studentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, studentId.toString())));
+    }
+
+    public List<UserDTO> findAllUsers() {
         return userRepository.findAll().stream().map(UserDTO::new).collect(Collectors.toList());
     }
 

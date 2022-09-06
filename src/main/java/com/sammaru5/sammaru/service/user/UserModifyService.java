@@ -21,13 +21,16 @@ public class UserModifyService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserDTO modifyUser(User user, UserRequest userRequest) {
+    public UserDTO modifyUser(String studentId, UserRequest userRequest) {
+        User user = userRepository.findByStudentId(studentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, studentId));
+
         if (!user.getEmail().equals(userRequest.getEmail()) && userRepository.existsByEmail(userRequest.getEmail())) {
             throw new CustomException(ErrorCode.ALREADY_EXIST_EMAIL, userRequest.getEmail());
         }
 
         user.modifyUserInfo(userRequest, passwordEncoder);
-        return new UserDTO(userRepository.save(user));
+        return new UserDTO(user);
     }
 
     public UserDTO modifyUserRole(Long userId, UserAuthority role) {
@@ -43,5 +46,11 @@ public class UserModifyService {
         }
         user.setPoint(user.getPoint() + pointRequest.getAddPoint());
         return new UserDTO(userRepository.save(user));
+    }
+
+    public UserDTO modifyUserGeneration(Long userId, Integer generation) {
+        User user = userRepository.findById(userId).get();
+        user.setGeneration(generation);
+        return new UserDTO(user);
     }
 }

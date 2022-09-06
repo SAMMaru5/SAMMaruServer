@@ -5,6 +5,7 @@ import com.sammaru5.sammaru.domain.User;
 import com.sammaru5.sammaru.exception.CustomException;
 import com.sammaru5.sammaru.exception.ErrorCode;
 import com.sammaru5.sammaru.repository.ArticleRepository;
+import com.sammaru5.sammaru.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
@@ -16,9 +17,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class ArticleRemoveService {
     private final ArticleRepository articleRepository;
     private final ArticleSearchService articleSearchService;
+    private final UserRepository userRepository;
 
     @CacheEvict(keyGenerator = "articleCacheKeyGenerator", value = "article", cacheManager = "cacheManager")
-    public boolean removeArticle(Long articleId, User findUser, Long boardId) {
+    public boolean removeArticle(Long articleId, String studentId, Long boardId) {
+        User findUser = userRepository.findByStudentId(studentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, studentId));
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ARTICLE_NOT_FOUND, articleId.toString()));
 

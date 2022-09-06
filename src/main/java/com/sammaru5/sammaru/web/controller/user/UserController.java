@@ -7,16 +7,15 @@ import com.sammaru5.sammaru.service.user.UserSearchService;
 import com.sammaru5.sammaru.util.AuthUser;
 import com.sammaru5.sammaru.util.OverAdminRole;
 import com.sammaru5.sammaru.util.OverMemberRole;
-import com.sammaru5.sammaru.util.OverTempRole;
 import com.sammaru5.sammaru.web.apiresult.ApiResult;
 import com.sammaru5.sammaru.web.dto.UserDTO;
+import com.sammaru5.sammaru.web.request.GenerationRequest;
 import com.sammaru5.sammaru.web.request.PointRequest;
 import com.sammaru5.sammaru.web.request.RoleRequest;
 import com.sammaru5.sammaru.web.request.UserRequest;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -35,6 +34,13 @@ public class UserController {
     @PatchMapping("/api/users/{userId}/role")
     public ApiResult<UserDTO> userRoleModify(@Valid @RequestBody RoleRequest roleRequest, @PathVariable Long userId) {
         return ApiResult.OK(userModifyService.modifyUserRole(userId, roleRequest.getRole()));
+    }
+
+    @ApiOperation(value = "유저 기수 설정", notes = "userId에 해당하는 유저 기수 변경")
+    @PatchMapping("/api/users/{userId}/generation")
+    @OverAdminRole
+    public ApiResult<UserDTO> userGenerationModify(@Valid @RequestBody GenerationRequest generationRequest, @PathVariable Long userId) {
+        return ApiResult.OK(userModifyService.modifyUserGeneration(userId, generationRequest.getGeneration()));
     }
 
     @ApiOperation(value = "유저 포인트 추가", notes = "userId에 해당하는 유저 포인트 부여 (음수 가능)")
@@ -75,7 +81,7 @@ public class UserController {
     @OverMemberRole
     @PatchMapping("/api/user/info")
     public ApiResult<UserDTO> userModify(@AuthUser User user, @Valid @RequestBody UserRequest userRequest) {
-        return ApiResult.OK(userModifyService.modifyUser(user, userRequest));
+        return ApiResult.OK(userModifyService.modifyUser(user.getStudentId(), userRequest));
     }
 
     @GetMapping("/api/users/gen/{generationNum}")

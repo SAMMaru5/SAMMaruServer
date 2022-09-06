@@ -8,6 +8,7 @@ import com.sammaru5.sammaru.exception.CustomException;
 import com.sammaru5.sammaru.exception.ErrorCode;
 import com.sammaru5.sammaru.repository.ArticleRepository;
 import com.sammaru5.sammaru.repository.BoardRepository;
+import com.sammaru5.sammaru.repository.UserRepository;
 import com.sammaru5.sammaru.web.request.ArticleRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,18 +22,21 @@ import org.springframework.web.multipart.MultipartFile;
 public class ArticleRegisterService {
     private final ArticleRepository articleRepository;
     private final BoardRepository boardRepository;
+    private final UserRepository userRepository;
 
     @Value("${app.fileDir}")
     private String fileDir;
 
-    public Long addArticle(User findUser, Long boardId, ArticleRequest articleRequest, MultipartFile[] multipartFiles) {
+    public Long addArticle(String studentId, Long boardId, ArticleRequest articleRequest, MultipartFile[] multipartFiles) {
+        User findUser = userRepository.findByStudentId(studentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, studentId));
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND, boardId.toString()));
 
         Article article = Article.createArticle(articleRequest, board, findUser);
 
-        if(multipartFiles != null){
-            for(MultipartFile multipartFile : multipartFiles) {
+        if (multipartFiles != null) {
+            for (MultipartFile multipartFile : multipartFiles) {
                 article.addFile(File.createFile(multipartFile, fileDir, boardId));
             }
         }

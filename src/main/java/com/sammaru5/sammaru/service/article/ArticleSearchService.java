@@ -10,6 +10,7 @@ import com.sammaru5.sammaru.repository.BoardRepository;
 import com.sammaru5.sammaru.web.dto.ArticleDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -38,22 +39,17 @@ public class ArticleSearchService {
     }
 
     //boardId에 해당하는 게시판의 게시글들을 paging
-    public List<ArticleDTO> findArticlesByBoardIdAndPaging(Long boardId, Integer pageNum) {
+    public Page<ArticleDTO> findArticlesByBoardIdAndPaging(Long boardId, Integer pageNum, Integer pageSize) {
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND));
-        Pageable pageable = PageRequest.of(pageNum, 15, Sort.by("createTime").descending());
-        List<Article> articles = articleRepository.findArticlesWithFilesAndUserByBoard(board, pageable);
-
-        return articles.stream().map(ArticleDTO::toDto).collect(Collectors.toList());
+        Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.by("createTime").descending());
+        Page<Article> articles = articleRepository.findArticlesWithFilesAndUserByBoard(board, pageable);
+        return articles.map(ArticleDTO::toDto);
     }
 
     //boardId에 해당하는 게시판에 달린 모든 게시글들 조회
     public List<ArticleDTO> findArticlesByBoardId(Long boardId) {
         List<Article> findArticles = articleRepository.findArticlesByBoardId(boardId);
-        if (findArticles.isEmpty()) {
-            throw new CustomException(ErrorCode.BOARD_IS_EMPTY, boardId.toString());
-        }
-
         return findArticles.stream().map(ArticleDTO::toDto).collect(Collectors.toList());
     }
 
@@ -63,19 +59,15 @@ public class ArticleSearchService {
                 .orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND));
         Pageable pageable = PageRequest.of(0, 7, Sort.by("createTime").descending());
         List<Article> findArticles = articleRepository.findByBoard(board, pageable);
-        if (findArticles.isEmpty()) {
-            throw new CustomException(ErrorCode.BOARD_IS_EMPTY, board.getId().toString());
-        }
-
         return findArticles.stream().map(ArticleDTO::toDto).collect(Collectors.toList());
     }
 
-    public List<ArticleDTO> findArticlesByBoardIdAndKeywordAndPaging(Long boardId, Integer pageNum, SearchSubject searchSubject, String keyword) {
+    public Page<ArticleDTO> findArticlesByBoardIdAndKeywordAndPaging(Long boardId, Integer pageNum, Integer pageSize, SearchSubject searchSubject, String keyword) {
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND));
-        Pageable pageable = PageRequest.of(pageNum, 15, Sort.by("createTime").descending());
+        Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.by("createTime").descending());
 
-        List<Article> articles;
+        Page<Article> articles;
         switch (searchSubject) {
             case WRITER_STUDENT_ID:
                 articles = articleRepository.searchArticlesByBoardAndStudentId(board, pageable, keyword);
@@ -95,13 +87,13 @@ public class ArticleSearchService {
             default:
                 throw new CustomException(ErrorCode.WRONG_SEARCH_SUBJECT, searchSubject.name());
         }
-        return articles.stream().map(ArticleDTO::toDto).collect(Collectors.toList());
+        return articles.map(ArticleDTO::toDto);
     }
 
-    public List<ArticleDTO> findArticlesByKeywordAndPaging(Integer pageNum, SearchSubject searchSubject, String keyword) {
-        Pageable pageable = PageRequest.of(pageNum, 15, Sort.by("createTime").descending());
+    public Page<ArticleDTO> findArticlesByKeywordAndPaging(Integer pageNum, Integer pageSize, SearchSubject searchSubject, String keyword) {
+        Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.by("createTime").descending());
 
-        List<Article> articles;
+        Page<Article> articles;
         switch (searchSubject) {
             case WRITER_STUDENT_ID:
                 articles = articleRepository.searchArticlesByStudentId(pageable, keyword);
@@ -121,6 +113,6 @@ public class ArticleSearchService {
             default:
                 throw new CustomException(ErrorCode.WRONG_SEARCH_SUBJECT, searchSubject.name());
         }
-        return articles.stream().map(ArticleDTO::toDto).collect(Collectors.toList());
+        return articles.map(ArticleDTO::toDto);
     }
 }

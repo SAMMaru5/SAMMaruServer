@@ -38,13 +38,13 @@ public class CommentController {
     @ApiOperation(value = "댓글 작성", notes = "해당 게시글에 댓글 작성", response = CommentDTO.class)
     @OverMemberRole
     public ApiResult<CommentDTO> commentAdd(@PathVariable Long boardId, @PathVariable Long articleId, @AuthUser User user, @Valid @RequestBody CommentRequest commentRequest) {
-        return ApiResult.OK(commentRegisterService.addComment(user, commentRequest, articleId));
+        return ApiResult.OK(commentRegisterService.addComment(user.getStudentId(), commentRequest, articleId));
     }
 
     @DeleteMapping("/api/boards/{boardId}/articles/{articleId}/comments/{commentId}")
     @ApiOperation(value = "댓글 삭제", notes = "해당 댓글 삭제", response = boolean.class)
     @OverMemberRole
     public ApiResult<Boolean> commentRemove(@PathVariable Long boardId, @PathVariable Long articleId, @AuthUser User user, @PathVariable Long commentId) {
-        return ApiResult.OK(commentRemoveService.removeComment(user,commentId));
+        return ApiResult.OK(commentRemoveService.removeComment(user.getStudentId(), commentId));
     }
 }

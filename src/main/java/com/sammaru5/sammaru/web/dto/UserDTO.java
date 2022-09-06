@@ -17,8 +17,9 @@ public class UserDTO {
     private UserAuthority role;
     private Integer generation;
     private String nickname;
+    private Integer grade;
 
-    public UserDTO(User user){
+    public UserDTO(User user) {
         this.userId = user.getId();
         this.studentId = user.getStudentId();
         this.username = user.getUsername();
@@ -26,6 +27,7 @@ public class UserDTO {
         this.point = user.getPoint();
         this.role = user.getRole();
         this.generation = user.getGeneration();
-        this.nickname = studentId.substring(2,4) + " " + user.getUsername();
+        this.nickname = studentId.substring(2, 4) + " " + user.getUsername();
+        this.grade = user.getGrade();
     }
 }

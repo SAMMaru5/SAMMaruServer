@@ -20,9 +20,9 @@ public class ArticleRemoveService {
     private final UserRepository userRepository;
 
     @CacheEvict(keyGenerator = "articleCacheKeyGenerator", value = "article", cacheManager = "cacheManager")
-    public boolean removeArticle(Long articleId, String studentId, Long boardId) {
-        User findUser = userRepository.findByStudentId(studentId)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, studentId));
+    public boolean removeArticle(Long articleId, Long userId, Long boardId) {
+        User findUser = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, userId.toString()));
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ARTICLE_NOT_FOUND, articleId.toString()));
 

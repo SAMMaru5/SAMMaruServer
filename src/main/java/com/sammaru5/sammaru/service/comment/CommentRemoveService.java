@@ -23,9 +23,9 @@ public class CommentRemoveService {
     private final UserRepository userRepository;
 
     @Transactional
-    public boolean removeComment(String studentId, Long commentId) throws CustomException {
-        User user = userRepository.findByStudentId(studentId)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, studentId));
+    public boolean removeComment(Long userId, Long commentId) throws CustomException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, userId.toString()));
         Optional<Comment> findComment = commentRepository.findById(commentId);
         if(findComment.isPresent()) {
             if (findComment.get().getUser() == user) {

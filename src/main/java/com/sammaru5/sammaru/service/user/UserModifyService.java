@@ -21,9 +21,9 @@ public class UserModifyService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserDTO modifyUser(String studentId, UserRequest userRequest) {
-        User user = userRepository.findByStudentId(studentId)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, studentId));
+    public UserDTO modifyUser(Long userId, UserRequest userRequest) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, userId.toString()));
 
         if (!user.getEmail().equals(userRequest.getEmail()) && userRepository.existsByEmail(userRequest.getEmail())) {
             throw new CustomException(ErrorCode.ALREADY_EXIST_EMAIL, userRequest.getEmail());

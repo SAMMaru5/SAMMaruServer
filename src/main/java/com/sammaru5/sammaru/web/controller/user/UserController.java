@@ -1,5 +1,6 @@
 package com.sammaru5.sammaru.web.controller.user;
 
+import com.sammaru5.sammaru.config.security.SecurityUtil;
 import com.sammaru5.sammaru.domain.User;
 import com.sammaru5.sammaru.domain.UserAuthority;
 import com.sammaru5.sammaru.service.user.UserModifyService;
@@ -52,8 +53,8 @@ public class UserController {
 
     @ApiOperation(value = "자기 자신 회원 정보", notes = "자기 자신의 회원 정보 가져오기, 토큰만 보내면 됩니다.")
     @GetMapping("/no-permit/api/user/info")
-    public ApiResult<UserDTO> loginUserSelfDetail(@AuthUser User user) {
-        return ApiResult.OK(userSearchService.findOne(user.getId()));
+    public ApiResult<UserDTO> loginUserSelfDetail() {
+        return ApiResult.OK(userSearchService.findOne(SecurityUtil.getCurrentUserId()));
     }
 
     @ApiOperation(value = "특정 회원 조회", notes = "userId에 대한 특정 회원 정보를 반환합니다.")
@@ -80,8 +81,8 @@ public class UserController {
     @ApiOperation(value = "회원 정보 수정", notes = "회원 정보 수정하기")
     @OverMemberRole
     @PatchMapping("/api/user/info")
-    public ApiResult<UserDTO> userModify(@AuthUser User user, @Valid @RequestBody UserRequest userRequest) {
-        return ApiResult.OK(userModifyService.modifyUser(user.getStudentId(), userRequest));
+    public ApiResult<UserDTO> userModify(@Valid @RequestBody UserRequest userRequest) {
+        return ApiResult.OK(userModifyService.modifyUser(SecurityUtil.getCurrentUserId(), userRequest));
     }
 
     @GetMapping("/api/users/gen/{generationNum}")

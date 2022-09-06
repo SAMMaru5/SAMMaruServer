@@ -1,5 +1,6 @@
 package com.sammaru5.sammaru.web.controller.comment;
 
+import com.sammaru5.sammaru.config.security.SecurityUtil;
 import com.sammaru5.sammaru.domain.User;
 import com.sammaru5.sammaru.util.AuthUser;
 import com.sammaru5.sammaru.util.OverMemberRole;
@@ -37,14 +38,14 @@ public class CommentController {
     @PostMapping("/api/boards/{boardId}/articles/{articleId}/comments")
     @ApiOperation(value = "댓글 작성", notes = "해당 게시글에 댓글 작성", response = CommentDTO.class)
     @OverMemberRole
-    public ApiResult<CommentDTO> commentAdd(@PathVariable Long boardId, @PathVariable Long articleId, @AuthUser User user, @Valid @RequestBody CommentRequest commentRequest) {
-        return ApiResult.OK(commentRegisterService.addComment(user.getStudentId(), commentRequest, articleId));
+    public ApiResult<CommentDTO> commentAdd(@PathVariable Long boardId, @PathVariable Long articleId, @Valid @RequestBody CommentRequest commentRequest) {
+        return ApiResult.OK(commentRegisterService.addComment(SecurityUtil.getCurrentUserId(), commentRequest, articleId));
     }
 
     @DeleteMapping("/api/boards/{boardId}/articles/{articleId}/comments/{commentId}")
     @ApiOperation(value = "댓글 삭제", notes = "해당 댓글 삭제", response = boolean.class)
     @OverMemberRole
-    public ApiResult<Boolean> commentRemove(@PathVariable Long boardId, @PathVariable Long articleId, @AuthUser User user, @PathVariable Long commentId) {
-        return ApiResult.OK(commentRemoveService.removeComment(user.getStudentId(), commentId));
+    public ApiResult<Boolean> commentRemove(@PathVariable Long boardId, @PathVariable Long articleId, @PathVariable Long commentId) {
+        return ApiResult.OK(commentRemoveService.removeComment(SecurityUtil.getCurrentUserId(), commentId));
     }
 }

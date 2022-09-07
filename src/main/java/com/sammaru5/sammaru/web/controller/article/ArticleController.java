@@ -1,16 +1,15 @@
 package com.sammaru5.sammaru.web.controller.article;
 
-import com.sammaru5.sammaru.util.OverMemberRole;
-import com.sammaru5.sammaru.web.apiresult.ApiResult;
-import com.sammaru5.sammaru.domain.User;
-import com.sammaru5.sammaru.web.dto.ArticleDTO;
-import com.sammaru5.sammaru.web.request.ArticleRequest;
-import com.sammaru5.sammaru.util.AuthUser;
+import com.sammaru5.sammaru.config.security.SecurityUtil;
 import com.sammaru5.sammaru.service.article.ArticleModifyService;
 import com.sammaru5.sammaru.service.article.ArticleRegisterService;
 import com.sammaru5.sammaru.service.article.ArticleRemoveService;
 import com.sammaru5.sammaru.service.article.ArticleSearchService;
 import com.sammaru5.sammaru.service.file.FileStatusService;
+import com.sammaru5.sammaru.util.OverMemberRole;
+import com.sammaru5.sammaru.web.apiresult.ApiResult;
+import com.sammaru5.sammaru.web.dto.ArticleDTO;
+import com.sammaru5.sammaru.web.request.ArticleRequest;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +22,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.IOException;
 
-@RestController @RequiredArgsConstructor
+@RestController
+@RequiredArgsConstructor
 @Api(tags = {"게시글 API"})
 public class ArticleController {
 
@@ -33,11 +33,11 @@ public class ArticleController {
     private final ArticleModifyService articleModifyService;
     private final FileStatusService fileStatusService;
 
-    @PostMapping(value="/api/boards/{boardId}/articles", consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(value = "/api/boards/{boardId}/articles", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @ApiOperation(value = "게시글 생성", notes = "게시판에 게시글 추가")
     @OverMemberRole
-    public ApiResult<Long> articleAdd(@AuthUser User user, @PathVariable Long boardId, @RequestPart(value="article") @Valid ArticleRequest articleRequest, @RequestPart(value="file", required = false) MultipartFile[] multipartFiles) {
-        return ApiResult.OK(articleRegisterService.addArticle(user.getStudentId(), boardId, articleRequest, multipartFiles));
+    public ApiResult<Long> articleAdd(@PathVariable Long boardId, @RequestPart(value = "article") @Valid ArticleRequest articleRequest, @RequestPart(value = "file", required = false) MultipartFile[] multipartFiles) {
+        return ApiResult.OK(articleRegisterService.addArticle(SecurityUtil.getCurrentUserId(), boardId, articleRequest, multipartFiles));
     }
 
     @GetMapping("/api/boards/{boardId}/articles/{articleId}")
@@ -50,15 +50,15 @@ public class ArticleController {
     @DeleteMapping("/api/boards/{boardId}/articles/{articleId}")
     @ApiOperation(value = "게시글 삭제", notes = "게시글 삭제")
     @OverMemberRole
-    public ApiResult<Boolean> articleRemove(@AuthUser User user, @PathVariable Long boardId, @PathVariable Long articleId) {
-        return ApiResult.OK(articleRemoveService.removeArticle(articleId, user.getStudentId(), boardId));
+    public ApiResult<Boolean> articleRemove(@PathVariable Long boardId, @PathVariable Long articleId) {
+        return ApiResult.OK(articleRemoveService.removeArticle(articleId, SecurityUtil.getCurrentUserId(), boardId));
     }
 
-    @PatchMapping(value = "/api/boards/{boardId}/articles/{articleId}", consumes = {MediaType.APPLICATION_JSON_VALUE,MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PatchMapping(value = "/api/boards/{boardId}/articles/{articleId}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @ApiOperation(value = "게시글 수정", notes = "작성자가 게시글 수정")
     @OverMemberRole
-    public ApiResult<Long> articleModify(@AuthUser User user, @PathVariable Long boardId, @PathVariable Long articleId, @RequestPart(value="article", required = false) @Valid ArticleRequest articleRequest, @RequestPart(value="file", required = false) MultipartFile[] multipartFiles) {
-        return ApiResult.OK(articleModifyService.modifyArticle(articleId, user.getStudentId(), boardId, articleRequest, multipartFiles));
+    public ApiResult<Long> articleModify(@PathVariable Long boardId, @PathVariable Long articleId, @RequestPart(value = "article", required = false) @Valid ArticleRequest articleRequest, @RequestPart(value = "file", required = false) MultipartFile[] multipartFiles) {
+        return ApiResult.OK(articleModifyService.modifyArticle(articleId, SecurityUtil.getCurrentUserId(), boardId, articleRequest, multipartFiles));
     }
 
     //파일 다운로드

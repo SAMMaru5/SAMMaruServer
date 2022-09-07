@@ -27,9 +27,9 @@ public class ArticleRegisterService {
     @Value("${app.fileDir}")
     private String fileDir;
 
-    public Long addArticle(String studentId, Long boardId, ArticleRequest articleRequest, MultipartFile[] multipartFiles) {
-        User findUser = userRepository.findByStudentId(studentId)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, studentId));
+    public Long addArticle(Long userId, Long boardId, ArticleRequest articleRequest, MultipartFile[] multipartFiles) {
+        User findUser = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, userId.toString()));
         Board board = boardRepository.findById(boardId)
                 .orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND, boardId.toString()));
 

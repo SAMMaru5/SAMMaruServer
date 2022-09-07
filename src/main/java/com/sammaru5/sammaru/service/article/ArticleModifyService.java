@@ -26,9 +26,9 @@ public class ArticleModifyService {
     private String fileDir;
 
     @CacheEvict(keyGenerator = "articleCacheKeyGenerator", value = "article", cacheManager = "cacheManager")
-    public Long modifyArticle(Long articleId, String studentId, Long boardId, ArticleRequest articleRequest, MultipartFile[] multipartFiles) {
-        User findUser = userRepository.findByStudentId(studentId)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, studentId));
+    public Long modifyArticle(Long articleId, Long userId, Long boardId, ArticleRequest articleRequest, MultipartFile[] multipartFiles) {
+        User findUser = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, userId.toString()));
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ARTICLE_NOT_FOUND, articleId.toString()));
 

@@ -26,9 +26,9 @@ public class CommentRegisterService {
     private final UserRepository userRepository;
 
     @Transactional
-    public CommentDTO addComment(String studentId, CommentRequest commentRequest, Long articleId) {
-        User user = userRepository.findByStudentId(studentId)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, studentId));
+    public CommentDTO addComment(Long userId, CommentRequest commentRequest, Long articleId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, userId.toString()));
         Article article = articleRepository.findById(articleId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ARTICLE_NOT_FOUND, articleId.toString()));
 

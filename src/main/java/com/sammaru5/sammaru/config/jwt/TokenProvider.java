@@ -101,7 +101,7 @@ public class TokenProvider {
         // 3. UserDetails 객체를 만들어서 Authentication을 반환합니다.
         UserDetail principal = new UserDetail(
                 User.builder()
-                        .studentId(claims.getSubject())
+                        .id(Long.parseLong(claims.getSubject()))
                         .role(userRole)
                         .build());
         return new UsernamePasswordAuthenticationToken(principal, accessToken, authorities);

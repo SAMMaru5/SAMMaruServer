@@ -30,6 +30,8 @@ public class Article extends BaseTime {
     private String content;
 
     private Integer viewCnt;
+
+    @Transient
     private Integer likeCnt;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -72,6 +74,10 @@ public class Article extends BaseTime {
         files.clear();
     }
 
+    public void setLikeCnt(Integer likeCnt) {
+        this.likeCnt = likeCnt;
+    }
+
     //== 비즈니스 메서드 ==//
     public void plusViewCnt() {
         this.viewCnt++;
@@ -79,16 +85,9 @@ public class Article extends BaseTime {
     public void minusViewCnt() {
         this.viewCnt--;
     }
-    public void plusLikeCnt() {
-        this.likeCnt++;
-    }
-    public void minusLikeCnt() {
-        this.likeCnt--;
-    }
 
     public void modifyArticle(ArticleRequest articleRequest) {
         this.title = articleRequest.getTitle();
         this.content = articleRequest.getContent();
     }
-
 }

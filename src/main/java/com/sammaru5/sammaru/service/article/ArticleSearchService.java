@@ -5,6 +5,7 @@ import com.sammaru5.sammaru.domain.Board;
 import com.sammaru5.sammaru.domain.SearchSubject;
 import com.sammaru5.sammaru.exception.CustomException;
 import com.sammaru5.sammaru.exception.ErrorCode;
+import com.sammaru5.sammaru.repository.ArticleLikeRepository;
 import com.sammaru5.sammaru.repository.ArticleRepository;
 import com.sammaru5.sammaru.repository.BoardRepository;
 import com.sammaru5.sammaru.web.dto.ArticleDTO;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 public class ArticleSearchService {
     private final BoardRepository boardRepository;
     private final ArticleRepository articleRepository;
+    private final ArticleLikeRepository articleLikeRepository;
 
     @Transactional
     @Cacheable(keyGenerator = "articleCacheKeyGenerator", value = "article", cacheManager = "cacheManager")
@@ -34,6 +36,8 @@ public class ArticleSearchService {
                 .orElseThrow(() -> new CustomException(ErrorCode.ARTICLE_NOT_FOUND, articleId.toString()));
 
         article.plusViewCnt(); //조회수 증가
+
+        article.setLikeCnt(articleLikeRepository.countAllByArticleId(articleId));
 
         return ArticleDTO.toDto(article);
     }

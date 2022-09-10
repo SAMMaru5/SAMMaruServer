@@ -1,0 +1,47 @@
+devtools:
+  livereload:
+    enabled: true
+
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant-path-matcher
+
+  cache:
+    type: redis
+  redis:
+    host: 172.17.0.1
+    port: 6379
+
+  output:
+    ansi:
+      enabled: always
+
+  config:
+    import:
+      - optional:classpath:/jwt.yml
+      - optional:classpath:/mail.yml
+
+  profiles:
+    active: test
+    default: test
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # 로컬 테스트용 DB
+    url: jdbc:mysql://localhost:3306/sammaru?serverTimezone=UTC&characterEncoding=UTF-8
+    username: sammaru
+    password: sammaru
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+    database: mysql
+
+sammaru:
+  cookie:
+    domain: localhost

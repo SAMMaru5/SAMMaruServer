@@ -35,7 +35,7 @@ public class ArticleDTO {
         this.author = article.getUser().getUsername();
         this.viewCnt = article.getViewCnt();
         this.likeCnt = article.getViewCnt();
-        if(!article.getFiles().isEmpty()) {
+        if(article.getFiles() != null && !article.getFiles().isEmpty()) {
             this.files = article.getFiles().stream().map(FileDTO::new).collect(Collectors.toList());
         }
     }

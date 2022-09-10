@@ -34,7 +34,7 @@ public class ArticleDTO {
         this.createDt = article.getCreateTime();
         this.author = article.getUser().getUsername();
         this.viewCnt = article.getViewCnt();
-        this.likeCnt = article.getViewCnt();
+        this.likeCnt = article.getLikeCnt();
         if(article.getFiles() != null && !article.getFiles().isEmpty()) {
             this.files = article.getFiles().stream().map(FileDTO::new).collect(Collectors.toList());
         }

@@ -45,7 +45,7 @@ class ArticleLikeServiceTest {
     }
 
     Article getArticle(Long articleId) {
-        return new Article(articleId, "title", "content", 0, 0, null, null, null);
+        return new Article(articleId, "title", "content", 0, 0, null, null, null, null);
     }
 
     @Test

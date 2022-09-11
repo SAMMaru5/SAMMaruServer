@@ -1,7 +1,6 @@
 package com.sammaru5.sammaru.repository;
 
 import com.sammaru5.sammaru.domain.*;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @RequiredArgsConstructor
@@ -94,11 +93,11 @@ public class ArticleLikeRepositoryTest {
             articles.add(getArticle(users.get(0)));
         }
 
-        for(int i=0; i<2; i++) {
+        for (int i = 0; i < 2; i++) {
             articleLikeRepository.save(getArticleLike(users.get(i), articles.get(0)));
         }
         List<ArticleLike> articleLikesOfArticle2 = new ArrayList<>();
-        for(int i=0; i<2; i++) {
+        for (int i = 0; i < 2; i++) {
             articleLikesOfArticle2.add(articleLikeRepository.save(getArticleLike(users.get(i), articles.get(1))));
         }
 
@@ -117,7 +116,7 @@ public class ArticleLikeRepositoryTest {
 
     Article getArticle(User user) {
         return articleRepository.save(
-                new Article(null, "title", "content", 0, 0, getBoard(), user, null));
+                new Article(null, "title", "content", 0, 0, null, getBoard(), user, null));
     }
 
     ArticleLike getArticleLike(User user, Article article) {

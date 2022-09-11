@@ -62,7 +62,7 @@ class ArticlesSearchTest {
         String[] contents = new String[]{"어쩌구 키워드", "키워드", "아무거나", "아무거나"};
         for (int i = 0; i < boards.length; i++) {
             for (int j = 0; j < 4; j++) {
-                articles[i][j] = new Article(null, titles[j] + i * j, i * j + contents[j], 0, 0, boards[i], users[j % 2], null);
+                articles[i][j] = new Article(null, titles[j] + i * j, i * j + contents[j], 0, 0, null, boards[i], users[j % 2], null);
                 articles[i][j] = articleRepository.save(articles[i][j]);
             }
         }

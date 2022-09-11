@@ -40,8 +40,8 @@ class ArticleRemoveServiceTest {
             users.add(userRepository.save(new User(null, "studentId" + i, "username", "password", "email", 0L, 0, 0, UserAuthority.ROLE_MEMBER)));
         }
         Board board = boardRepository.save(new Board(null, "name", "description"));
-        Article article1 = articleRepository.save(new Article(null, "title1", "content", 0, 0, board, users.get(0), null));
-        Article article2 = articleRepository.save(new Article(null, "title2", "content", 0, 0, board, users.get(0), null));
+        Article article1 = articleRepository.save(new Article(null, "title1", "content", 0, 0, null, board, users.get(0), null));
+        Article article2 = articleRepository.save(new Article(null, "title2", "content", 0, 0, null, board, users.get(0), null));
 
         articleLikeRepository.save(new ArticleLike(null, users.get(0), article1));
         articleLikeRepository.save(new ArticleLike(null, users.get(1), article1));

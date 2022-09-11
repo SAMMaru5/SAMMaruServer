@@ -6,12 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +17,8 @@ import java.util.List;
 @AllArgsConstructor
 public class Article extends BaseTime {
 
-    @Id @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "article_id")
     private Long id;
 
@@ -34,6 +31,9 @@ public class Article extends BaseTime {
     @Transient
     private Integer likeCnt;
 
+    @Transient
+    private Boolean isLiked;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
     private Board board;
@@ -43,7 +43,7 @@ public class Article extends BaseTime {
     private User user;
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
-    @BatchSize(size=100)
+    @BatchSize(size = 100)
     private List<File> files = new ArrayList<>();
 
     public static Article createArticle(ArticleRequest articleRequest, Board board, User user) {
@@ -78,10 +78,15 @@ public class Article extends BaseTime {
         this.likeCnt = likeCnt;
     }
 
+    public void setIsLiked(Boolean isLiked) {
+        this.isLiked = isLiked;
+    }
+
     //== 비즈니스 메서드 ==//
     public void plusViewCnt() {
         this.viewCnt++;
     }
+
     public void minusViewCnt() {
         this.viewCnt--;
     }

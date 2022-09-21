@@ -50,7 +50,7 @@ public class TokenProvider {
                 .collect(Collectors.joining(","));
 
         if (authorities.contains(UserAuthority.ROLE_TEMP.toString()))
-            throw new CustomException(ErrorCode.UNAUTHORIZED_USER_ACCESS);
+            throw new CustomException(ErrorCode.USER_IS_TEMP_ACCOUNT);
 
         long now = (new Date()).getTime();
 

@@ -28,6 +28,7 @@ public enum ErrorCode {
 
     // 403 FORBIDDEN
     USER_POINT_CANT_NEGATIVE(HttpStatus.FORBIDDEN, "사용자의 포인트는 음수가 될 수 없습니다!"),
+    USER_IS_TEMP_ACCOUNT(HttpStatus.FORBIDDEN, "임시 회원은 관리자가 승인하기 전까지 로그인 할 수 없습니다!"),
 
     // 406 NOT ACCEPTABLE
     ACCESS_DENIED(HttpStatus.NOT_ACCEPTABLE, "접근이 거부되었습니다!"),

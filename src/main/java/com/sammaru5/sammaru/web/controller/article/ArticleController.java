@@ -1,10 +1,7 @@
 package com.sammaru5.sammaru.web.controller.article;
 
 import com.sammaru5.sammaru.config.security.SecurityUtil;
-import com.sammaru5.sammaru.service.article.ArticleModifyService;
-import com.sammaru5.sammaru.service.article.ArticleRegisterService;
-import com.sammaru5.sammaru.service.article.ArticleRemoveService;
-import com.sammaru5.sammaru.service.article.ArticleSearchService;
+import com.sammaru5.sammaru.service.article.*;
 import com.sammaru5.sammaru.service.file.FileStatusService;
 import com.sammaru5.sammaru.util.OverMemberRole;
 import com.sammaru5.sammaru.web.apiresult.ApiResult;
@@ -32,6 +29,7 @@ public class ArticleController {
     private final ArticleRemoveService articleRemoveService;
     private final ArticleModifyService articleModifyService;
     private final FileStatusService fileStatusService;
+    private final ArticleLikeService articleLikeService;
 
     @PostMapping(value = "/api/boards/{boardId}/articles", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     @ApiOperation(value = "게시글 생성", notes = "게시판에 게시글 추가")
@@ -66,5 +64,19 @@ public class ArticleController {
     @ApiOperation(value = "파일 다운로드", notes = "게시판 id와 파일 경로를 통해 파일 다운로드")
     public ResponseEntity<InputStreamResource> fileDownload(@PathVariable Long boardId, @PathVariable Long articleId, @PathVariable String fileName) throws IOException {
         return fileStatusService.downloadFile(boardId, fileName);
+    }
+
+    @PostMapping("/api/boards/{boardId}/articles/{articleId}/like")
+    @ApiOperation(value = "게시글에 좋아요 추가", notes = "로그인된 유저가 해당 게시글에 좋아요를 누른다")
+    @OverMemberRole
+    public ApiResult<Long> articleLikeAdd(@PathVariable Long boardId, @PathVariable Long articleId) {
+        return ApiResult.OK(articleLikeService.giveArticleLike(articleId, SecurityUtil.getCurrentUserId()));
+    }
+
+    @DeleteMapping("/api/boards/{boardId}/articles/{articleId}/like")
+    @ApiOperation(value = "게시글에 눌렀던 좋아요 취소", notes = "로그인된 유저가 해당 게시글에 눌렀던 좋아요를 취소한다")
+    @OverMemberRole
+    public ApiResult<Boolean> articleLikeRemove(@PathVariable Long boardId, @PathVariable Long articleId) {
+        return ApiResult.OK(articleLikeService.cancelArticleLike(articleId, SecurityUtil.getCurrentUserId()));
     }
 }

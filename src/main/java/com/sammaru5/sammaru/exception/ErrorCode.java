@@ -30,6 +30,9 @@ public enum ErrorCode {
     USER_POINT_CANT_NEGATIVE(HttpStatus.FORBIDDEN, "사용자의 포인트는 음수가 될 수 없습니다!"),
     USER_IS_TEMP_ACCOUNT(HttpStatus.FORBIDDEN, "임시 회원은 관리자가 승인하기 전까지 로그인 할 수 없습니다!"),
 
+    // 404 NOT FOUND
+    ARTICLE_NOT_LIKED(HttpStatus.NOT_FOUND, "좋아요를 누르지 않은 게시글입니다"),
+
     // 406 NOT ACCEPTABLE
     ACCESS_DENIED(HttpStatus.NOT_ACCEPTABLE, "접근이 거부되었습니다!"),
 
@@ -37,6 +40,7 @@ public enum ErrorCode {
     ALREADY_EXIST_USER(HttpStatus.CONFLICT, "해당 학번의 사용자가 이미 존재합니다!"),
     ALREADY_EXIST_EMAIL(HttpStatus.CONFLICT, "해당 email 계정의 사용자가 이미 존재합니다!"),
     ALREADY_EXIST_BOARD(HttpStatus.CONFLICT, "해당 게시판이 이미 존재합니다!"),
+    ALREADY_LIKED_ARTICLE(HttpStatus.CONFLICT, "이미 좋아요를 누른 게시글입니다!"),
     ;
 
     private final HttpStatus httpStatus;

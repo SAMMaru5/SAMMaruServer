@@ -35,22 +35,19 @@ class ArticleRepositoryTest {
     @DisplayName("@CreatedDate 동작 확인")
     public void checkArticleCreateTime() {
         // given
-        User user = User.builder()
+        User user = userRepository.save(User.builder()
                 .studentId("1111111")
                 .username("test")
                 .password("1234")
                 .email("test@gmail.com")
                 .point(0L)
                 .role(UserAuthority.ROLE_TEMP)
-                .build();
-        userRepository.save(user);
+                .build());
 
-        Board board = new Board(1L, "boardName", "description");
-        boardRepository.save(board);
+        Board board = boardRepository.save(new Board(null, "boardName", "description"));
 
         // when
-        Article article = new Article(null, "title", "content", 0, 0, board, user, null);
-        articleRepository.save(article);
+        Article article = articleRepository.save(new Article(null, "title", "content", 0, 0, null, board, user, null));
 
         // then
         List<Article> articleList = articleRepository.findAll();

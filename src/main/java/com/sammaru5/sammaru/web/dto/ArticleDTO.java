@@ -1,7 +1,6 @@
 package com.sammaru5.sammaru.web.dto;
 
 import com.sammaru5.sammaru.domain.Article;
-import com.sammaru5.sammaru.domain.File;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +20,7 @@ public class ArticleDTO {
     private String author;
     private Integer viewCnt;
     private Integer likeCnt;
+    private Boolean isLiked;
     private List<FileDTO> files = new ArrayList<>();
 
     public static ArticleDTO toDto(Article article) {
@@ -34,8 +34,9 @@ public class ArticleDTO {
         this.createDt = article.getCreateTime();
         this.author = article.getUser().getUsername();
         this.viewCnt = article.getViewCnt();
-        this.likeCnt = article.getViewCnt();
-        if(!article.getFiles().isEmpty()) {
+        this.likeCnt = article.getLikeCnt();
+        this.isLiked = article.getIsLiked();
+        if (article.getFiles() != null && !article.getFiles().isEmpty()) {
             this.files = article.getFiles().stream().map(FileDTO::new).collect(Collectors.toList());
         }
     }

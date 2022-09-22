@@ -44,6 +44,9 @@ dependencies {
 	implementation 'commons-io:commons-io:2.8.0'
 	implementation 'commons-fileupload:commons-fileupload:1.4'
 	implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
+
+	// https://mvnrepository.com/artifact/org.mockito/mockito-inline
+	testImplementation group: 'org.mockito', name: 'mockito-inline', version: '4.8.0'
 }
 
 tasks.named('test') {

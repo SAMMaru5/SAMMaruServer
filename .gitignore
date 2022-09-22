@@ -48,3 +48,4 @@ src/main/resources/files/
 
 jwt.yml
 mail.yml
+application-prod.yml

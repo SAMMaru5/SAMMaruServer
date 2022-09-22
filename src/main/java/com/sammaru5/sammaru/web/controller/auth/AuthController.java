@@ -2,12 +2,9 @@ package com.sammaru5.sammaru.web.controller.auth;
 
 import com.sammaru5.sammaru.config.jwt.AccessTokenResponseDto;
 import com.sammaru5.sammaru.config.jwt.TokenDto;
-import com.sammaru5.sammaru.service.user.UserLoginService;
-import com.sammaru5.sammaru.service.user.UserRegisterService;
-import com.sammaru5.sammaru.service.user.UserReissueService;
-import com.sammaru5.sammaru.service.user.UserTempPasswordService;
+import com.sammaru5.sammaru.config.security.SecurityUtil;
+import com.sammaru5.sammaru.service.user.*;
 import com.sammaru5.sammaru.web.apiresult.ApiResult;
-import com.sammaru5.sammaru.web.dto.JwtDTO;
 import com.sammaru5.sammaru.web.dto.UserDTO;
 import com.sammaru5.sammaru.web.request.SignInRequest;
 import com.sammaru5.sammaru.web.request.SignUpRequest;
@@ -21,7 +18,6 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.time.Duration;
 
@@ -34,6 +30,7 @@ public class AuthController {
     private final UserLoginService userLoginService;
     private final UserReissueService userReissueService;
     private final UserTempPasswordService userTempPasswordService;
+    private final UserLogoutService userLogoutService;
 
     @Value("${sammaru.cookie.domain}")
     private String cookieDomain;
@@ -73,6 +70,37 @@ public class AuthController {
         return ApiResult.OK(userTempPasswordService.sendTempPassword(userEmail));
     }
 
+    @DeleteMapping("/auth/logout")
+    @ApiOperation(value = "로그아웃", notes = "Refresh Token 삭제 + 프론트단 Access, Refresh 쿠키 삭제")
+    public ResponseEntity<? extends ApiResult<Boolean>> logout() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .header(HttpHeaders.SET_COOKIE, createAccessTokenDeleteCookie().toString())
+                .header(HttpHeaders.SET_COOKIE, createRefreshTokenDeleteCookie().toString())
+                .body(ApiResult.OK(userLogoutService.deleteRefreshToken(SecurityUtil.getCurrentUserId())));
+    }
+
+    private ResponseCookie createRefreshTokenDeleteCookie() {
+        return ResponseCookie.from("SammaruRefreshToken", "")
+                .httpOnly(true)
+                .secure(true)
+                .path("/auth/reissue")
+                .maxAge(0)
+                .sameSite("Strict")
+                .domain(cookieDomain)
+                .build();
+    }
+
+    private ResponseCookie createAccessTokenDeleteCookie() {
+        return ResponseCookie.from("SammaruAccessToken", "")
+                .httpOnly(false)
+                .secure(true)
+                .path("/")
+                .maxAge(0)
+                .sameSite("Strict")
+                .domain(cookieDomain)
+                .build();
+    }
+
     private ResponseCookie createRefreshTokenCookie(TokenDto tokenDto) {
         return ResponseCookie.from("SammaruRefreshToken", tokenDto.getRefreshToken())
                 .httpOnly(true)
@@ -89,7 +117,7 @@ public class AuthController {
                 .httpOnly(false)
                 .secure(true)
                 .path("/")
-                .maxAge(Duration.ofMillis(1000*60*30L))
+                .maxAge(Duration.ofMillis(1000 * 60 * 30L))
                 .sameSite("Strict")
                 .domain(cookieDomain)
                 .build();

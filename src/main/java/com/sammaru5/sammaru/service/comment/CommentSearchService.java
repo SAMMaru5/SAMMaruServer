@@ -25,10 +25,11 @@ public class CommentSearchService {
 
     public List<CommentDTO> findCommentsByArticleId(Long articleId) throws CustomException {
         Optional<Article> article = articleRepository.findById(articleId);
-        if(article.isEmpty()) throw new CustomException(ErrorCode.ARTICLE_NOT_FOUND, articleId.toString());
-        else {
-            List<Comment> comments = commentRepository.findByArticle(article.get());
-            return comments.stream().map(CommentDTO::new).collect(Collectors.toList());
+        if(article.isEmpty()) {
+            throw new CustomException(ErrorCode.ARTICLE_NOT_FOUND, articleId.toString());
         }
+
+        List<Comment> comments = commentRepository.findByArticle(article.get());
+        return comments.stream().map(CommentDTO::new).collect(Collectors.toList());
     }
 }

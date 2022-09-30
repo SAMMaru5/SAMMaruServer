@@ -26,16 +26,16 @@ public class CommentRemoveService {
     public boolean removeComment(Long userId, Long commentId) throws CustomException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, userId.toString()));
+
         Optional<Comment> findComment = commentRepository.findById(commentId);
-        if(findComment.isPresent()) {
-            if (findComment.get().getUser() == user) {
-                commentRepository.deleteById(commentId);
-                return true;
-            } else {
-                throw new CustomException(ErrorCode.UNAUTHORIZED_USER_ACCESS, user.getId().toString());
-            }
-        } else {
+        if(findComment.isEmpty()) {
             throw new CustomException(ErrorCode.COMMENT_NOT_FOUND, commentId.toString());
         }
+        if (findComment.get().getUser() != user) {
+            throw new CustomException(ErrorCode.UNAUTHORIZED_USER_ACCESS, user.getId().toString());
+        }
+
+        commentRepository.deleteById(commentId);
+        return true;
     }
 }

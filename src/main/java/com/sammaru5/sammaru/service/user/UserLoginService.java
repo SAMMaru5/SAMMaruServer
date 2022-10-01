@@ -14,7 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.concurrent.TimeUnit;
 
 @Transactional
-@Service @RequiredArgsConstructor
+@Service
+@RequiredArgsConstructor
 public class UserLoginService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final TokenProvider tokenProvider;
@@ -28,7 +29,9 @@ public class UserLoginService {
 
         TokenDto tokenDto = tokenProvider.generateTokenDto(authentication);
 
-        redisUtil.setDataExpire("RT:"+authentication.getName(), tokenDto.getRefreshToken(), tokenDto.getRefreshTokenExpiresTime(), TimeUnit.MILLISECONDS);
+        redisUtil.deleteData("RT:" + authentication.getName());
+
+        redisUtil.setDataExpire("RT:" + authentication.getName(), tokenDto.getRefreshToken(), tokenDto.getRefreshTokenExpiresTime(), TimeUnit.MILLISECONDS);
 
         return tokenDto;
     }

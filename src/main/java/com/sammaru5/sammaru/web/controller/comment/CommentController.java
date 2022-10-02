@@ -2,6 +2,7 @@ package com.sammaru5.sammaru.web.controller.comment;
 
 import com.sammaru5.sammaru.config.security.SecurityUtil;
 import com.sammaru5.sammaru.domain.User;
+import com.sammaru5.sammaru.service.comment.CommentModifyService;
 import com.sammaru5.sammaru.util.AuthUser;
 import com.sammaru5.sammaru.util.OverMemberRole;
 import com.sammaru5.sammaru.web.apiresult.ApiResult;
@@ -26,6 +27,7 @@ public class CommentController {
 
     private final CommentSearchService commentSearchService;
     private final CommentRegisterService commentRegisterService;
+    private final CommentModifyService commentModifyService;
     private final CommentRemoveService commentRemoveService;
 
     @GetMapping("/api/boards/{boardId}/articles/{articleId}/comments")
@@ -40,6 +42,13 @@ public class CommentController {
     @OverMemberRole
     public ApiResult<CommentDTO> commentAdd(@PathVariable Long boardId, @PathVariable Long articleId, @Valid @RequestBody CommentRequest commentRequest) {
         return ApiResult.OK(commentRegisterService.addComment(SecurityUtil.getCurrentUserId(), commentRequest, articleId));
+    }
+
+    @PatchMapping("/api/boards/{boardId}/articles/{articleId}/comments/{commentId}")
+    @ApiOperation(value = "댓글 수정", notes = "해당 댓글 수정", response = CommentDTO.class)
+    @OverMemberRole
+    public ApiResult<CommentDTO> commentModify(@PathVariable Long boardId, @PathVariable Long articleId, @PathVariable Long commentId, @Valid @RequestBody CommentRequest commentRequest) {
+        return ApiResult.OK(commentModifyService.modifyComment(SecurityUtil.getCurrentUserId(), commentId, commentRequest));
     }
 
     @DeleteMapping("/api/boards/{boardId}/articles/{articleId}/comments/{commentId}")

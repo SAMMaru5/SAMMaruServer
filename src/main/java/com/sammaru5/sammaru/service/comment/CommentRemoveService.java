@@ -12,7 +12,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -26,12 +25,10 @@ public class CommentRemoveService {
     public boolean removeComment(Long userId, Long commentId) throws CustomException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, userId.toString()));
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND, commentId.toString()));
 
-        Optional<Comment> findComment = commentRepository.findById(commentId);
-        if(findComment.isEmpty()) {
-            throw new CustomException(ErrorCode.COMMENT_NOT_FOUND, commentId.toString());
-        }
-        if (findComment.get().getUser() != user) {
+        if (comment.getUser() != user) {
             throw new CustomException(ErrorCode.UNAUTHORIZED_USER_ACCESS, user.getId().toString());
         }
 

@@ -12,9 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
 public class CommentModifyService {
@@ -26,18 +25,14 @@ public class CommentModifyService {
     public CommentDTO modifyComment(Long userId, Long commentId, CommentRequest commentRequest) throws CustomException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, userId.toString()));
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND, commentId.toString()));
 
-        Optional<Comment> findComment = commentRepository.findById(commentId);
-
-        if(findComment.isEmpty()) {
-            throw new CustomException(ErrorCode.COMMENT_NOT_FOUND, commentId.toString());
-        }
-        if (findComment.get().getUser() != user) {
+        if (comment.getUser() != user) {
             throw new CustomException(ErrorCode.UNAUTHORIZED_USER_ACCESS, user.getId().toString());
         }
 
-        findComment.get().modifyContent(commentRequest);
-
-        return new CommentDTO(commentRepository.save(findComment.get()));
+        comment.modifyContent(commentRequest);
+        return new CommentDTO(commentRepository.save(comment));
     }
 }

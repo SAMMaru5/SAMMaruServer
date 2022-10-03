@@ -24,4 +24,8 @@ public class ScheduleDTO {
         this.end = calendar.getEnd();
         this.content = calendar.getContent();
     }
+
+    public static ScheduleDTO from(Schedule schedule){
+        return new ScheduleDTO(schedule);
+    }
 }

@@ -18,6 +18,6 @@ public class ScheduleRegisterService {
     public ScheduleDTO addSchedule(ScheduleRequest calendarRequest) {
         Schedule schedule = new Schedule(calendarRequest);
         scheduleRepository.save(schedule);
-        return new ScheduleDTO(schedule);
+        return ScheduleDTO.from(schedule);
     }
 }

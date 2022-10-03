@@ -12,6 +12,7 @@ WORKDIR /app
 ARG JAR_FILE=/app/build/libs/sammaru-0.0.1-SNAPSHOT.jar
 
 COPY --from=builder ${JAR_FILE} /app/app.jar
+COPY /home/sammaru/SAMMaruFiles /app/files
 
 EXPOSE 8080
 

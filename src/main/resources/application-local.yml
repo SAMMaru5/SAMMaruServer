@@ -3,8 +3,8 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     # 로컬 테스트용 DB
     url: jdbc:mysql://localhost:3306/sammaru?serverTimezone=UTC&characterEncoding=UTF-8
-    username: sammaru
-    password: sammaru
+    username: root
+    password: root1234
 
   jpa:
     hibernate:
@@ -18,3 +18,4 @@ spring:
 sammaru:
   cookie:
     domain: localhost
+  fileDir: src/main/resources/files/

@@ -24,7 +24,7 @@ public class ArticleRegisterService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
 
-    @Value("${app.fileDir}")
+    @Value("${sammaru.fileDir}")
     private String fileDir;
 
     public Long addArticle(Long userId, Long boardId, ArticleRequest articleRequest, MultipartFile[] multipartFiles) {

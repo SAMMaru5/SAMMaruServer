@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Transactional(readOnly = true)
@@ -24,12 +23,10 @@ public class CommentSearchService {
     private final ArticleRepository articleRepository;
 
     public List<CommentDTO> findCommentsByArticleId(Long articleId) throws CustomException {
-        Optional<Article> article = articleRepository.findById(articleId);
-        if(article.isEmpty()) {
-            throw new CustomException(ErrorCode.ARTICLE_NOT_FOUND, articleId.toString());
-        }
+        Article article = articleRepository.findById(articleId)
+                .orElseThrow(() -> new CustomException(ErrorCode.ARTICLE_NOT_FOUND, articleId.toString()));
+        List<Comment> comments = commentRepository.findByArticle(article);
 
-        List<Comment> comments = commentRepository.findByArticle(article.get());
         return comments.stream().map(CommentDTO::new).collect(Collectors.toList());
     }
 }

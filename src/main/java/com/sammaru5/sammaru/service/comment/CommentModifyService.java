@@ -6,9 +6,9 @@ import com.sammaru5.sammaru.exception.CustomException;
 import com.sammaru5.sammaru.exception.ErrorCode;
 import com.sammaru5.sammaru.repository.CommentRepository;
 import com.sammaru5.sammaru.repository.UserRepository;
-import com.sammaru5.sammaru.service.user.UserStatusService;
+import com.sammaru5.sammaru.web.dto.CommentDTO;
+import com.sammaru5.sammaru.web.request.CommentRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,13 +16,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
-public class CommentRemoveService {
+public class CommentModifyService {
 
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
 
     @Transactional
-    public boolean removeComment(Long userId, Long commentId) throws CustomException {
+    public CommentDTO modifyComment(Long userId, Long commentId, CommentRequest commentRequest) throws CustomException {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, userId.toString()));
         Comment comment = commentRepository.findById(commentId)
@@ -32,7 +32,7 @@ public class CommentRemoveService {
             throw new CustomException(ErrorCode.UNAUTHORIZED_USER_ACCESS, user.getId().toString());
         }
 
-        commentRepository.deleteById(commentId);
-        return true;
+        comment.modifyContent(commentRequest);
+        return new CommentDTO(commentRepository.save(comment));
     }
 }

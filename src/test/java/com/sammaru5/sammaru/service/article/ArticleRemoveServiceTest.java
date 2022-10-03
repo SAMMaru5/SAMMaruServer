@@ -1,14 +1,14 @@
 package com.sammaru5.sammaru.service.article;
 
 import com.sammaru5.sammaru.domain.*;
-import com.sammaru5.sammaru.repository.ArticleLikeRepository;
-import com.sammaru5.sammaru.repository.ArticleRepository;
-import com.sammaru5.sammaru.repository.BoardRepository;
-import com.sammaru5.sammaru.repository.UserRepository;
+import com.sammaru5.sammaru.repository.*;
+import com.sammaru5.sammaru.web.request.CommentRequest;
 import lombok.RequiredArgsConstructor;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestConstructor;
@@ -28,8 +28,12 @@ class ArticleRemoveServiceTest {
     private final BoardRepository boardRepository;
     private final ArticleRepository articleRepository;
     private final ArticleLikeRepository articleLikeRepository;
+    private final CommentRepository commentRepository;
 
     private final ArticleRemoveService articleRemoveService;
+
+    @Mock
+    CommentRequest commentRequest = new CommentRequest();
 
     @Test
     @DisplayName("게시글 삭제시 관련 좋아요들도 삭제되는지 확인")
@@ -52,5 +56,24 @@ class ArticleRemoveServiceTest {
 
         //then
         Assertions.assertThat(articleLikeRepository.findAll()).hasSameElementsAs(List.of(articleLike));
+    }
+
+    @Test
+    @DisplayName("댓글이 존재하는 게시글이 정상적으로 삭제되는지 확인")
+    void removeArticleWithComment() {
+        //given
+        User user = userRepository.save(new User(null, "studentId", "username", "password", "email", 0L, 0, 0, UserAuthority.ROLE_MEMBER));
+        Board board = boardRepository.save(new Board(null, "name", "description"));
+        Article article = articleRepository.save(new Article(null, "title1", "content", 0, 0, null, board, user, null));
+
+        Mockito.when(commentRequest.getContent()).thenReturn("comment");
+        Comment comment = commentRepository.save(Comment.createComment(commentRequest, article, user));
+
+        //when
+        articleRemoveService.removeArticle(article.getId(), article.getUser().getId(), board.getId());
+
+        //then
+        Assertions.assertThat(articleRepository.findById(article.getId())).isEmpty();
+        Assertions.assertThat(commentRepository.findByArticle(article).size()).isEqualTo(0);
     }
 }

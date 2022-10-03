@@ -33,6 +33,6 @@ public class CommentRegisterService {
                 .orElseThrow(() -> new CustomException(ErrorCode.ARTICLE_NOT_FOUND, articleId.toString()));
 
         Comment comment = commentRepository.save(Comment.createComment(commentRequest, article, user));
-        return new CommentDTO(comment);
+        return CommentDTO.from(comment);
     }
 }

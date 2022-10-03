@@ -22,7 +22,7 @@ public class ArticleModifyService {
     private final ArticleRepository articleRepository;
     private final UserRepository userRepository;
 
-    @Value("${app.fileDir}")
+    @Value("${sammaru.fileDir}")
     private String fileDir;
 
     @CacheEvict(keyGenerator = "articleCacheKeyGenerator", value = "article", cacheManager = "cacheManager")

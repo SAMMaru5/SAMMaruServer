@@ -7,6 +7,7 @@ import com.sammaru5.sammaru.exception.CustomException;
 import com.sammaru5.sammaru.exception.ErrorCode;
 import com.sammaru5.sammaru.repository.ArticleRepository;
 import com.sammaru5.sammaru.repository.UserRepository;
+import com.sammaru5.sammaru.web.dto.ArticleDTO;
 import com.sammaru5.sammaru.web.request.ArticleRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +27,7 @@ public class ArticleModifyService {
     private String fileDir;
 
     @CacheEvict(keyGenerator = "articleCacheKeyGenerator", value = "article", cacheManager = "cacheManager")
-    public Long modifyArticle(Long articleId, Long userId, Long boardId, ArticleRequest articleRequest, MultipartFile[] multipartFiles) {
+    public ArticleDTO modifyArticle(Long articleId, Long userId, Long boardId, ArticleRequest articleRequest, MultipartFile[] multipartFiles) {
         User findUser = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, userId.toString()));
         Article article = articleRepository.findById(articleId)
@@ -40,11 +41,11 @@ public class ArticleModifyService {
 
         if (multipartFiles != null) {
             article.removeFile();
-            for(MultipartFile multipartFile : multipartFiles) {
+            for (MultipartFile multipartFile : multipartFiles) {
                 article.addFile(File.createFile(multipartFile, fileDir, boardId));
             }
         }
-        return articleId;
-    }
 
+        return ArticleDTO.toDto(articleRepository.save(article));
+    }
 }

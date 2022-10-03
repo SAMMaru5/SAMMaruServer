@@ -23,7 +23,7 @@ public class ArticleDTO {
     private Boolean isLiked;
     private List<FileDTO> files = new ArrayList<>();
 
-    public static ArticleDTO toDto(Article article) {
+    public static ArticleDTO from(Article article) {
         return new ArticleDTO(article);
     }
 

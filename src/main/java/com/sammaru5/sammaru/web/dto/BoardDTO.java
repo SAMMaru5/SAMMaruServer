@@ -19,4 +19,8 @@ public class BoardDTO {
         this.name = board.getBoardName();
         this.description = board.getDescription();
     }
+
+    public static BoardDTO from(Board board) {
+        return new BoardDTO(board);
+    }
 }

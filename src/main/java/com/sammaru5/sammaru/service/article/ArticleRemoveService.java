@@ -6,6 +6,7 @@ import com.sammaru5.sammaru.exception.CustomException;
 import com.sammaru5.sammaru.exception.ErrorCode;
 import com.sammaru5.sammaru.repository.ArticleLikeRepository;
 import com.sammaru5.sammaru.repository.ArticleRepository;
+import com.sammaru5.sammaru.repository.CommentRepository;
 import com.sammaru5.sammaru.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
@@ -20,6 +21,7 @@ public class ArticleRemoveService {
     private final ArticleRepository articleRepository;
     private final UserRepository userRepository;
     private final ArticleLikeRepository articleLikeRepository;
+    private final CommentRepository commentRepository;
 
     @CacheEvict(keyGenerator = "articleCacheKeyGenerator", value = "article", cacheManager = "cacheManager")
     public boolean removeArticle(Long articleId, Long userId, Long boardId) {
@@ -33,6 +35,7 @@ public class ArticleRemoveService {
         }
 
         articleLikeRepository.deleteAllByArticleId(articleId);
+        commentRepository.deleteAllByArticleId(articleId);
 
         articleRepository.delete(article);
         return true;

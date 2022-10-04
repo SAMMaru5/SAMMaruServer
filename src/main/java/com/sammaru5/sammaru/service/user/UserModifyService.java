@@ -30,14 +30,14 @@ public class UserModifyService {
         }
 
         user.modifyUserInfo(userRequest, passwordEncoder);
-        return new UserDTO(user);
+        return UserDTO.from(user);
     }
 
     public UserDTO modifyUserRole(Long userId, UserAuthority role) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, userId.toString()));
         user.setRole(role);
-        return new UserDTO(userRepository.save(user));
+        return UserDTO.from(userRepository.save(user));
     }
 
     public UserDTO addUserPoint(Long userId, PointRequest pointRequest) throws CustomException {
@@ -46,13 +46,13 @@ public class UserModifyService {
             throw new CustomException(ErrorCode.USER_POINT_CANT_NEGATIVE, userId.toString());
         }
         user.setPoint(user.getPoint() + pointRequest.getAddPoint());
-        return new UserDTO(userRepository.save(user));
+        return UserDTO.from(userRepository.save(user));
     }
 
     public UserDTO modifyUserGeneration(Long userId, Integer generation) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, userId.toString()));
         user.setGeneration(generation);
-        return new UserDTO(user);
+        return UserDTO.from(user);
     }
 }

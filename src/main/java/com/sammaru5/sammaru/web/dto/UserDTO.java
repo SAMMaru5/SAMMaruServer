@@ -30,4 +30,8 @@ public class UserDTO {
         this.nickname = studentId.substring(2, 4) + " " + user.getUsername();
         this.grade = user.getGrade();
     }
+
+    public static UserDTO from(User user) {
+        return new UserDTO(user);
+    }
 }

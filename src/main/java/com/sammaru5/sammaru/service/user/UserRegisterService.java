@@ -13,13 +13,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
-@Service @RequiredArgsConstructor
+@Service
+@RequiredArgsConstructor
 public class UserRegisterService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
     public UserDTO signUpUser(SignUpRequest signUpRequest) {
-        if(userRepository.existsByStudentId(signUpRequest.getStudentId())) {
+        if (userRepository.existsByStudentId(signUpRequest.getStudentId())) {
             throw new CustomException(ErrorCode.ALREADY_EXIST_USER, signUpRequest.getStudentId());
         }
 
@@ -28,6 +29,6 @@ public class UserRegisterService {
         }
 
         User user = signUpRequest.toEntityWithEncryptingPassword(passwordEncoder);
-        return new UserDTO(userRepository.save(user));
+        return UserDTO.from(userRepository.save(user));
     }
 }

@@ -19,12 +19,12 @@ public class UserSearchService {
     private final UserRepository userRepository;
 
     public UserDTO findOne(Long userId) {
-        return new UserDTO(userRepository.findById(userId)
+        return UserDTO.from(userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, userId.toString())));
     }
 
     public UserDTO findUserByStudentId(String studentId) {
-        return new UserDTO(userRepository.findByStudentId(studentId)
+        return UserDTO.from(userRepository.findByStudentId(studentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, studentId.toString())));
     }
 
@@ -45,6 +45,7 @@ public class UserSearchService {
     }
 
     public UserDTO findByStudentId(String studentId) {
-        return new UserDTO(userRepository.findByStudentId(studentId).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, studentId)));
+        return UserDTO.from(userRepository.findByStudentId(studentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, studentId)));
     }
 }

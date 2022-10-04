@@ -3,9 +3,11 @@ package com.sammaru5.sammaru.web.request;
 import lombok.Getter;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
 
 @Getter
 public class UserRequest {
@@ -20,6 +22,10 @@ public class UserRequest {
     @NotBlank(message = "이메일은 필수 입력입니다")
     @Email(message = "이메일은 이메일 형식에 맞아야 됩니다")
     private String email;
+
+    @NotBlank(message = "학번은 필수 입력입니다")
+    @Size(min = 4, message = "학번은 자신의 학번 풀네임 입니다 ex) 2016XXXXXX")
+    private String studentId;
 
     @NotNull(message = "학년을 입력해주세요")
     private Integer grade;

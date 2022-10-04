@@ -4,7 +4,7 @@ import com.sammaru5.sammaru.domain.SearchSubject;
 import com.sammaru5.sammaru.service.article.ArticleSearchService;
 import com.sammaru5.sammaru.service.board.BoardRegisterService;
 import com.sammaru5.sammaru.service.board.BoardRemoveService;
-import com.sammaru5.sammaru.service.board.BoardStatusService;
+import com.sammaru5.sammaru.service.board.BoardSearchService;
 import com.sammaru5.sammaru.util.OverAdminRole;
 import com.sammaru5.sammaru.web.apiresult.ApiResult;
 import com.sammaru5.sammaru.web.dto.ArticleDTO;
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 public class BoardController {
 
     private final BoardRegisterService boardRegisterService;
-    private final BoardStatusService boardStatusService;
+    private final BoardSearchService boardSearchService;
     private final BoardRemoveService boardRemoveService;
     private final ArticleSearchService articleSearchService;
 
@@ -47,7 +47,7 @@ public class BoardController {
     @GetMapping("/no-permit/api/boards")
     @ApiOperation(value = "게시판 목록", notes = "게시판 목록을 조회", responseContainer = "List", response = BoardDTO.class)
     public ApiResult<List<BoardDTO>> boardList() {
-        return ApiResult.OK(boardStatusService.findBoards().stream().map(BoardDTO::new).collect(Collectors.toList()));
+        return ApiResult.OK(boardSearchService.findBoards().stream().map(BoardDTO::new).collect(Collectors.toList()));
     }
 
     @GetMapping("/no-permit/api/boards/{boardId}/pages/{pageNum}")

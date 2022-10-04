@@ -19,7 +19,7 @@ public class BoardRegisterService {
 
     public BoardDTO addBoard(BoardRequest boardRequest) {
         validateDuplicateBoard(boardRequest.getBoardName());
-        return new BoardDTO(boardRepository.save(boardRequest.toEntity()));
+        return BoardDTO.from(boardRepository.save(boardRequest.toEntity()));
     }
 
     private void validateDuplicateBoard(String boardName) {

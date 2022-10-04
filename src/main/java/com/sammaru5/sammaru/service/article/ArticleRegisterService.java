@@ -39,6 +39,6 @@ public class ArticleRegisterService {
             }
         }
 
-        return ArticleDTO.toDto(articleRepository.save(article));
+        return ArticleDTO.from(articleRepository.save(article));
     }
 }

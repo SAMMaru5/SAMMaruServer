@@ -45,7 +45,7 @@ public class ArticleSearchService {
             article.setIsLiked(articleLikeRepository.existsByArticleIdAndUserId(articleId, currentUserId));
         } catch (CustomException e) { }
 
-        return ArticleDTO.toDto(article);
+        return ArticleDTO.from(article);
     }
 
     //boardId에 해당하는 게시판의 게시글들을 paging
@@ -54,13 +54,13 @@ public class ArticleSearchService {
                 .orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND));
         Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.by("createTime").descending());
         Page<Article> articles = articleRepository.findArticlesWithFilesAndUserByBoard(board, pageable);
-        return articles.map(ArticleDTO::toDto);
+        return articles.map(ArticleDTO::from);
     }
 
     //boardId에 해당하는 게시판에 달린 모든 게시글들 조회
     public List<ArticleDTO> findArticlesByBoardId(Long boardId) {
         List<Article> findArticles = articleRepository.findArticlesByBoardId(boardId);
-        return findArticles.stream().map(ArticleDTO::toDto).collect(Collectors.toList());
+        return findArticles.stream().map(ArticleDTO::from).collect(Collectors.toList());
     }
 
     // 메인페이지에 보여지는 7개의 공지사항을 가져오는 메서드 findArticlesByBoardName
@@ -69,7 +69,7 @@ public class ArticleSearchService {
                 .orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND));
         Pageable pageable = PageRequest.of(0, 7, Sort.by("createTime").descending());
         List<Article> findArticles = articleRepository.findByBoard(board, pageable);
-        return findArticles.stream().map(ArticleDTO::toDto).collect(Collectors.toList());
+        return findArticles.stream().map(ArticleDTO::from).collect(Collectors.toList());
     }
 
     public Page<ArticleDTO> findArticlesByBoardIdAndKeywordAndPaging(Long boardId, Integer pageNum, Integer pageSize, SearchSubject searchSubject, String keyword) {
@@ -97,7 +97,7 @@ public class ArticleSearchService {
             default:
                 throw new CustomException(ErrorCode.WRONG_SEARCH_SUBJECT, searchSubject.name());
         }
-        return articles.map(ArticleDTO::toDto);
+        return articles.map(ArticleDTO::from);
     }
 
     public Page<ArticleDTO> findArticlesByKeywordAndPaging(Integer pageNum, Integer pageSize, SearchSubject searchSubject, String keyword) {
@@ -123,6 +123,6 @@ public class ArticleSearchService {
             default:
                 throw new CustomException(ErrorCode.WRONG_SEARCH_SUBJECT, searchSubject.name());
         }
-        return articles.map(ArticleDTO::toDto);
+        return articles.map(ArticleDTO::from);
     }
 }

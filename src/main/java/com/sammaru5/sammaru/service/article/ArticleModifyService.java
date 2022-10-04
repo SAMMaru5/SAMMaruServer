@@ -46,6 +46,6 @@ public class ArticleModifyService {
             }
         }
 
-        return ArticleDTO.toDto(articleRepository.save(article));
+        return ArticleDTO.from(articleRepository.save(article));
     }
 }

@@ -19,4 +19,8 @@ public class CommentDTO {
         this.createDt = comment.getCreateTime();
         this.author =comment.getUser().getUsername();
     }
+
+    public static CommentDTO from(Comment comment){
+        return new CommentDTO(comment);
+    }
 }

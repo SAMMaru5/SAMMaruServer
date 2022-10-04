@@ -37,7 +37,7 @@ public class UserModifyService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, userId.toString()));
         user.setRole(role);
-        return UserDTO.from(userRepository.save(user));
+        return UserDTO.from(user);
     }
 
     public UserDTO addUserPoint(Long userId, PointRequest pointRequest) throws CustomException {
@@ -46,7 +46,7 @@ public class UserModifyService {
             throw new CustomException(ErrorCode.USER_POINT_CANT_NEGATIVE, userId.toString());
         }
         user.setPoint(user.getPoint() + pointRequest.getAddPoint());
-        return UserDTO.from(userRepository.save(user));
+        return UserDTO.from(user);
     }
 
     public UserDTO modifyUserGeneration(Long userId, Integer generation) {

@@ -33,6 +33,6 @@ public class CommentModifyService {
         }
 
         comment.modifyContent(commentRequest);
-        return CommentDTO.from(commentRepository.save(comment));
+        return CommentDTO.from(comment);
     }
 }

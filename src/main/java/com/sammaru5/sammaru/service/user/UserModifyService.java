@@ -25,6 +25,10 @@ public class UserModifyService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, userId.toString()));
 
+        if (userRepository.existsByStudentId(userRequest.getStudentId())) {
+            throw new CustomException(ErrorCode.ALREADY_EXIST_USER, userRequest.getStudentId());
+        }
+
         if (!user.getEmail().equals(userRequest.getEmail()) && userRepository.existsByEmail(userRequest.getEmail())) {
             throw new CustomException(ErrorCode.ALREADY_EXIST_EMAIL, userRequest.getEmail());
         }

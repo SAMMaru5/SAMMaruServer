@@ -22,7 +22,7 @@ import java.util.Optional;
 public class FileStatusService {
 
     private final FileRepository fileRepository;
-    @Value("${app.fileDir}")
+    @Value("${sammaru.fileDir}")
     private String fileDir;
 
     public ResponseEntity<InputStreamResource> downloadFile(Long boardId, String filePath) throws CustomException, FileNotFoundException {

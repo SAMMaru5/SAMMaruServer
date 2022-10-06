@@ -12,18 +12,21 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 @Transactional(readOnly = true)
-@Service @RequiredArgsConstructor
+@Service
+@RequiredArgsConstructor
 public class BoardRemoveService {
 
     private final ArticleRepository articleRepository;
     private final BoardRepository boardRepository;
 
     @Transactional
-    public boolean removeBoard(Long boardId)  {
+    public boolean removeBoard(Long boardId) {
 
-        String boardname = boardRepository.findById(boardId).get().getBoardName();
+        String boardname = boardRepository.findById(boardId)
+                .orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND, boardId.toString()))
+                .getBoardName();
 
-        if(IndelibleBoardName.contain(boardname)) {
+        if (IndelibleBoardName.contain(boardname)) {
             throw new CustomException(ErrorCode.INDELIBLE_BOARD, boardId.toString());
         }
 

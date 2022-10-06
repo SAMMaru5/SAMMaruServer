@@ -8,13 +8,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
+@Transactional(readOnly = true)
 @Service
 @RequiredArgsConstructor
 public class ScheduleRegisterService {
 
     private final ScheduleRepository scheduleRepository;
 
+    @Transactional
     public ScheduleDTO addSchedule(ScheduleRequest calendarRequest) {
         Schedule schedule = new Schedule(calendarRequest);
         scheduleRepository.save(schedule);

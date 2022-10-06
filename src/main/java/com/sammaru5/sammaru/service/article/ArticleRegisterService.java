@@ -14,8 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
-@Transactional
 @Service
 public class ArticleRegisterService {
     private final ArticleRepository articleRepository;
@@ -25,6 +25,7 @@ public class ArticleRegisterService {
     @Value("${sammaru.fileDir}")
     private String fileDir;
 
+    @Transactional
     public ArticleDTO addArticle(Long userId, Long boardId, ArticleRequest articleRequest, MultipartFile[] multipartFiles) {
         User findUser = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, userId.toString()));

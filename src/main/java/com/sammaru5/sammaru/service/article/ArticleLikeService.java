@@ -12,8 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Transactional(readOnly = true)
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class ArticleLikeService {
 
@@ -21,6 +21,7 @@ public class ArticleLikeService {
     private final ArticleRepository articleRepository;
     private final ArticleLikeRepository articleLikeRepository;
 
+    @Transactional
     public Long giveArticleLike(Long articleId, Long userId) {
         User findUser = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, userId.toString()));
@@ -35,6 +36,7 @@ public class ArticleLikeService {
         return articleLikeRepository.save(articleLike).getId();
     }
 
+    @Transactional
     public boolean cancelArticleLike(Long articleId, Long userId) {
         if (!userRepository.existsById(userId)) {
             throw new CustomException(ErrorCode.USER_NOT_FOUND, userId.toString());
@@ -42,8 +44,10 @@ public class ArticleLikeService {
         if (!articleRepository.existsById(articleId)) {
             throw new CustomException(ErrorCode.ARTICLE_NOT_FOUND, articleId.toString());
         }
+
         ArticleLike articleLike = articleLikeRepository.findByArticleIdAndUserId(articleId, userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ARTICLE_NOT_LIKED, articleId.toString()));
+
         articleLikeRepository.delete(articleLike);
         return true;
     }

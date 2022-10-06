@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-@Transactional
+@Transactional(readOnly = true)
 @Service
 @RequiredArgsConstructor
 public class ArticleModifyService {
@@ -26,6 +26,7 @@ public class ArticleModifyService {
     @Value("${sammaru.fileDir}")
     private String fileDir;
 
+    @Transactional
     @CacheEvict(keyGenerator = "articleCacheKeyGenerator", value = "article", cacheManager = "cacheManager")
     public ArticleDTO modifyArticle(Long articleId, Long userId, Long boardId, ArticleRequest articleRequest, MultipartFile[] multipartFiles) {
         User findUser = userRepository.findById(userId)

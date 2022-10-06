@@ -68,5 +68,6 @@ public class User {
         this.email = userRequest.getEmail();
         this.password = passwordEncoder.encode(userRequest.getPassword());
         this.grade = userRequest.getGrade();
+        this.studentId = userRequest.getStudentId();
     }
 }

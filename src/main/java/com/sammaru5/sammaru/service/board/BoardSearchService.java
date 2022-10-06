@@ -9,7 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Transactional(readOnly = true)
-@Service @RequiredArgsConstructor
+@Service
+@RequiredArgsConstructor
 public class BoardSearchService {
     private final BoardRepository boardRepository;
 

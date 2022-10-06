@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.concurrent.TimeUnit;
 
-@Transactional
+@Transactional(readOnly = true)
 @Service
 @RequiredArgsConstructor
 public class UserLoginService {
@@ -21,6 +21,7 @@ public class UserLoginService {
     private final TokenProvider tokenProvider;
     private final RedisUtil redisUtil;
 
+    @Transactional
     public TokenDto login(SignInRequest signInRequest) {
 
         UsernamePasswordAuthenticationToken authenticationToken = signInRequest.toAuthentication();

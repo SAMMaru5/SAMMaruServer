@@ -15,7 +15,7 @@ import java.security.SecureRandom;
 import java.util.Date;
 import java.util.regex.Pattern;
 
-@Transactional
+@Transactional(readOnly = true)
 @Service
 @RequiredArgsConstructor
 public class UserTempPasswordService {
@@ -23,6 +23,7 @@ public class UserTempPasswordService {
     private final PasswordEncoder passwordEncoder;
     private final JavaMailSender javaMailSender;
 
+    @Transactional
     public Long sendTempPassword(String userEmail) {
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, userEmail));
@@ -34,6 +35,7 @@ public class UserTempPasswordService {
         return user.getId();
     }
 
+    @Transactional
     public String getRandomPassword(int size) {
         final String regex = "(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{8,20}";
 
@@ -59,6 +61,7 @@ public class UserTempPasswordService {
         }
     }
 
+    @Transactional
     public void sendMail(String userEmail, String tempPassword) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(userEmail);

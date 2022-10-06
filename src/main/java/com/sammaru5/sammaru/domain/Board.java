@@ -13,7 +13,8 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class Board {
 
-    @Id @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "board_id")
     private Long id;
 
@@ -25,4 +26,8 @@ public class Board {
         this.description = boardRequest.getDescription();
     }
 
+    public void modifyBoard(BoardRequest boardRequest) {
+        this.boardName = boardRequest.getBoardName();
+        this.description = boardRequest.getDescription();
+    }
 }

@@ -27,4 +27,11 @@ public class Schedule {
         this.end = scheduleRequest.getEnd();
         this.content = scheduleRequest.getContent();
     }
+
+    public void modifySchedule(ScheduleRequest scheduleRequest){
+        this.title = scheduleRequest.getTitle();
+        this.content = scheduleRequest.getContent();
+        this.start = scheduleRequest.getStart();
+        this.end = scheduleRequest.getEnd();
+    }
 }

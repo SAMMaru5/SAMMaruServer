@@ -14,6 +14,7 @@ public enum ErrorCode {
     COMMENT_NOT_FOUND(HttpStatus.BAD_REQUEST, "해당 댓글은 존재하지 않습니다!"),
     FILE_NOT_FOUND(HttpStatus.BAD_REQUEST, "해당 파일은 존재하지 않습니다!"),
     USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "해당 회원은 존재하지 않습니다!"),
+    SCHEDULE_NOT_FOUND(HttpStatus.BAD_REQUEST, "해당 일정은 존재하지 않습니다!"),
     INDELIBLE_BOARD(HttpStatus.BAD_REQUEST, "해당 게시판은 삭제할 수 없습니다!"),
     WRONG_SEARCH_SUBJECT(HttpStatus.BAD_REQUEST, "올바르지 않은 검색 주제입니다!"),
     VALID_CHECK_FAIL(HttpStatus.BAD_REQUEST, "입력 값에 대한 유효성 검사가 실패했습니다!"),

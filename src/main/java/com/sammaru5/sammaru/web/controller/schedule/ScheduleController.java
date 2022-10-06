@@ -1,5 +1,6 @@
 package com.sammaru5.sammaru.web.controller.schedule;
 
+import com.sammaru5.sammaru.service.schedule.ScheduleModifyService;
 import com.sammaru5.sammaru.util.OverAdminRole;
 import com.sammaru5.sammaru.web.apiresult.ApiResult;
 import com.sammaru5.sammaru.web.dto.ScheduleDTO;
@@ -22,6 +23,7 @@ import java.sql.Date;
 public class ScheduleController {
 
     private final ScheduleRegisterService scheduleRegisterService;
+    private final ScheduleModifyService scheduleModifyService;
     private final ScheduleSearchService scheduleSearchService;
     private final ScheduleRemoveService scheduleRemoveService;
 
@@ -30,6 +32,13 @@ public class ScheduleController {
     @OverAdminRole
     public ApiResult<?> scheduleAdd(Authentication authentication, @Valid @RequestBody ScheduleRequest calendarRequest) {
         return ApiResult.OK(scheduleRegisterService.addSchedule(calendarRequest));
+    }
+
+    @PatchMapping(value = "/api/schedules/{scheduleId}")
+    @ApiOperation(value = "일정 수정", notes = "달력에 해당 일정 수정", response = ScheduleDTO.class)
+    @OverAdminRole
+    public ApiResult<?> scheduleModify(@PathVariable Long scheduleId, @Valid @RequestBody ScheduleRequest calendarRequest) {
+        return ApiResult.OK(scheduleModifyService.modifySchedule(scheduleId, calendarRequest));
     }
 
     @GetMapping("/no-permit/schedules")

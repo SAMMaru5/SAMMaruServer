@@ -13,7 +13,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
+@Transactional(readOnly = true)
 @Service
 @RequiredArgsConstructor
 public class ArticleRemoveService {
@@ -23,6 +23,7 @@ public class ArticleRemoveService {
     private final ArticleLikeRepository articleLikeRepository;
     private final CommentRepository commentRepository;
 
+    @Transactional
     @CacheEvict(keyGenerator = "articleCacheKeyGenerator", value = "article", cacheManager = "cacheManager")
     public boolean removeArticle(Long articleId, Long userId, Long boardId) {
         User findUser = userRepository.findById(userId)
@@ -41,6 +42,7 @@ public class ArticleRemoveService {
         return true;
     }
 
+    @Transactional
     public boolean removeArticleByAdmin(Long boardId) {
         if (!articleRepository.existsById(boardId)) {
             throw new CustomException(ErrorCode.BOARD_NOT_FOUND, boardId.toString());

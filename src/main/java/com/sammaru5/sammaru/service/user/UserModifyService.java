@@ -13,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
+@Transactional(readOnly = true)
 @Service
 @RequiredArgsConstructor
 public class UserModifyService {
@@ -21,6 +21,7 @@ public class UserModifyService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @Transactional
     public UserDTO modifyUser(Long userId, UserRequest userRequest) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, userId.toString()));
@@ -37,6 +38,7 @@ public class UserModifyService {
         return UserDTO.from(user);
     }
 
+    @Transactional
     public UserDTO modifyUserRole(Long userId, UserAuthority role) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, userId.toString()));
@@ -44,6 +46,7 @@ public class UserModifyService {
         return UserDTO.from(user);
     }
 
+    @Transactional
     public UserDTO addUserPoint(Long userId, PointRequest pointRequest) throws CustomException {
         User user = userRepository.getById(userId);
         if (user.getPoint() + pointRequest.getAddPoint() < 0) {
@@ -53,6 +56,7 @@ public class UserModifyService {
         return UserDTO.from(user);
     }
 
+    @Transactional
     public UserDTO modifyUserGeneration(Long userId, Integer generation) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, userId.toString()));

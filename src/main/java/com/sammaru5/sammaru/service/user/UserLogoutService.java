@@ -8,13 +8,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
+@Transactional(readOnly = true)
 @Service
 @RequiredArgsConstructor
 public class UserLogoutService {
     private final UserRepository userRepository;
     private final RedisUtil redisUtil;
 
+    @Transactional
     public Boolean deleteRefreshToken(Long userId) {
 
         if (!userRepository.existsById(userId)) {

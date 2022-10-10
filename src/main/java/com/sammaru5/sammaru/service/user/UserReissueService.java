@@ -12,14 +12,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.concurrent.TimeUnit;
 
-@Transactional
-@Service @RequiredArgsConstructor
+@Transactional(readOnly = true)
+@Service
+@RequiredArgsConstructor
 public class UserReissueService {
     private final TokenProvider tokenProvider;
     private final RedisUtil redisUtil;
 
+    @Transactional
     public TokenDto reissue(String accessToken, String refreshToken) {
-        if(!tokenProvider.validateToken(accessToken)) {
+        if (!tokenProvider.validateToken(accessToken)) {
             throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
         }
 
@@ -27,13 +29,13 @@ public class UserReissueService {
 
         String realRefreshToken = redisUtil.getData("RT:" + authentication.getName());
 
-        if(!realRefreshToken.equals(refreshToken)) {
+        if (!realRefreshToken.equals(refreshToken)) {
             throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
         }
 
         TokenDto tokenDto = tokenProvider.generateTokenDto(authentication);
 
-        redisUtil.setDataExpire("RT:"+authentication.getName(), tokenDto.getRefreshToken(), tokenDto.getRefreshTokenExpiresTime(), TimeUnit.MILLISECONDS);
+        redisUtil.setDataExpire("RT:" + authentication.getName(), tokenDto.getRefreshToken(), tokenDto.getRefreshTokenExpiresTime(), TimeUnit.MILLISECONDS);
 
         return tokenDto;
     }

@@ -22,7 +22,9 @@ public class BoardRemoveService {
     @Transactional
     public boolean removeBoard(Long boardId) {
 
-        String boardname = boardRepository.findById(boardId).get().getBoardName();
+        String boardname = boardRepository.findById(boardId)
+                .orElseThrow(() -> new CustomException(ErrorCode.BOARD_NOT_FOUND, boardId.toString()))
+                .getBoardName();
 
         if (IndelibleBoardName.contain(boardname)) {
             throw new CustomException(ErrorCode.INDELIBLE_BOARD, boardId.toString());

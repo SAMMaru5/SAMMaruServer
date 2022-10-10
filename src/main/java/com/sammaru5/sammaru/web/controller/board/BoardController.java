@@ -2,6 +2,7 @@ package com.sammaru5.sammaru.web.controller.board;
 
 import com.sammaru5.sammaru.domain.SearchSubject;
 import com.sammaru5.sammaru.service.article.ArticleSearchService;
+import com.sammaru5.sammaru.service.board.BoardModifyService;
 import com.sammaru5.sammaru.service.board.BoardRegisterService;
 import com.sammaru5.sammaru.service.board.BoardRemoveService;
 import com.sammaru5.sammaru.service.board.BoardSearchService;
@@ -27,6 +28,7 @@ public class BoardController {
 
     private final BoardRegisterService boardRegisterService;
     private final BoardSearchService boardSearchService;
+    private final BoardModifyService boardModifyService;
     private final BoardRemoveService boardRemoveService;
     private final ArticleSearchService articleSearchService;
 
@@ -35,6 +37,13 @@ public class BoardController {
     @OverAdminRole
     public ApiResult<BoardDTO> boardAdd(@Valid @RequestBody BoardRequest boardRequest) {
         return ApiResult.OK(boardRegisterService.addBoard(boardRequest));
+    }
+
+    @PatchMapping("/api/boards/{boardId}")
+    @ApiOperation(value = "게시판 수정", notes = "게시판을 수정", response = BoardDTO.class)
+    @OverAdminRole
+    public ApiResult<BoardDTO> boardModify(@PathVariable Long boardId, @Valid @RequestBody BoardRequest boardRequest) {
+        return ApiResult.OK(boardModifyService.modifyBoard(boardId, boardRequest));
     }
 
     @DeleteMapping("/api/boards/{boardId}")

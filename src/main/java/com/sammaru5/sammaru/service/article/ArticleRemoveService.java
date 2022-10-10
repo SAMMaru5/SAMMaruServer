@@ -44,6 +44,10 @@ public class ArticleRemoveService {
 
     @Transactional
     public boolean removeArticleByAdmin(Long boardId) {
+        if (!articleRepository.existsById(boardId)) {
+            throw new CustomException(ErrorCode.BOARD_NOT_FOUND, boardId.toString());
+        }
+
         articleRepository.deleteArticlesByBoardId(boardId);
         return true;
     }

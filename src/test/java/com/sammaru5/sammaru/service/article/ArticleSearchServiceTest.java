@@ -8,15 +8,13 @@ import com.sammaru5.sammaru.repository.ArticleRepository;
 import com.sammaru5.sammaru.repository.BoardRepository;
 import com.sammaru5.sammaru.repository.UserRepository;
 import com.sammaru5.sammaru.web.dto.ArticleDTO;
-import lombok.RequiredArgsConstructor;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestConstructor;
-import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -24,18 +22,21 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+
 @Transactional
 @SpringBootTest
-@RequiredArgsConstructor
-@TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class ArticleSearchServiceTest {
 
-    private final UserRepository userRepository;
-    private final BoardRepository boardRepository;
-    private final ArticleRepository articleRepository;
-    private final ArticleLikeRepository articleLikeRepository;
-    private final ArticleSearchService articleSearchService;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private BoardRepository boardRepository;
+    @Autowired
+    private ArticleRepository articleRepository;
+    @Autowired
+    private ArticleLikeRepository articleLikeRepository;
+    @Autowired
+    private ArticleSearchService articleSearchService;
 
     List<User> users;
     List<Article> articles;
@@ -83,7 +84,7 @@ class ArticleSearchServiceTest {
 
     @Test
     @DisplayName("로그인 후 게시글 정보를 가져올때 좋아요 여부가 잘 반환되는지 확인")
-    @Sql(statements = "ALTER TABLE user ALTER COLUMN user_id RESTART 1", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
     @WithMockCustomUser(userId = "1")
     void findArticleCheckIsLikedWhenLogin() {
         // when

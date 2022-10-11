@@ -83,7 +83,7 @@ class ArticleSearchServiceTest {
 
     @Test
     @DisplayName("로그인 후 게시글 정보를 가져올때 좋아요 여부가 잘 반환되는지 확인")
-    @Sql(statements = "ALTER TABLE user AUTO_INCREMENT = 1", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
+    @Sql(statements = "ALTER TABLE user ALTER COLUMN user_id RESTART 1", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
     @WithMockCustomUser(userId = "1")
     void findArticleCheckIsLikedWhenLogin() {
         // when

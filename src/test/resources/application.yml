@@ -45,3 +45,4 @@ spring:
 sammaru:
   cookie:
     domain: localhost
+  fileDir: src/main/resources/files/

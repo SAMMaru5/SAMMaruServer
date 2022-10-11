@@ -27,20 +27,18 @@ spring:
     default: test
 
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    # 로컬 테스트용 DB
-    url: jdbc:mysql://localhost:3306/sammaru?serverTimezone=UTC&characterEncoding=UTF-8
-    username: sammaru
-    password: sammaru
+    # 테스트 코드 동작환경
+    url: jdbc:h2:mem:test
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     properties:
       hibernate:
-        show_sql: true
-        format_sql: true
-    database: mysql
+#        show_sql: true
+#        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+    database: h2
 
 sammaru:
   cookie:

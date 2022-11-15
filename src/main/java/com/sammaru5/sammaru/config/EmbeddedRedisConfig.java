@@ -17,19 +17,37 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import redis.embedded.RedisServer;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.time.Duration;
 
-@Profile("prod")
+@Profile("!prod")
 @Configuration
 @EnableRedisRepositories
 @EnableCaching
-public class RedisConfig {
+public class EmbeddedRedisConfig {
     @Value("${spring.redis.host}")
     private String redisHost;
 
     @Value("${spring.redis.port}")
     private int redisPort;
+
+    private RedisServer redisServer;
+
+    @PostConstruct
+    public void redisServer() {
+        redisServer = new RedisServer(redisPort);
+        redisServer.start();
+    }
+
+    @PreDestroy
+    public void stopRedis() {
+        if (redisServer != null) {
+            redisServer.stop();
+        }
+    }
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {

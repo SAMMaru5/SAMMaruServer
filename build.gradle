@@ -60,6 +60,9 @@ dependencies {
 
 	// https://mvnrepository.com/artifact/org.mockito/mockito-inline
 	testImplementation group: 'org.mockito', name: 'mockito-inline', version: '4.8.0'
+
+	//embedded-redis
+	implementation group: 'it.ozimov', name: 'embedded-redis', version: '0.7.2'
 }
 
 tasks.named('test') {

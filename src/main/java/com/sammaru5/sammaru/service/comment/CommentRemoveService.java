@@ -27,7 +27,7 @@ public class CommentRemoveService {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND, commentId.toString()));
 
-        if (comment.getUser() != user && user.getRole() != UserAuthority.ROLE_ADMIN) {
+        if (comment.isIndelible(user)) {
             throw new CustomException(ErrorCode.UNAUTHORIZED_USER_ACCESS, user.getId().toString());
         }
 

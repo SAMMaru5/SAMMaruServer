@@ -1,6 +1,7 @@
 package com.sammaru5.sammaru.web.controller.article;
 
 import com.sammaru5.sammaru.config.security.SecurityUtil;
+import com.sammaru5.sammaru.domain.SearchSubject;
 import com.sammaru5.sammaru.service.article.*;
 import com.sammaru5.sammaru.service.file.FileStatusService;
 import com.sammaru5.sammaru.util.OverMemberRole;
@@ -11,6 +12,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -78,5 +80,17 @@ public class ArticleController {
     @OverMemberRole
     public ApiResult<Boolean> articleLikeRemove(@PathVariable Long boardId, @PathVariable Long articleId) {
         return ApiResult.OK(articleLikeService.cancelArticleLike(articleId, SecurityUtil.getCurrentUserId()));
+    }
+
+    @GetMapping("/no-permit/api/boards/{boardId}/searchResult/pages/{pageNum}")
+    @ApiOperation(value = "특정 게시판을 대상으로 게시글 검색", notes = "해당 게시판을 대상으로 게시글들을 검색 ex.자유게시판", responseContainer = "List", response = ArticleDTO.class)
+    public ApiResult<Page<ArticleDTO>> boardSearch(@PathVariable Long boardId, @PathVariable Integer pageNum, @RequestParam Integer pageSize, @RequestParam SearchSubject searchSubject, @RequestParam String keyword) {
+        return ApiResult.OK(articleSearchService.findArticlesByBoardIdAndKeywordAndPaging(boardId, pageNum - 1, pageSize, searchSubject, keyword));
+    }
+
+    @GetMapping("/no-permit/api/boards/searchResult/pages/{pageNum}")
+    @ApiOperation(value = "모든 게시판을 대상으로 게시글 검색", notes = "모든 게시판을 대상으로 게시글들을 검색", responseContainer = "List", response = ArticleDTO.class)
+    public ApiResult<Page<ArticleDTO>> search(@PathVariable Integer pageNum, @RequestParam Integer pageSize, @RequestParam SearchSubject searchSubject, @RequestParam String keyword) {
+        return ApiResult.OK(articleSearchService.findArticlesByKeywordAndPaging(pageNum - 1, pageSize, searchSubject, keyword));
     }
 }

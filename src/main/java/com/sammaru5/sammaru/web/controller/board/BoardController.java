@@ -1,6 +1,5 @@
 package com.sammaru5.sammaru.web.controller.board;
 
-import com.sammaru5.sammaru.domain.SearchSubject;
 import com.sammaru5.sammaru.service.article.ArticleSearchService;
 import com.sammaru5.sammaru.service.board.BoardModifyService;
 import com.sammaru5.sammaru.service.board.BoardRegisterService;
@@ -63,17 +62,5 @@ public class BoardController {
     @ApiOperation(value = "게시판 세부 정보 조회", notes = "해당 게시판의 게시글들을 조회 ex.자유게시판", responseContainer = "List", response = ArticleDTO.class)
     public ApiResult<Page<ArticleDTO>> boardDetails(@PathVariable Long boardId, @PathVariable Integer pageNum, @RequestParam Integer pageSize) {
         return ApiResult.OK(articleSearchService.findArticlesByBoardIdAndPaging(boardId, pageNum - 1, pageSize));
-    }
-
-    @GetMapping("/no-permit/api/boards/{boardId}/searchResult/pages/{pageNum}")
-    @ApiOperation(value = "특정 게시판 검색", notes = "해당 게시판을 대상으로 게시글들을 검색 ex.자유게시판", responseContainer = "List", response = ArticleDTO.class)
-    public ApiResult<Page<ArticleDTO>> boardSearch(@PathVariable Long boardId, @PathVariable Integer pageNum, @RequestParam Integer pageSize, @RequestParam SearchSubject searchSubject, @RequestParam String keyword) {
-        return ApiResult.OK(articleSearchService.findArticlesByBoardIdAndKeywordAndPaging(boardId, pageNum - 1, pageSize, searchSubject, keyword));
-    }
-
-    @GetMapping("/no-permit/api/boards/searchResult/pages/{pageNum}")
-    @ApiOperation(value = "모든 게시판 검색", notes = "모든 게시판을 대상으로 게시글들을 검색", responseContainer = "List", response = ArticleDTO.class)
-    public ApiResult<Page<ArticleDTO>> search(@PathVariable Integer pageNum, @RequestParam Integer pageSize, @RequestParam SearchSubject searchSubject, @RequestParam String keyword) {
-        return ApiResult.OK(articleSearchService.findArticlesByKeywordAndPaging(pageNum - 1, pageSize, searchSubject, keyword));
     }
 }

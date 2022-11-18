@@ -9,7 +9,6 @@ import javax.persistence.*;
 
 @Getter
 @Entity
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class ArticleLike {
@@ -31,5 +30,16 @@ public class ArticleLike {
                 .user(user)
                 .article(article)
                 .build();
+    }
+
+    @Builder
+    private ArticleLike(User user, Article article){
+        this.user = user;
+        belongToArticle(article);
+    }
+
+    private void belongToArticle(Article article){
+        this.article = article;
+        article.addArticleLike(this);
     }
 }

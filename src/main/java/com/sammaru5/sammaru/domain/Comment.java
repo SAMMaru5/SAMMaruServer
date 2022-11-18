@@ -38,11 +38,19 @@ public class Comment extends BaseTime {
     @Builder
     private Comment(CommentRequest commentRequest, User user, Article article) {
         this.content = commentRequest.getContent();
-        this.article = article;
         this.user = user;
+
+        belongToArticle(article);
     }
 
     public void modifyContent(CommentRequest commentRequest) {
         this.content = commentRequest.getContent();
     }
+
+    //==연관관계 메서드==//
+    private void belongToArticle(Article article){
+        this.article = article;
+        article.addComment(this);
+    }
+
 }

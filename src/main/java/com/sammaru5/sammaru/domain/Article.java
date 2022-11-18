@@ -46,6 +46,12 @@ public class Article extends BaseTime {
     @BatchSize(size = 100)
     private List<File> files = new ArrayList<>();
 
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ArticleLike> articleLikes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
+
     public static Article createArticle(ArticleRequest articleRequest, Board board, User user) {
         return Article.builder()
                 .articleRequest(articleRequest)
@@ -70,6 +76,13 @@ public class Article extends BaseTime {
         file.belongToArticle(this);
     }
 
+    public void addComment(Comment comment){
+        comments.add(comment);
+    }
+
+    public void addArticleLike(ArticleLike articleLike){
+        articleLikes.add(articleLike);
+    }
     public void removeFile() {
         files.clear();
     }

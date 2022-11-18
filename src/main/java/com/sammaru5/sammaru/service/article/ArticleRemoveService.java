@@ -35,9 +35,6 @@ public class ArticleRemoveService {
             throw new CustomException(ErrorCode.UNAUTHORIZED_USER_ACCESS, findUser.getId().toString());
         }
 
-        articleLikeRepository.deleteAllByArticleId(articleId);
-        commentRepository.deleteAllByArticleId(articleId);
-
         articleRepository.delete(article);
         return true;
     }

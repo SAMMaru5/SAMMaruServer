@@ -47,10 +47,13 @@ public class Comment extends BaseTime {
         this.content = commentRequest.getContent();
     }
 
-    public boolean isIndelible(User user) {
-        // TODO 간단하게 이렇게 짜보았는데 작성자와 관리자를 분리해서 메서드가 있으면 더 좋을 것 같아요.
-        // 좋은 의견 있으면 추가해주세요.
-        return !this.getUser().equals(user) && user.getRole() != UserAuthority.ROLE_ADMIN;
+    /**
+     * 해당 Comment의 작성자인지 판별하는 메서드
+     * @param user
+     * @return
+     */
+    public boolean isWrittenBy(User user) {
+        return this.getUser().equals(user);
     }
 
     @Override

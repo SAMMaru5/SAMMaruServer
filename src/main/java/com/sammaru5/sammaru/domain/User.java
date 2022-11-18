@@ -63,6 +63,14 @@ public class User {
         this.grade = grade;
     }
 
+    /**
+     * 해당 User의 Role이 어드민인지 판별하는 메서드
+     * @return
+     */
+    public boolean isAdmin() {
+        return this.getRole() == UserAuthority.ROLE_ADMIN;
+    }
+
     public void modifyUserInfo(UserRequest userRequest, PasswordEncoder passwordEncoder) {
         this.username = userRequest.getUsername();
         this.email = userRequest.getEmail();

@@ -39,7 +39,13 @@ public class EmbeddedRedisConfig {
     @PostConstruct
     public void redisServer() {
         redisServer = new RedisServer(redisPort);
-        redisServer.start();
+        // 여러 @SpringBootTest를 실행하다보면 이미 redisServer가 실행중인데, redisServer.start()를 실행하면서 포트 충돌이 발생하는 경우가 생긴다.
+        // 하지만 이때, 다른 @SpringBootTest에서 생성한 redisServer를 직접적으로 조작할 수는 없어도 통신하는 것은 가능하기 때문에 생성에 실패하더라도 테스트를 수행하는데는 문제가 없다.
+        try {
+            redisServer.start();
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
     }
 
     @PreDestroy

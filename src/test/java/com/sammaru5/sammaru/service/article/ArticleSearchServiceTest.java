@@ -84,7 +84,6 @@ class ArticleSearchServiceTest {
 
     @Test
     @DisplayName("로그인 후 게시글 정보를 가져올때 좋아요 여부가 잘 반환되는지 확인")
-    @DirtiesContext(methodMode = DirtiesContext.MethodMode.BEFORE_METHOD)
     @WithMockCustomUser(userId = "1")
     void findArticleCheckIsLikedWhenLogin() {
         // when

@@ -18,10 +18,15 @@ repositories {
 	mavenCentral()
 }
 
+def restAssuredVersion = '5.2.0'
+
 dependencies {
 	// should be placed before JUnit dependency declaration in order to make sure that the correct version of Hamcrest is used.
-	testImplementation 'io.rest-assured:rest-assured:5.2.0'
-	testImplementation 'io.rest-assured:spring-mock-mvc:5.2.0'
+	testImplementation "io.rest-assured:rest-assured:${restAssuredVersion}"
+	testImplementation "io.rest-assured:json-path:${restAssuredVersion}"
+	testImplementation "io.rest-assured:xml-path:${restAssuredVersion}"
+	testImplementation "io.rest-assured:json-schema-validator:${restAssuredVersion}"
+	testImplementation "io.rest-assured:spring-mock-mvc:${restAssuredVersion}"
 
 	modules {
 		module("org.codehaus.groovy:groovy") {

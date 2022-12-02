@@ -1,12 +1,11 @@
 package com.sammaru5.sammaru.repository;
 
 import com.sammaru5.sammaru.domain.*;
-import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.TestConstructor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,15 +14,18 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-@RequiredArgsConstructor
-@TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class ArticleLikeRepositoryTest {
 
-    private final ArticleLikeRepository articleLikeRepository;
-    private final UserRepository userRepository;
-    private final ArticleRepository articleRepository;
-    private final BoardRepository boardRepository;
+    @Autowired
+    private ArticleLikeRepository articleLikeRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private ArticleRepository articleRepository;
+    @Autowired
+    private BoardRepository boardRepository;
 
     @Test
     @DisplayName("좋아요 추가")

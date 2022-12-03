@@ -1,11 +1,10 @@
 package com.sammaru5.sammaru.web.controller.user;
 
 import com.sammaru5.sammaru.config.security.SecurityUtil;
-import com.sammaru5.sammaru.domain.User;
 import com.sammaru5.sammaru.domain.UserAuthority;
 import com.sammaru5.sammaru.service.user.UserModifyService;
+import com.sammaru5.sammaru.service.user.UserRemoveService;
 import com.sammaru5.sammaru.service.user.UserSearchService;
-import com.sammaru5.sammaru.util.AuthUser;
 import com.sammaru5.sammaru.util.OverAdminRole;
 import com.sammaru5.sammaru.util.OverMemberRole;
 import com.sammaru5.sammaru.web.apiresult.ApiResult;
@@ -29,6 +28,7 @@ public class UserController {
 
     private final UserModifyService userModifyService;
     private final UserSearchService userSearchService;
+    private final UserRemoveService userRemoveService;
 
     @ApiOperation(value = "유저 권한 변경", notes = "userId에 해당하는 유저 권한 변경")
     @OverAdminRole
@@ -97,5 +97,12 @@ public class UserController {
     @OverAdminRole
     public ApiResult<List<UserDTO>> userDetailByUsername(@RequestParam String username) {
         return ApiResult.OK(userSearchService.findByUsername(username));
+    }
+
+    @DeleteMapping("/api/users/{userId}")
+    @ApiOperation(value = "userId로 회원 추방", notes = "관리자 권한이 userId로 해당 회원을 추방합니다.")
+    @OverAdminRole
+    public ApiResult<?> userBanish(@Valid @PathVariable Long userId) {
+        return ApiResult.OK(userRemoveService.banishUser(userId));
     }
 }

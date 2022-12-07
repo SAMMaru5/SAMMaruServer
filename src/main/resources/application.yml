@@ -1,8 +1,9 @@
-devtools:
-  livereload:
-    enabled: true
-
 spring:
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 7MB
+
   mvc:
     pathmatch:
       matching-strategy: ant-path-matcher

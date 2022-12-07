@@ -17,6 +17,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -42,7 +44,7 @@ public class TokenProvider {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public TokenDto generateTokenDto(Authentication authentication) {
+    public JwtToken generateTokenDto(Authentication authentication) {
 
         // 1. 권한 가져옵니다.
         String authorities = authentication.getAuthorities().stream()
@@ -52,9 +54,12 @@ public class TokenProvider {
         if (authorities.contains(UserAuthority.ROLE_TEMP.toString()))
             throw new CustomException(ErrorCode.USER_IS_TEMP_ACCOUNT);
 
-        long now = (new Date()).getTime();
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime at = now.plusSeconds(ACCESS_TOKEN_EXPIRE_TIME / 1000);
+        LocalDateTime rt = now.plusSeconds(REFRESH_TOKEN_EXPIRE_TIME / 1000);
 
-        Date accessTokenExpiresAt = new Date(now + ACCESS_TOKEN_EXPIRE_TIME);
+        Date accessTokenExpiresAt = Date.from(at.atZone(ZoneId.of("Asia/Seoul")).toInstant());
+        Date refreshTokenExpiresAt = Date.from(rt.atZone(ZoneId.of("Asia/Seoul")).toInstant());
 
         // 2. Access Token을 생성합니다.
         String accessToken = Jwts.builder()
@@ -66,15 +71,14 @@ public class TokenProvider {
 
         // 3. RefreshToken을 생성합니다.
         String refreshToken = Jwts.builder()
-                .setExpiration(new Date(now + REFRESH_TOKEN_EXPIRE_TIME))
+                .setExpiration(refreshTokenExpiresAt)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
 
-        return TokenDto.builder()
+        return JwtToken.builder()
                 .grantType(BEARER_TYPE)
                 .accessToken(accessToken)
                 .accessTokenExpiresTime(accessTokenExpiresAt)
-                .refreshTokenExpiresTime(REFRESH_TOKEN_EXPIRE_TIME)
                 .refreshToken(refreshToken)
                 .build();
     }

@@ -1,9 +1,9 @@
 package com.sammaru5.sammaru.web.controller.auth;
 
-import com.sammaru5.sammaru.config.jwt.TokenDto;
 import com.sammaru5.sammaru.config.security.SecurityUtil;
 import com.sammaru5.sammaru.service.user.*;
 import com.sammaru5.sammaru.web.apiresult.ApiResult;
+import com.sammaru5.sammaru.web.dto.JwtDTO;
 import com.sammaru5.sammaru.web.dto.UserDTO;
 import com.sammaru5.sammaru.web.request.SignInRequest;
 import com.sammaru5.sammaru.web.request.SignUpRequest;
@@ -36,13 +36,13 @@ public class AuthController {
     }
 
     @PostMapping("/auth/login")
-    @ApiOperation(value = "로그인", notes = "엑세스 토큰과 리프레쉬 토큰 발급", response = TokenDto.class)
+    @ApiOperation(value = "로그인", notes = "엑세스 토큰과 리프레쉬 토큰 발급", response = JwtDTO.class)
     public ApiResult<?> userSignIn(@Valid @RequestBody SignInRequest signInRequest) {
         return ApiResult.OK(userLoginService.login(signInRequest));
     }
 
     @PostMapping("/auth/reissue")
-    @ApiOperation(value = "엑세스 토큰 재발급", notes = "만료된 엑세스 토큰과, 리프레쉬 토큰을 이용해 토큰 재 발급", response = TokenDto.class)
+    @ApiOperation(value = "엑세스 토큰 재발급", notes = "만료된 엑세스 토큰과, 리프레쉬 토큰을 이용해 토큰 재 발급", response = JwtDTO.class)
     public ApiResult<?> userReissue(@Valid @RequestBody TokenRequest tokenRequest) {
         return ApiResult.OK(userReissueService.reissue(tokenRequest));
     }

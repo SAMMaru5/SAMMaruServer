@@ -3,15 +3,14 @@ package com.sammaru5.sammaru.service.article;
 import com.sammaru5.sammaru.domain.*;
 import com.sammaru5.sammaru.repository.*;
 import com.sammaru5.sammaru.web.request.CommentRequest;
-import lombok.RequiredArgsConstructor;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -19,18 +18,22 @@ import java.util.List;
 
 @Transactional
 @SpringBootTest
-@RequiredArgsConstructor
-@TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class ArticleRemoveServiceTest {
 
-    private final UserRepository userRepository;
-    private final BoardRepository boardRepository;
-    private final ArticleRepository articleRepository;
-    private final ArticleLikeRepository articleLikeRepository;
-    private final CommentRepository commentRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private BoardRepository boardRepository;
+    @Autowired
+    private ArticleRepository articleRepository;
+    @Autowired
+    private ArticleLikeRepository articleLikeRepository;
+    @Autowired
+    private CommentRepository commentRepository;
+    @Autowired
 
-    private final ArticleRemoveService articleRemoveService;
+    private ArticleRemoveService articleRemoveService;
 
     @Mock
     CommentRequest commentRequest = new CommentRequest();

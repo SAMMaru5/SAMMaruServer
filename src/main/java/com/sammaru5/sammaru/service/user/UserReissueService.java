@@ -39,7 +39,6 @@ public class UserReissueService {
         }
 
         JwtToken tokenDto = tokenProvider.generateTokenDto(authentication);
-        System.out.println("tokenDto = " + tokenDto);
         redisUtil.setDataExpire("RT:" + authentication.getName(), tokenDto.getRefreshToken(), REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.MILLISECONDS);
 
         return tokenDto.toDto();

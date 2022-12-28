@@ -10,6 +10,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommentDTO {
     private Long id;
+    private Long userId;
     private String content;
     private Timestamp createDt;
     private String author;
@@ -18,6 +19,7 @@ public class CommentDTO {
         this.content = comment.getContent();
         this.createDt = comment.getCreateTime();
         this.author =comment.getUser().getUsername();
+        this.userId = comment.getUser().getId();
     }
 
     public static CommentDTO from(Comment comment){

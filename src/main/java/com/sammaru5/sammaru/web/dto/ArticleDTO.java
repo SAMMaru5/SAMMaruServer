@@ -22,6 +22,8 @@ public class ArticleDTO {
     private Integer likeCnt;
     private Boolean isLiked;
     private List<FileDTO> files = new ArrayList<>();
+    private Long prevArticleId;
+    private Long nextArticleId;
 
     public static ArticleDTO from(Article article) {
         return new ArticleDTO(article);
@@ -38,6 +40,12 @@ public class ArticleDTO {
         this.isLiked = article.getIsLiked();
         if (article.getFiles() != null && !article.getFiles().isEmpty()) {
             this.files = article.getFiles().stream().map(FileDTO::new).collect(Collectors.toList());
+        }
+        if(article.getPrevArticle() != null){
+            this.prevArticleId = article.getPrevArticle().getId();
+        }
+        if(article.getNextArticle() != null){
+            this.nextArticleId = article.getNextArticle().getId();
         }
     }
 }

@@ -36,6 +36,10 @@ public class ArticleSearchService {
         Article article = articleRepository.findOneWithFilesAndUserById(articleId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ARTICLE_NOT_FOUND, articleId.toString()));
 
+        // 게시글의 이전글, 다음글 지정
+        article.setPrevArticle(articleRepository.findPrevArticle(articleId, article.getBoard()));
+        article.setNextArticle(articleRepository.findNextArticle(articleId, article.getBoard()));
+
         article.plusViewCnt(); //조회수 증가
 
         article.setLikeCnt(articleLikeRepository.countAllByArticleId(articleId));

@@ -41,11 +41,26 @@ public class ArticleDTO {
         if (article.getFiles() != null && !article.getFiles().isEmpty()) {
             this.files = article.getFiles().stream().map(FileDTO::new).collect(Collectors.toList());
         }
-        if(article.getPrevArticle() != null){
+        if(hasPrevArticle(article)) {
             this.prevArticleId = article.getPrevArticle().getId();
         }
-        if(article.getNextArticle() != null){
+        if(hasNextArticle(article)) {
             this.nextArticleId = article.getNextArticle().getId();
         }
+    }
+
+    private Boolean hasPrevArticle(Article article) {
+
+        if(article.getPrevArticle() == null){
+            this.prevArticleId = 0L;
+            return false;
+        }else return true;
+    }
+    private Boolean hasNextArticle(Article article) {
+
+        if(article.getNextArticle() == null){
+            this.nextArticleId = 0L;
+            return false;
+        }else return true;
     }
 }

@@ -91,10 +91,9 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
 
     // 게시판 이전글, 다음글
 
-//    select max(article_id) from article where article_id < 10 and board_id = 1;
     @Query(value = "select max(a) from Article a where a.id < :articleId and a.board = :board")
-    Article findPrevArticle(@Param("articleId") Long articleId , @Param("board") Board board);
+    Optional<Article> findPrevArticle(@Param("articleId") Long articleId , @Param("board") Board board);
 
     @Query(value = "select min(a) from Article a where a.id > :articleId and a.board = :board")
-    Article findNextArticle(@Param("articleId") Long articleId , @Param("board") Board board);
+    Optional<Article> findNextArticle(@Param("articleId") Long articleId , @Param("board") Board board);
 }

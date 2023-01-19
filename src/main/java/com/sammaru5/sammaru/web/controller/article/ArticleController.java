@@ -7,6 +7,7 @@ import com.sammaru5.sammaru.service.file.FileStatusService;
 import com.sammaru5.sammaru.util.OverMemberRole;
 import com.sammaru5.sammaru.web.apiresult.ApiResult;
 import com.sammaru5.sammaru.web.dto.ArticleDTO;
+import com.sammaru5.sammaru.web.dto.ArticleDetailDTO;
 import com.sammaru5.sammaru.web.request.ArticleRequest;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -43,7 +44,7 @@ public class ArticleController {
     @GetMapping("/api/boards/{boardId}/articles/{articleId}")
     @ApiOperation(value = "게시글 상세", notes = "게시글 상세 정보 가져오기")
     @OverMemberRole
-    public ApiResult<ArticleDTO> articleDetails(@PathVariable Long boardId, @PathVariable Long articleId) {
+    public ApiResult<ArticleDetailDTO> articleDetails(@PathVariable Long boardId, @PathVariable Long articleId) {
         return ApiResult.OK(articleSearchService.findArticle(articleId));
     }
 

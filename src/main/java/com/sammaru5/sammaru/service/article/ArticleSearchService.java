@@ -10,6 +10,7 @@ import com.sammaru5.sammaru.repository.ArticleLikeRepository;
 import com.sammaru5.sammaru.repository.ArticleRepository;
 import com.sammaru5.sammaru.repository.BoardRepository;
 import com.sammaru5.sammaru.web.dto.ArticleDTO;
+import com.sammaru5.sammaru.web.dto.ArticleDetailDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
@@ -32,13 +33,13 @@ public class ArticleSearchService {
 
     @Transactional
     @Cacheable(keyGenerator = "articleCacheKeyGenerator", value = "article", cacheManager = "cacheManager")
-    public ArticleDTO findArticle(Long articleId) {
+    public ArticleDetailDTO findArticle(Long articleId) {
         Article article = articleRepository.findOneWithFilesAndUserById(articleId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ARTICLE_NOT_FOUND, articleId.toString()));
 
-        // 게시글의 이전글, 다음글 지정
-        article.setPrevArticle(articleRepository.findPrevArticle(articleId, article.getBoard()));
-        article.setNextArticle(articleRepository.findNextArticle(articleId, article.getBoard()));
+        // 게시글의 이전글, 다음글
+        Long prevArticleId = articleRepository.findPrevArticle(articleId, article.getBoard()).orElse(article).getId();
+        Long nextArticleId = articleRepository.findNextArticle(articleId, article.getBoard()).orElse(article).getId();
 
         article.plusViewCnt(); //조회수 증가
 
@@ -49,7 +50,7 @@ public class ArticleSearchService {
             article.setIsLiked(articleLikeRepository.existsByArticleIdAndUserId(articleId, currentUserId));
         } catch (CustomException e) { }
 
-        return ArticleDTO.from(article);
+        return ArticleDetailDTO.from(article, prevArticleId, nextArticleId);
     }
 
     //boardId에 해당하는 게시판의 게시글들을 paging

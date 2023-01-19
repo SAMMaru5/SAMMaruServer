@@ -46,12 +46,6 @@ public class Article extends BaseTime {
     @BatchSize(size = 100)
     private List<File> files = new ArrayList<>();
 
-    @Transient
-    private Article prevArticle;
-
-    @Transient
-    private Article nextArticle;
-
     public static Article createArticle(ArticleRequest articleRequest, Board board, User user) {
         return Article.builder()
                 .articleRequest(articleRequest)
@@ -86,14 +80,6 @@ public class Article extends BaseTime {
 
     public void setIsLiked(Boolean isLiked) {
         this.isLiked = isLiked;
-    }
-
-    public void setPrevArticle(Article prevArticle){
-        this.prevArticle = prevArticle;
-    }
-
-    public void setNextArticle(Article nextArticle){
-        this.nextArticle = nextArticle;
     }
 
     //== 비즈니스 메서드 ==//

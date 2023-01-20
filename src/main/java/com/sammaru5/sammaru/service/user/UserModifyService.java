@@ -86,17 +86,17 @@ public class UserModifyService {
                 userRepository.existsByStudentId(studentId);
     }
 
-    public boolean isNotProperUsername(String username) {
+    private boolean isNotProperUsername(String username) {
         return username == null;
     }
 
-    public boolean isNotProperEmail(String email) {
+    private boolean isNotProperEmail(String email) {
         return email == null ||
                 !email.contains("@") ||
                 userRepository.existsByEmail(email);
     }
 
-    public boolean isNotProperPassword(String password) {
+    private boolean isNotProperPassword(String password) {
         String passwordPattern = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$";
         return password == null || !Pattern.matches(passwordPattern, password);
     }

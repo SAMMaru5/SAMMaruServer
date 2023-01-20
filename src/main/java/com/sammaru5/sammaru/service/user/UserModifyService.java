@@ -7,11 +7,13 @@ import com.sammaru5.sammaru.exception.ErrorCode;
 import com.sammaru5.sammaru.repository.UserRepository;
 import com.sammaru5.sammaru.web.dto.UserDTO;
 import com.sammaru5.sammaru.web.request.PointRequest;
-import com.sammaru5.sammaru.web.request.UserRequest;
+import com.sammaru5.sammaru.web.request.UserModifyRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.regex.Pattern;
 
 @Transactional(readOnly = true)
 @Service
@@ -22,19 +24,32 @@ public class UserModifyService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public UserDTO modifyUser(Long userId, UserRequest userRequest) {
+    public UserDTO modifyUser(Long userId, UserModifyRequestDto requestDto) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, userId.toString()));
 
-        if (userRepository.existsByStudentId(userRequest.getStudentId())) {
-            throw new CustomException(ErrorCode.ALREADY_EXIST_USER, userRequest.getStudentId());
+
+        if (isNotProperStudentId(requestDto.getStudentId())) {
+            throw new CustomException(ErrorCode.ALREADY_EXIST_USER, requestDto.getStudentId());
+        }
+        user.modifyStudentId(requestDto.getStudentId());
+
+        if (isNotProperEmail(requestDto.getEmail())) {
+            throw new CustomException(ErrorCode.ALREADY_EXIST_EMAIL, requestDto.getEmail());
+        }
+        user.modifyEmail(requestDto.getEmail());
+
+        if (isNotProperUsername(requestDto.getUsername())) {
+            throw new CustomException(ErrorCode.NULL_POINTER_EXCEPTION);
+        }
+        user.modifyUsername(requestDto.getUsername());
+
+        if (isNotProperPassword(requestDto.getPassword())) {
+            throw new CustomException(ErrorCode.INAPPROPRIATE_PASSWORD);
         }
 
-        if (!user.getEmail().equals(userRequest.getEmail()) && userRepository.existsByEmail(userRequest.getEmail())) {
-            throw new CustomException(ErrorCode.ALREADY_EXIST_EMAIL, userRequest.getEmail());
-        }
+        user.modifyPassword(requestDto.getPassword(), passwordEncoder);
 
-        user.modifyUserInfo(userRequest, passwordEncoder);
         return UserDTO.from(user);
     }
 
@@ -62,5 +77,27 @@ public class UserModifyService {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, userId.toString()));
         user.setGeneration(generation);
         return UserDTO.from(user);
+    }
+
+    private boolean isNotProperStudentId(String studentId) {
+        return studentId == null ||
+                studentId.length() != 10 ||
+                !studentId.startsWith("20") ||
+                userRepository.existsByStudentId(studentId);
+    }
+
+    public boolean isNotProperUsername(String username) {
+        return username == null;
+    }
+
+    public boolean isNotProperEmail(String email) {
+        return email == null ||
+                !email.contains("@") ||
+                userRepository.existsByEmail(email);
+    }
+
+    public boolean isNotProperPassword(String password) {
+        String passwordPattern = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$";
+        return password == null || !Pattern.matches(passwordPattern, password);
     }
 }

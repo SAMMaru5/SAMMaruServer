@@ -12,7 +12,7 @@ import com.sammaru5.sammaru.web.dto.UserDTO;
 import com.sammaru5.sammaru.web.request.GenerationRequest;
 import com.sammaru5.sammaru.web.request.PointRequest;
 import com.sammaru5.sammaru.web.request.RoleRequest;
-import com.sammaru5.sammaru.web.request.UserRequest;
+import com.sammaru5.sammaru.web.request.UserModifyRequestDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -79,10 +79,10 @@ public class UserController {
     }
 
     @ApiOperation(value = "회원 정보 수정", notes = "회원 정보 수정하기")
-    @OverMemberRole
+    @OverAdminRole
     @PatchMapping("/api/user/info")
-    public ApiResult<UserDTO> userModify(@Valid @RequestBody UserRequest userRequest) {
-        return ApiResult.OK(userModifyService.modifyUser(SecurityUtil.getCurrentUserId(), userRequest));
+    public ApiResult<UserDTO> userModify(@RequestBody UserModifyRequestDto requestDto) {
+        return ApiResult.OK(userModifyService.modifyUser(SecurityUtil.getCurrentUserId(), requestDto));
     }
 
     @GetMapping("/api/users/gen/{generationNum}")

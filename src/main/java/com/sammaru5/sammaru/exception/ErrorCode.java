@@ -20,6 +20,7 @@ public enum ErrorCode {
     VALID_CHECK_FAIL(HttpStatus.BAD_REQUEST, "입력 값에 대한 유효성 검사가 실패했습니다!"),
     NULL_POINTER_EXCEPTION(HttpStatus.BAD_REQUEST, "Null pointer exception 오류가 발생했습니다!"),
     ILLEGAL_ARGUMENT_EXCEPTION(HttpStatus.BAD_REQUEST, "Illegal argument exception 오류가 발생했습니다!"),
+    INAPPROPRIATE_PASSWORD(HttpStatus.BAD_REQUEST, "비밀번호 규칙에 맞지 않습니다!"),
 
     // 401 UNAUTHORIZED
     UNAUTHORIZED_USER_ACCESS(HttpStatus.UNAUTHORIZED, "권한이 없는 사용자의 접근입니다!"),

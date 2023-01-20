@@ -79,6 +79,18 @@ public class UserModifyService {
         return UserDTO.from(user);
     }
 
+    @Transactional
+    public UserDTO changePassword(Long userId, String password) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, userId.toString()));
+
+        if (isNotProperPassword(password)) {
+            throw new CustomException(ErrorCode.INAPPROPRIATE_PASSWORD);
+        }
+        user.modifyPassword(password, passwordEncoder);
+        return UserDTO.from(user);
+    }
+
     private boolean isNotProperStudentId(String studentId) {
         return studentId == null ||
                 studentId.length() != 10 ||

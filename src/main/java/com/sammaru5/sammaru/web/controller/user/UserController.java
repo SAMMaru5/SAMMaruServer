@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -83,6 +84,13 @@ public class UserController {
     @PatchMapping("/api/user/info")
     public ApiResult<UserDTO> userModify(@RequestBody UserModifyRequestDto requestDto) {
         return ApiResult.OK(userModifyService.modifyUser(SecurityUtil.getCurrentUserId(), requestDto));
+    }
+
+    @ApiOperation(value = "비밀번호 변경", notes = "비밀번호 변경하기")
+    @OverMemberRole
+    @PutMapping("/api/user/password")
+    public ApiResult<?> userChangePassword(@NotBlank @RequestBody String password) {
+        return ApiResult.OK(userModifyService.changePassword(SecurityUtil.getCurrentUserId(), password));
     }
 
     @GetMapping("/api/users/gen/{generationNum}")

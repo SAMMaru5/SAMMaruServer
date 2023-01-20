@@ -78,4 +78,20 @@ public class User {
         this.grade = userRequest.getGrade();
         this.studentId = userRequest.getStudentId();
     }
+
+    public void modifyUsername(String username) {
+        this.username = username;
+    }
+
+    public void modifyEmail(String email) {
+        this.email = email;
+    }
+
+    public void modifyPassword(String password, PasswordEncoder encoder) {
+        this.password = encoder.encode(password);
+    }
+
+    public void modifyStudentId(String studentId) {
+        this.studentId = studentId;
+    }
 }

@@ -38,8 +38,8 @@ public class ArticleSearchService {
                 .orElseThrow(() -> new CustomException(ErrorCode.ARTICLE_NOT_FOUND, articleId.toString()));
 
         // 게시글의 이전글, 다음글
-        Long prevArticleId = articleRepository.findPrevArticle(articleId, article.getBoard()).orElse(article).getId();
-        Long nextArticleId = articleRepository.findNextArticle(articleId, article.getBoard()).orElse(article).getId();
+        Long prevArticleId = articleRepository.findPrevArticleId(articleId, article.getBoard().getId()).orElse(0L);
+        Long nextArticleId = articleRepository.findNextArticleId(articleId, article.getBoard().getId()).orElse(0L);
 
         article.plusViewCnt(); //조회수 증가
 

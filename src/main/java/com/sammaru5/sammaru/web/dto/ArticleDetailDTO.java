@@ -39,25 +39,7 @@ public class ArticleDetailDTO {
         if (article.getFiles() != null && !article.getFiles().isEmpty()) {
             this.files = article.getFiles().stream().map(FileDTO::new).collect(Collectors.toList());
         }
-        if (prevArticleExist(prevArticleId)){
-            this.prevArticleId = prevArticleId;
-        }
-        if (nextArticleExist(nextArticleId)){
-            this.nextArticleId = nextArticleId;
-        }
-    }
-
-    private boolean prevArticleExist(Long prevArticleId){
-        if(this.id != prevArticleId)
-            return true;
-        this.prevArticleId = 0L;
-        return false;
-    }
-
-    private boolean nextArticleExist(Long nextArticleId){
-        if(this.id != nextArticleId)
-            return true;
-        this.nextArticleId = 0L;
-        return false;
+        this.prevArticleId = prevArticleId;
+        this.nextArticleId = nextArticleId;
     }
 }

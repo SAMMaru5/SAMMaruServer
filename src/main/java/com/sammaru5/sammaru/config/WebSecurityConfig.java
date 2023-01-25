@@ -83,6 +83,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/auth/signup").permitAll()
                 .antMatchers("/auth/login").permitAll()
                 .antMatchers("/auth/reissue").permitAll()
+                .antMatchers("/auth/tempPassword").permitAll()
                 .antMatchers("/no-permit/**").permitAll()
                 .anyRequest().authenticated();
 

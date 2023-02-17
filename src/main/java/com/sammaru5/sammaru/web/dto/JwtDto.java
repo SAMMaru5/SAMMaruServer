@@ -5,9 +5,8 @@ import lombok.Data;
 
 @Builder
 @Data
-public class JwtDTO {
+public class JwtDto {
     private final String tokenType = "Bearer";
     private String accessToken;
-    private String refreshToken;
     private String accessTokenExpiresTime;
 }

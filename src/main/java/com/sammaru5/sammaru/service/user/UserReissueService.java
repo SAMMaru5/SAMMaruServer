@@ -5,8 +5,6 @@ import com.sammaru5.sammaru.config.jwt.TokenProvider;
 import com.sammaru5.sammaru.exception.CustomException;
 import com.sammaru5.sammaru.exception.ErrorCode;
 import com.sammaru5.sammaru.util.redis.RedisUtil;
-import com.sammaru5.sammaru.web.controller.auth.TokenRequest;
-import com.sammaru5.sammaru.web.dto.JwtDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -25,22 +23,23 @@ public class UserReissueService {
     private long REFRESH_TOKEN_EXPIRE_TIME;
 
     @Transactional
-    public JwtDTO reissue(TokenRequest tokenRequest) {
+    public JwtToken reissue(JwtToken jwtTokenRequest) {
 
-        if (!tokenProvider.validateToken(tokenRequest.getAccessToken())) {
-            throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
+        if (!tokenProvider.validateAccessToken(jwtTokenRequest.getAccessToken())) {
+            throw new CustomException(ErrorCode.INVALID_ACCESS_TOKEN);
         }
 
-        Authentication authentication = tokenProvider.getAuthentication(tokenRequest.getAccessToken());
+        Authentication authentication = tokenProvider.getAuthentication(jwtTokenRequest.getAccessToken(),
+                false);
         String realRefreshToken = redisUtil.getData("RT:" + authentication.getName());
 
-        if (!realRefreshToken.equals(tokenRequest.getRefreshToken())) {
+        if (!realRefreshToken.equals(jwtTokenRequest.getRefreshToken())) {
             throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
         }
 
-        JwtToken tokenDto = tokenProvider.generateTokenDto(authentication);
-        redisUtil.setDataExpire("RT:" + authentication.getName(), tokenDto.getRefreshToken(), REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.MILLISECONDS);
+        JwtToken jwtToken = tokenProvider.generateTokenDto(authentication);
+        redisUtil.setDataExpire("RT:" + authentication.getName(), jwtToken.getRefreshToken(), REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.MILLISECONDS);
 
-        return tokenDto.toDto();
+        return jwtToken;
     }
 }

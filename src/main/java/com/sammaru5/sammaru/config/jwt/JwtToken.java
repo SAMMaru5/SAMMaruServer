@@ -1,6 +1,6 @@
 package com.sammaru5.sammaru.config.jwt;
 
-import com.sammaru5.sammaru.web.dto.JwtDTO;
+import com.sammaru5.sammaru.web.dto.JwtDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,12 +18,19 @@ public class JwtToken {
     private String accessToken;
     private String refreshToken;
     private Date accessTokenExpiresTime;
+    private long refreshTokenExpiresTime;
 
-    public JwtDTO toDto() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return JwtDTO.builder()
+    public static JwtToken ofTokens(String accessToken, String refreshToken) {
+        return JwtToken.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
+                .build();
+    }
+
+    public JwtDto toDto() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return JwtDto.builder()
+                .accessToken(accessToken)
                 .accessTokenExpiresTime(sdf.format(accessTokenExpiresTime))
                 .build();
     }

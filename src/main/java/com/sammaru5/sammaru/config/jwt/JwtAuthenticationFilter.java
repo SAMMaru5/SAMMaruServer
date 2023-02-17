@@ -8,7 +8,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -28,8 +27,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String jwt = resolveToken(request);
 
         // 2. Token의 유효성을 검사하고 정상 토큰이라면 Authentication을 SecurityContext에 저장합니다.
-        if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
-            Authentication authentication = tokenProvider.getAuthentication(jwt);
+        if (StringUtils.hasText(jwt) && tokenProvider.validateAccessToken(jwt)) {
+            Authentication authentication = tokenProvider.getAuthentication(jwt, true);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 

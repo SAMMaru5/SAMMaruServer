@@ -21,4 +21,5 @@ spring:
 sammaru:
   cookie:
     domain: localhost
+    secure: false
   fileDir: src/main/resources/files/

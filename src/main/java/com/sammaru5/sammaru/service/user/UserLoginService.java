@@ -3,7 +3,6 @@ package com.sammaru5.sammaru.service.user;
 import com.sammaru5.sammaru.config.jwt.JwtToken;
 import com.sammaru5.sammaru.config.jwt.TokenProvider;
 import com.sammaru5.sammaru.util.redis.RedisUtil;
-import com.sammaru5.sammaru.web.dto.JwtDTO;
 import com.sammaru5.sammaru.web.request.SignInRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,18 +25,14 @@ public class UserLoginService {
     private long REFRESH_TOKEN_EXPIRE_TIME;
 
     @Transactional
-    public JwtDTO login(SignInRequest signInRequest) {
-
+    public JwtToken login(SignInRequest signInRequest) {
         UsernamePasswordAuthenticationToken authenticationToken = signInRequest.toAuthentication();
-
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-
-        JwtToken tokenDto = tokenProvider.generateTokenDto(authentication);
+        JwtToken jwtToken = tokenProvider.generateTokenDto(authentication);
 
         redisUtil.deleteData("RT:" + authentication.getName());
+        redisUtil.setDataExpire("RT:" + authentication.getName(), jwtToken.getRefreshToken(), REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.MILLISECONDS);
 
-        redisUtil.setDataExpire("RT:" + authentication.getName(), tokenDto.getRefreshToken(), REFRESH_TOKEN_EXPIRE_TIME, TimeUnit.MILLISECONDS);
-
-        return tokenDto.toDto();
+        return jwtToken;
     }
 }

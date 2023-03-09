@@ -9,10 +9,7 @@ import com.sammaru5.sammaru.util.OverAdminRole;
 import com.sammaru5.sammaru.util.OverMemberRole;
 import com.sammaru5.sammaru.web.apiresult.ApiResult;
 import com.sammaru5.sammaru.web.dto.UserDTO;
-import com.sammaru5.sammaru.web.request.GenerationRequest;
-import com.sammaru5.sammaru.web.request.PointRequest;
-import com.sammaru5.sammaru.web.request.RoleRequest;
-import com.sammaru5.sammaru.web.request.UserModifyRequestDto;
+import com.sammaru5.sammaru.web.request.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -79,11 +76,18 @@ public class UserController {
         return ApiResult.OK(userSearchService.findUsersByRole(role));
     }
 
-    @ApiOperation(value = "회원 정보 수정", notes = "회원 정보 수정하기")
+    //deprecated
     @OverAdminRole
     @PatchMapping("/api/user/info")
     public ApiResult<UserDTO> userModify(@RequestBody UserModifyRequestDto requestDto) {
         return ApiResult.OK(userModifyService.modifyUser(SecurityUtil.getCurrentUserId(), requestDto));
+    }
+
+    @ApiOperation(value = "회원 정보 수정 v2", notes = "studentId, username, email, generation 회원 정보 수정하기")
+    @OverAdminRole
+    @PatchMapping("/api/v2/user/info")
+    public ApiResult<UserDTO> userModifyV2(@NotBlank @RequestBody UserInfoModifyRequestDto requestDto) {
+        return ApiResult.OK(userModifyService.modifyUserV2(requestDto));
     }
 
     @ApiOperation(value = "비밀번호 변경", notes = "비밀번호 변경하기")

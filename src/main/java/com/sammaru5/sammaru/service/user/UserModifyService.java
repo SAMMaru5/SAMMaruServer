@@ -7,6 +7,7 @@ import com.sammaru5.sammaru.exception.ErrorCode;
 import com.sammaru5.sammaru.repository.UserRepository;
 import com.sammaru5.sammaru.web.dto.UserDTO;
 import com.sammaru5.sammaru.web.request.PointRequest;
+import com.sammaru5.sammaru.web.request.UserInfoModifyRequestDto;
 import com.sammaru5.sammaru.web.request.UserModifyRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,6 +23,19 @@ public class UserModifyService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
+    @Transactional
+    public UserDTO modifyUserV2(UserInfoModifyRequestDto requestDto) {
+        User user = userRepository.findById(requestDto.getUserId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, requestDto.getUserId().toString()));
+
+        user.modifyStudentId(requestDto.getStudentId());
+        user.modifyUsername(requestDto.getUsername());
+        user.modifyEmail(requestDto.getEmail());
+        user.setGeneration(requestDto.getGeneration());
+
+        return UserDTO.from(user);
+    }
 
     @Transactional
     public UserDTO modifyUser(Long userId, UserModifyRequestDto requestDto) {

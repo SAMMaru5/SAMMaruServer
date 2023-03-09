@@ -24,7 +24,7 @@ public class ArticleRemoveService {
     private final CommentRepository commentRepository;
 
     @Transactional
-    @CacheEvict(keyGenerator = "articleCacheKeyGenerator", value = "article", cacheManager = "cacheManager")
+    @CacheEvict(keyGenerator = "articleCacheKeyGenerator", value = "article", cacheManager = "cacheManager", allEntries = true)
     public boolean removeArticle(Long articleId, Long userId, Long boardId) {
         User findUser = userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND, userId.toString()));

@@ -89,4 +89,12 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
             countQuery = "select count(a) from Article a where a.title like %:keyword% or a.content like %:keyword%")
     Page<Article> searchArticlesByTitleAndContent(Pageable pageable, @Param("keyword") String keyword);
 
+    // 게시판 이전글, 다음글
+
+    @Query(value = "select max(a.article_id) from article a where a.article_id < :articleId and a.board_id = :boardId", nativeQuery = true)
+    Optional<Long> findPrevArticleId(@Param("articleId") Long articleId , @Param("boardId") Long boardId);
+
+    @Query(value = "select min(a.article_id) from article a where a.article_id > :articleId and a.board_id = :boardId", nativeQuery = true)
+    Optional<Long> findNextArticleId(@Param("articleId") Long articleId , @Param("boardId") Long boardId);
+
 }

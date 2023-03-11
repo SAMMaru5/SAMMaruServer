@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ArticleDTO {
+public class ArticleDetailDTO {
     private Long id;
     private String title;
     private String content;
@@ -22,10 +22,12 @@ public class ArticleDTO {
     private Integer likeCnt;
     private Boolean isLiked;
     private List<FileDTO> files = new ArrayList<>();
+    private Long prevArticleId;
+    private Long nextArticleId;
 
-    public static ArticleDTO from(Article article) {return new ArticleDTO(article);}
+    public static ArticleDetailDTO from(Article article, Long prevArticleId, Long nextArticleId) {return new ArticleDetailDTO(article, prevArticleId, nextArticleId);}
 
-    private ArticleDTO(Article article) {
+    private ArticleDetailDTO(Article article, Long prevArticleId, Long nextArticleId) {
         this.id = article.getId();
         this.title = article.getTitle();
         this.content = article.getContent();
@@ -37,5 +39,7 @@ public class ArticleDTO {
         if (article.getFiles() != null && !article.getFiles().isEmpty()) {
             this.files = article.getFiles().stream().map(FileDTO::new).collect(Collectors.toList());
         }
+        this.prevArticleId = prevArticleId;
+        this.nextArticleId = nextArticleId;
     }
 }

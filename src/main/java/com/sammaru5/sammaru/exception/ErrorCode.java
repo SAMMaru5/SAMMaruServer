@@ -35,6 +35,7 @@ public enum ErrorCode {
 
     // 404 NOT FOUND
     ARTICLE_NOT_LIKED(HttpStatus.NOT_FOUND, "좋아요를 누르지 않은 게시글입니다"),
+    INVALID_VERIFICATION_CODE(HttpStatus.BAD_REQUEST, "유효하지 않는 인증코드 입니다."),
 
     // 406 NOT ACCEPTABLE
     ACCESS_DENIED(HttpStatus.NOT_ACCEPTABLE, "접근이 거부되었습니다!"),

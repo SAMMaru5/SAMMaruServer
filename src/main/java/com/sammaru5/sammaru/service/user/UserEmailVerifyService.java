@@ -3,6 +3,7 @@ package com.sammaru5.sammaru.service.user;
 
 import com.sammaru5.sammaru.exception.CustomException;
 import com.sammaru5.sammaru.exception.ErrorCode;
+import com.sammaru5.sammaru.repository.UserRepository;
 import com.sammaru5.sammaru.util.redis.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.mail.Message;
 import javax.mail.internet.MimeMessage;
 import java.util.Random;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -18,7 +20,13 @@ public class UserEmailVerifyService {
     private final JavaMailSender javaMailSender;
     private final RedisUtil redisUtil;
 
+    private final UserRepository userRepository;
+
     public Boolean sendVerificationCode(String userEmail) {
+
+        if(existEmail(userEmail)){
+            throw new CustomException(ErrorCode.ALREADY_EXIST_EMAIL, userEmail);
+        }
 
         String verificationCode = getVerificationCode();
 
@@ -77,6 +85,11 @@ public class UserEmailVerifyService {
     }
     private void deleteVerificationCode(String verificationCode) {
         redisUtil.deleteData(verificationCode);
+    }
+
+    @Transactional(readOnly = true)
+    public boolean existEmail(String userEmail){
+        return userRepository.existsByEmail(userEmail);
     }
 }
 

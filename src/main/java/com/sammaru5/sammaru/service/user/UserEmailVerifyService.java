@@ -24,8 +24,8 @@ public class UserEmailVerifyService {
 
     public Boolean sendVerificationCode(String userEmail) {
 
-        if(existEmail(userEmail)){
-            throw new CustomException(ErrorCode.ALREADY_EXIST_EMAIL, userEmail);
+        if(isNotProperEmail(userEmail)){
+            throw new CustomException(ErrorCode.VALID_CHECK_FAIL, userEmail);
         }
 
         String verificationCode = getVerificationCode();
@@ -85,8 +85,12 @@ public class UserEmailVerifyService {
     }
 
     @Transactional(readOnly = true)
-    public boolean existEmail(String userEmail){
-        return userRepository.existsByEmail(userEmail);
+    public boolean isNotProperEmail(String userEmail){
+        if(userRepository.existsByEmail(userEmail)){
+            throw new CustomException(ErrorCode.ALREADY_EXIST_EMAIL, userEmail);
+        }
+        return userEmail == null ||
+                !userEmail.contains("@");
     }
 
     private void saveTempVerifiedEmail(String verificationCode){

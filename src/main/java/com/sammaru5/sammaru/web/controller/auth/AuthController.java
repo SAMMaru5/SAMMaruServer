@@ -89,8 +89,8 @@ public class AuthController {
 
     @PostMapping("/auth/verify")
     @ApiOperation(value = "이메일 검증", notes = "인증 코드 확인을 통한 이메일 검증")
-    public ApiResult<Boolean> verifyEmail(@RequestParam String verificationCode) {
-        return ApiResult.OK(userEmailVerifyService.verifyEmail(verificationCode));
+    public ApiResult<Boolean> verifyEmail(@RequestParam String code) {
+        return ApiResult.OK(userEmailVerifyService.verifyEmail(code));
     }
 
     private ResponseCookie createRefreshTokenCookie(JwtToken jwtToken) {

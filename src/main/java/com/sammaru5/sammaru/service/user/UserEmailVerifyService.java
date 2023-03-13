@@ -30,7 +30,7 @@ public class UserEmailVerifyService {
 
         String verificationCode = getVerificationCode();
 
-        saveVerificationCode(userEmail, verificationCode);
+        saveVerificationCode(verificationCode, userEmail);
 
         sendMail(userEmail, verificationCode);
 
@@ -41,7 +41,7 @@ public class UserEmailVerifyService {
         if (!validateVerificationCode(verificationCode)){
             throw new CustomException(ErrorCode.INVALID_VERIFICATION_CODE);
         }
-        deleteVerificationCode(verificationCode);
+        saveTempVerifiedEmail(verificationCode);
         return true;
     }
 
@@ -80,16 +80,18 @@ public class UserEmailVerifyService {
         return redisUtil.hasKey(verificationCode);
     }
 
-    private void saveVerificationCode(String userEmail, String verificationCode) {
+    private void saveVerificationCode(String verificationCode, String userEmail) {
         redisUtil.setDataExpire(verificationCode, userEmail, 300);
-    }
-    private void deleteVerificationCode(String verificationCode) {
-        redisUtil.deleteData(verificationCode);
     }
 
     @Transactional(readOnly = true)
     public boolean existEmail(String userEmail){
         return userRepository.existsByEmail(userEmail);
+    }
+
+    private void saveTempVerifiedEmail(String verificationCode){
+        String authenticatedEmail = redisUtil.getData(verificationCode);
+        redisUtil.setDataExpire(authenticatedEmail, verificationCode, 300);
     }
 }
 

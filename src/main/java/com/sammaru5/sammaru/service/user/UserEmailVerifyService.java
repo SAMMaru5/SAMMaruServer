@@ -5,9 +5,10 @@ import com.sammaru5.sammaru.exception.CustomException;
 import com.sammaru5.sammaru.exception.ErrorCode;
 import com.sammaru5.sammaru.util.redis.RedisUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import javax.mail.Message;
+import javax.mail.internet.MimeMessage;
 import java.util.Random;
 
 @Service
@@ -49,12 +50,22 @@ public class UserEmailVerifyService {
     }
 
     private void sendMail(String userEmail, String verificationCode) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(userEmail);
-        message.setSubject("인증 코드");
-        message.setText(verificationCode);
-
-        javaMailSender.send(message);
+        MimeMessage message = javaMailSender.createMimeMessage();
+        try {
+            message.addRecipients(Message.RecipientType.TO, userEmail);
+            message.setSubject("SAMMaru 인증 코드");
+            String htmlStr =
+                    "<div>" +
+                    "  <h3>SAMMaru</h3>\n" +
+                    "  <div><p>다음 인증코드를 입력해주세요.</p><p>인증코드: <span style=\"color:blue\">"
+                    + verificationCode +
+                    "</span></p></div>" +
+                    "</div>";
+            message.setText(htmlStr,"UTF-8", "html");
+            javaMailSender.send(message);
+        } catch (Exception e ){
+            e.printStackTrace();
+        }
     }
 
     private boolean validateVerificationCode(String verificationCode) {

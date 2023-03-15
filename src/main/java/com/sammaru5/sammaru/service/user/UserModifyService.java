@@ -101,8 +101,17 @@ public class UserModifyService {
         if (isNotProperPassword(password)) {
             throw new CustomException(ErrorCode.INAPPROPRIATE_PASSWORD);
         }
+
+        if (isCurrentPassword(password, user.getPassword())) {
+            throw new CustomException(ErrorCode.SAME_PASSWORD);
+        }
+
         user.modifyPassword(password, passwordEncoder);
         return UserDTO.from(user);
+    }
+
+    private boolean isCurrentPassword(String password, String userPassword) {
+        return passwordEncoder.matches(password, userPassword);
     }
 
     private boolean isNotProperStudentId(String studentId) {

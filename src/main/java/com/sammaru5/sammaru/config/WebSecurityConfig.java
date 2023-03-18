@@ -2,12 +2,12 @@ package com.sammaru5.sammaru.config;
 
 import com.sammaru5.sammaru.config.jwt.JwtAccessDeniedHandler;
 import com.sammaru5.sammaru.config.jwt.JwtAuthenticationEntryPoint;
-import com.sammaru5.sammaru.config.security.CustomUserDetailsService;
 import com.sammaru5.sammaru.config.jwt.JwtAuthenticationFilter;
 import com.sammaru5.sammaru.config.jwt.TokenProvider;
-import com.sammaru5.sammaru.config.security.UnauthorizedHandler;
+import com.sammaru5.sammaru.config.security.CustomUserDetailsService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -56,6 +56,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
+    @Profile("!prod")
     public void configure(WebSecurity web) {
         web.ignoring()
                 .antMatchers("/v2/api-docs", "/swagger-resources/**", "/swagger-ui.html", "/webjars/**", "/swagger-ui/**","/swagger/**");

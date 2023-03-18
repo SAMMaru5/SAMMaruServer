@@ -20,3 +20,6 @@ sammaru:
     domain: localhost
     secure: false
   fileDir: src/main/resources/files/
+
+swagger:
+  pattern: /v2/api-docs,/swagger-resources/**,/swagger-ui.html,/webjars/**,/swagger-ui/**,/swagger/**

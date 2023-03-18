@@ -5,9 +5,9 @@ import com.sammaru5.sammaru.config.jwt.JwtAuthenticationEntryPoint;
 import com.sammaru5.sammaru.config.jwt.JwtAuthenticationFilter;
 import com.sammaru5.sammaru.config.jwt.TokenProvider;
 import com.sammaru5.sammaru.config.security.CustomUserDetailsService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -21,10 +21,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.util.List;
+
 @EnableWebSecurity
-@AllArgsConstructor
+@RequiredArgsConstructor
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Value("${swagger.pattern}")
+    private List<String> swaggerPattern;
 
     private final CustomUserDetailsService customUserDetailsService;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
@@ -56,10 +61,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    @Profile("!prod")
     public void configure(WebSecurity web) {
-        web.ignoring()
-                .antMatchers("/v2/api-docs", "/swagger-resources/**", "/swagger-ui.html", "/webjars/**", "/swagger-ui/**","/swagger/**");
+        if (swaggerPattern.isEmpty()) return;
+        swaggerPattern.forEach(
+                s -> web.ignoring().antMatchers(s)
+        );
     }
 
     @Override

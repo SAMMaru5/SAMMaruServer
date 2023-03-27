@@ -32,14 +32,14 @@ public class UserRegisterService {
             throw new CustomException(ErrorCode.ALREADY_EXIST_EMAIL, signUpRequest.getEmail());
         }
 
-        if (!checkEmailValidity(signUpRequest.getEmail())){
+        if (!isValidEmail(signUpRequest.getEmail())){
             throw new CustomException(ErrorCode.INVALID_EMAIL, signUpRequest.getEmail());
         }
 
         User user = signUpRequest.toEntityWithEncryptingPassword(passwordEncoder);
         return UserDTO.from(userRepository.save(user));
     }
-    private boolean checkEmailValidity(String userEmail){
+    private boolean isValidEmail(String userEmail){
 
         if (!redisUtil.hasKey(userEmail)){
             return false;

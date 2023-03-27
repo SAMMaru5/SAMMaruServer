@@ -4,6 +4,7 @@ package com.sammaru5.sammaru.service.user;
 import com.sammaru5.sammaru.exception.CustomException;
 import com.sammaru5.sammaru.exception.ErrorCode;
 import com.sammaru5.sammaru.repository.UserRepository;
+import com.sammaru5.sammaru.util.CacheKey;
 import com.sammaru5.sammaru.util.redis.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -19,7 +20,6 @@ public class UserEmailVerifyService {
 
     private final JavaMailSender javaMailSender;
     private final RedisUtil redisUtil;
-
     private final UserRepository userRepository;
 
     public Boolean sendVerificationCode(String userEmail) {
@@ -81,7 +81,7 @@ public class UserEmailVerifyService {
     }
 
     private void saveVerificationCode(String verificationCode, String userEmail) {
-        redisUtil.setDataExpire(verificationCode, userEmail, 300);
+        redisUtil.setDataExpire(verificationCode, userEmail, CacheKey.VERIFICATION_CODE_EXPIRE_SEC);
     }
 
     @Transactional(readOnly = true)
@@ -95,7 +95,7 @@ public class UserEmailVerifyService {
 
     private void saveTempVerifiedEmail(String verificationCode){
         String authenticatedEmail = redisUtil.getData(verificationCode);
-        redisUtil.setDataExpire(authenticatedEmail, verificationCode, 300);
+        redisUtil.setDataExpire(authenticatedEmail, verificationCode, CacheKey.TEMP_EMAIL_EXPIRE_SEC);
     }
 }
 

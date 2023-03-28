@@ -24,7 +24,7 @@ public class UserEmailVerifyService {
 
     public Boolean sendVerificationCode(String userEmail) {
 
-        if(isNotProperEmail(userEmail)){
+        if( isNotProperEmail(userEmail)){
             throw new CustomException(ErrorCode.VALID_CHECK_FAIL, userEmail);
         }
 
@@ -93,7 +93,7 @@ public class UserEmailVerifyService {
             throw new CustomException(ErrorCode.ALREADY_EXIST_EMAIL, userEmail);
         }
         return userEmail == null ||
-                !userEmail.contains("@");
+                !(userEmail.contains("@gmail.com") || userEmail.contains("@naver.com"));
     }
 
     private void saveTempVerifiedEmail(String verificationCode){

@@ -41,11 +41,11 @@ public class UserRegisterService {
     }
     private boolean isValidEmail(String userEmail){
 
-        if (!redisUtil.hasKey(userEmail)){
+        if (!redisUtil.hasKey(userEmail+":auth")){
             return false;
         }
-        redisUtil.deleteData(redisUtil.getData(userEmail));
-        redisUtil.deleteData(userEmail);
+        redisUtil.deleteData(redisUtil.getData(userEmail+":auth"));
+        redisUtil.deleteData(userEmail+":auth");
         return true;
     }
 }

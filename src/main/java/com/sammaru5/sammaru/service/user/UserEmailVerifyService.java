@@ -28,6 +28,8 @@ public class UserEmailVerifyService {
             throw new CustomException(ErrorCode.VALID_CHECK_FAIL, userEmail);
         }
 
+        expirePreviousVerificationCode(userEmail);
+
         String verificationCode = getVerificationCode();
 
         saveVerificationCode(verificationCode, userEmail);
@@ -82,6 +84,7 @@ public class UserEmailVerifyService {
 
     private void saveVerificationCode(String verificationCode, String userEmail) {
         redisUtil.setDataExpire(verificationCode, userEmail, CacheKey.VERIFICATION_CODE_EXPIRE_SEC);
+        redisUtil.setDataExpire(userEmail,verificationCode, CacheKey.VERIFICATION_CODE_EXPIRE_SEC);
     }
 
     @Transactional(readOnly = true)
@@ -94,8 +97,19 @@ public class UserEmailVerifyService {
     }
 
     private void saveTempVerifiedEmail(String verificationCode){
-        String authenticatedEmail = redisUtil.getData(verificationCode);
-        redisUtil.setDataExpire(authenticatedEmail, verificationCode, CacheKey.TEMP_EMAIL_EXPIRE_SEC);
+        String userEmail = redisUtil.getData(verificationCode);
+        redisUtil.deleteData(userEmail);
+        redisUtil.setDataExpire(userEmail+":auth", verificationCode, CacheKey.TEMP_EMAIL_EXPIRE_SEC);
+    }
+
+    private void expirePreviousVerificationCode(String userEmail) {
+        String verificationCode = redisUtil.getData(userEmail);
+        if(verificationCode == null || verificationCode.isEmpty()){
+            return;
+        }
+        //이전에 발급된 인증번호 삭제
+        redisUtil.deleteData(userEmail);
+        redisUtil.deleteData(verificationCode);
     }
 }
 

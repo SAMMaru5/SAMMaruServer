@@ -8,6 +8,7 @@ import com.sammaru5.sammaru.web.dto.JwtDto;
 import com.sammaru5.sammaru.web.dto.UserDTO;
 import com.sammaru5.sammaru.web.request.SignInRequest;
 import com.sammaru5.sammaru.web.request.SignUpRequest;
+import com.sammaru5.sammaru.web.request.VerificationCodeRequest;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -89,8 +90,8 @@ public class AuthController {
 
     @PostMapping("/auth/verify")
     @ApiOperation(value = "이메일 검증", notes = "인증 코드 확인을 통한 이메일 검증")
-    public ApiResult<Boolean> verifyEmail(@RequestParam String code) {
-        return ApiResult.OK(userEmailVerifyService.verifyEmail(code));
+    public ApiResult<Boolean> verifyEmail(@Valid @RequestBody VerificationCodeRequest verificationCodeRequest) {
+        return ApiResult.OK(userEmailVerifyService.verifyEmail(verificationCodeRequest.getVerificationCode()));
     }
 
     private ResponseCookie createRefreshTokenCookie(JwtToken jwtToken) {

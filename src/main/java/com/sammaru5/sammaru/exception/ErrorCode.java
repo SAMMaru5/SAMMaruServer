@@ -28,6 +28,7 @@ public enum ErrorCode {
     INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "리프레쉬 토큰이 유효하지 않습니다!"),
     EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "만료된 토큰입니다."),
     TOKEN_WITHOUT_AUTHORITY(HttpStatus.UNAUTHORIZED, "권한이 없는 토큰입니다."),
+    INVALID_EMAIL(HttpStatus.UNAUTHORIZED, "인증되지 않은 이메일입니다. "),
 
     // 403 FORBIDDEN
     USER_POINT_CANT_NEGATIVE(HttpStatus.FORBIDDEN, "사용자의 포인트는 음수가 될 수 없습니다!"),
@@ -35,6 +36,7 @@ public enum ErrorCode {
 
     // 404 NOT FOUND
     ARTICLE_NOT_LIKED(HttpStatus.NOT_FOUND, "좋아요를 누르지 않은 게시글입니다"),
+    INVALID_VERIFICATION_CODE(HttpStatus.NOT_FOUND, "유효하지 않는 인증코드 입니다."),
 
     // 406 NOT ACCEPTABLE
     ACCESS_DENIED(HttpStatus.NOT_ACCEPTABLE, "접근이 거부되었습니다!"),

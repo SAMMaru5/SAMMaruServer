@@ -8,6 +8,7 @@ import com.sammaru5.sammaru.web.dto.JwtDto;
 import com.sammaru5.sammaru.web.dto.UserDTO;
 import com.sammaru5.sammaru.web.request.SignInRequest;
 import com.sammaru5.sammaru.web.request.SignUpRequest;
+import com.sammaru5.sammaru.web.request.VerificationCodeRequest;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,7 @@ public class AuthController {
     private final UserReissueService userReissueService;
     private final UserTempPasswordService userTempPasswordService;
     private final UserLogoutService userLogoutService;
+    private final UserEmailVerifyService userEmailVerifyService;
 
     @Value("${sammaru.cookie.domain}")
     private String cookieDomain;
@@ -78,6 +80,18 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.OK)
                 .header(HttpHeaders.SET_COOKIE, removeRefreshTokenCookie().toString())
                 .body(ApiResult.OK(userLogoutService.deleteRefreshToken(SecurityUtil.getCurrentUserId())));
+    }
+
+    @PostMapping("/auth/send")
+    @ApiOperation(value = "인증 코드 발송", notes = "작성한 이메일로 인증코드 발송")
+    public ApiResult<Boolean> sendVerificationCode(@RequestParam String userEmail) {
+        return ApiResult.OK(userEmailVerifyService.sendVerificationCode(userEmail));
+    }
+
+    @PostMapping("/auth/verify")
+    @ApiOperation(value = "이메일 검증", notes = "인증 코드 확인을 통한 이메일 검증")
+    public ApiResult<Boolean> verifyEmail(@Valid @RequestBody VerificationCodeRequest verificationCodeRequest) {
+        return ApiResult.OK(userEmailVerifyService.verifyEmail(verificationCodeRequest.getVerificationCode()));
     }
 
     private ResponseCookie createRefreshTokenCookie(JwtToken jwtToken) {

@@ -44,7 +44,6 @@ public class UserRegisterService {
         if (!redisUtil.hasKey(userEmail+":auth")){
             return false;
         }
-        redisUtil.deleteData(redisUtil.getData(userEmail+":auth"));
         redisUtil.deleteData(userEmail+":auth");
         return true;
     }

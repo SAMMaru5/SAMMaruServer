@@ -99,6 +99,7 @@ public class UserEmailVerifyService {
     private void saveTempVerifiedEmail(String verificationCode){
         String userEmail = redisUtil.getData(verificationCode);
         redisUtil.deleteData(userEmail);
+        redisUtil.deleteData(verificationCode);
         redisUtil.setDataExpire(userEmail+":auth", verificationCode, CacheKey.TEMP_EMAIL_EXPIRE_SEC);
     }
 

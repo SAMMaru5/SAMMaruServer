@@ -68,6 +68,12 @@ dependencies {
 
 	//embedded-redis
 	implementation group: 'it.ozimov', name: 'embedded-redis', version: '0.7.2'
+
+	// logging
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
+	implementation group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '6.3'
+
+
 }
 
 tasks.named('test') {

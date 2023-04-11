@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <timestamp key="TIMESTAMP" datePattern="yyyyMMdd"/>
+
+    <springProfile name="dev">
+        <property name="LOG_PATH" value="/app/log"/>
+    </springProfile>
+
+    <appender name="ELK" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <pattern>%msg%n</pattern>
+        </encoder>
+        <prudent>true</prudent>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/sammaru-filebeat-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>500MB</maxFileSize>
+        </rollingPolicy>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+    <logger name="ELK_LOGGER" level="INFO" additivity="false">
+        <appender-ref ref="ELK"/>
+    </logger>
+</configuration>

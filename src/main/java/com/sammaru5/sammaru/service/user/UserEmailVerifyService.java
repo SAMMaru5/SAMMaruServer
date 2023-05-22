@@ -8,6 +8,7 @@ import com.sammaru5.sammaru.util.CacheKey;
 import com.sammaru5.sammaru.util.redis.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import javax.mail.Message;
 import javax.mail.internet.MimeMessage;
@@ -22,6 +23,7 @@ public class UserEmailVerifyService {
     private final RedisUtil redisUtil;
     private final UserRepository userRepository;
 
+    @Async
     public Boolean sendVerificationCode(String userEmail) {
 
         if( isNotProperEmail(userEmail)){

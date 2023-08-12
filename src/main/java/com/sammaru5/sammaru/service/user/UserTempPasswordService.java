@@ -19,6 +19,9 @@ import java.util.regex.Pattern;
 @Service
 @RequiredArgsConstructor
 public class UserTempPasswordService {
+
+    private static final Pattern RANDOM_PASSWORD = Pattern.compile("(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{8,20}");
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JavaMailSender javaMailSender;
@@ -37,8 +40,6 @@ public class UserTempPasswordService {
 
     @Transactional
     public String getRandomPassword(int size) {
-        final String regex = "(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{8,20}";
-
         char[] charSet = new char[]{
                 '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
                 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
@@ -55,7 +56,7 @@ public class UserTempPasswordService {
                 sb.append(charSet[idx]);
             }
 
-            if (Pattern.matches(regex, sb.toString())) {
+            if (RANDOM_PASSWORD.matcher(sb.toString()).matches()) {
                 return sb.toString();
             }
         }
